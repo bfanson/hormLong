@@ -2,6 +2,6 @@
 .Rhistory
 .RData
 inst/doc
-.pdf
-.csv
-.rtf
+*.pdf
+*.csv
+*.rtf
