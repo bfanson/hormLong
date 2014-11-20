@@ -14,8 +14,8 @@
 
 hormSmooth <- function(data,by_var,group_var,time_var,conc_var, plot_per_page=4,
                        plot_height=2, plot_width=6, yscale='free', xscale='free',
-                       smoothness=c(0.7,0.7), shape=c(19,20), colour=c('red','blue'), line_type=c(1,2),
-                       line_width=c(1,1),   ...) {
+                       smoothness=0.7, shape=19, colour='black', line_type=1,
+                       line_width=1,...) {
   
 #--- add in checks ---#
    if(missing(data)){
@@ -67,7 +67,9 @@ hormSmooth <- function(data,by_var,group_var,time_var,conc_var, plot_per_page=4,
   
   #-- create titles--#
     paste1 <- function(...) paste(...,sep='; ')
-    data$plot_title <- do.call(paste1, data[,c(by_var_v)] )
+    if( length(by_var_v)>1){
+        data$plot_title <- do.call(paste1, data[,c(by_var_v)] )
+     }else{data$plot_title <- data[,c(by_var_v)] }
     
 #--- create plots ---#
   if( save_plot ){
@@ -102,11 +104,11 @@ hormSmooth <- function(data,by_var,group_var,time_var,conc_var, plot_per_page=4,
           xlab=NA, ylab=conc_var)
       mtext(unique(ds_sub$plot_title),side=3,line=0.25)
       loop <- 1
-      for(g in levels(ds_sub[,group_var]) ){
-        ds_sub1 <- ds_sub[ds_sub$horm_type==g,]
+      for(g in unique(ds_sub[,group_var]) ){
+        ds_sub1 <- ds_sub[ds_sub[,group_var]==g,]
         points(ds_sub1[,time_var], ds_sub1[,conc_var],pch=shape[loop],col=colour[loop] )
-        lines(loess.smooth(ds_sub1[,time_var],ds_sub1[,conc_var], span=smoothness[loop]),col=colour[loop]  ) 
-        loop <- loop + 1
+        lines(loess.smooth(ds_sub1[,time_var],ds_sub1[,conc_var], col=colour[loop], span=smoothness[loop]))
+        #loop <- loop + 1
       }
       legend('topleft',legend=levels(ds_sub[,group_var]),col=colour,pch=shape, lty=line_type,bty='n')
   }

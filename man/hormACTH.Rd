@@ -3,7 +3,7 @@
 \alias{hormACTH}
 \title{Run iterative process to calculate baseline.}
 \usage{
-hormACTH(data)
+hormACTH(x, start = 0, end = 10)
 }
 \arguments{
 \item{data}{dataset.}
@@ -21,6 +21,6 @@ hormLong object.
 Run iterative process to calculate baseline.
 }
 \examples{
-result <- hormACTH(data=ACTH)
+result <- hormACTH(x=result)
 }
 

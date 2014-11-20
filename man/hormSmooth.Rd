@@ -5,8 +5,8 @@
 \usage{
 hormSmooth(data, by_var, group_var, time_var, conc_var, plot_per_page = 4,
   plot_height = 2, plot_width = 6, yscale = "free", xscale = "free",
-  smoothness = c(0.7, 0.7), shape = c(19, 20), colour = c("red", "blue"),
-  line_type = c(1, 2), line_width = c(1, 1), ...)
+  smoothness = 0.7, shape = 19, colour = "black", line_type = 1,
+  line_width = 1, ...)
 }
 \arguments{
 \item{data}{dataset.}

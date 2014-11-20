@@ -44,8 +44,9 @@ hormCutoff <- function(x, criteria){
 
 #' Helper function to work with dates
 #' 
-#' @param date date column in format '2014-jan-01'
-#' @param time time column in format '10:10 PM'
+#' @param data data set with the variables to convert
+#' @param date_var variable name for date column in format '2014-jan-01'
+#' @param time_var variable name for the time column in format '10:10 PM'
 #' @return new datetime variable
 #' @export
 #' @examples
@@ -54,15 +55,24 @@ hormCutoff <- function(x, criteria){
 #' time <- c('10:10 Am', '10:30 pm')
 #' hormDate(date,time)
 
-hormDate <- function(date,time){
-  if( any( grepl('-',date)==F ) ){
-    stop('check format of date.  It should be in from: 2014-jan-01')
+hormDate <- function(data,date_var,time_var){
+  if( missing(date_var) ){stop('please provide date_var. Time_var is optional ')}
+  if( !missing(time_var) & any( grepl('-',data[,date_var])==F ) ){
+    stop('check format of date_var.  It should be in from: 01-jan-2014')
   }
-  if( any( (grepl('pm',tolower(time))==F |  grepl('am',tolower(time))==F)==F ) ){
-    stop('check format of date.  It should be in from: 10:00 AM')
+  if( !missing(time_var)){
+    if(any( (grepl('pm',tolower(data[,time_var]))==F |  
+                              grepl('am',tolower(time_var))==F)==F ) ){
+    stop('check format of date_var.  It should be in from: 10:00 AM')
+  }}
+  if(!missing(date_var) & !missing(time_var)){
+    datetime <- as.POSIXct(paste(data[,date_var],data[,time_var]), format="%Y-%m-%d %I:%M %p", tz='GMT' )
   }
-  datetime <- as.POSIXct(paste(date,time), format="%Y-%b-%d %I:%M %p", tz='GMT' )
-  return(datetime)
+  if(!missing(date_var) & missing(time_var)){
+    datetime <- as.Date(data[,date_var])
+  }
+  data$datetime<-datetime  
+  return(data)
 }
   
 
@@ -115,11 +125,21 @@ hormAuto<- function(file_method='write',by_var, time_var, conc_var, filename='te
 #' @export
 #' @examples
 #' 
-#' result <- hormACTH(data=ACTH)
+#' result <- hormACTH(x=result)
  
-
-hormACTH <- function(data) {
-  stop('function under development')
+hormACTH <- function(x, start=0, end=10) {
+  if( class(x)!='hormLong'){
+      stop('Object needs to be hormLong.  Run hormBaseline() first')
+  }
+  ds <- x$data
+  by_var_v <- cleanByvar(x$by_var)
+  time_var <- x$time_var
+  conc_var <- x$conc_var
+  ds <- ds[ start <= ds[,time_var] & ds[,time_var] <= start, ]
+  ds_base <- getSumStat( ds[ ds[,'conc_type']=='base',], name='baseline', func=function(x) mean(x,na.rm=T) )
+  ds <- merge(ds, ds_base, all.x=T)
+  ds$conc_baseline <- ds[,conc_var]/ x$baseline
+  
 }
 
 
@@ -140,3 +160,13 @@ write.rtf <- function(x,file){
       addTable.RTF(rtf, x)
   done(rtf)
 }
+
+#' Helper to get aggregate statistics
+#' 
+
+  getSumStat <- function(data=ds,name='mean', func=function(x)mean(x,na.rm=T), add_ds ){
+    ds1 <- aggregate(data[,conc_var], by = data[c(by_var_v)], FUN = func )
+      names(ds1)[ncol(ds1)] <- name
+      if(!missing(add_ds)){ ds1 <- merge(add_ds,ds1,all=T)}
+      return(ds1)
+  }    

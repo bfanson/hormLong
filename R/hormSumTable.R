@@ -24,19 +24,13 @@ hormSumTable <- function(x,file_type='rtf', num_decimals=2){
   by_var_v <- cleanByvar(x$by_var) 
 
 #--- make table ---#
-  getSumStat <- function(data=ds,name='mean', func=function(x)mean(x,na.rm=T), add_ds ){
-    ds1 <- aggregate(data[,conc_var], by = data[c(by_var_v)], FUN = func )
-      names(ds1)[ncol(ds1)] <- name
-      if(!missing(add_ds)){ ds1 <- merge(add_ds,ds1,all=T)}
-      return(ds1)
-  }    
   ds_b <- aggregate(ds[,conc_var], by = ds[c(by_var_v,'conc_type')], FUN = mean, na.rm=T )
     ds_b <- merge( subset(ds_b,conc_type=='base',-conc_type), subset(ds_b,conc_type=='peak',-conc_type),
                    by=by_var_v,all=T )
     names(ds_b)[(ncol(ds_b)-1):ncol(ds_b)] <- c('base_mean','peak_mean')
 
   ds2 <- getSumStat(data=ds,name='mean', func=function(x)mean(x,na.rm=T), add_ds=ds_b  )
-  ds2 <- getSumStat(data=ds,name='sd', func=function(x)mean(x,na.rm=T), add_ds=ds2 )
+  ds2 <- getSumStat(data=ds,name='sd', func=function(x)sd(x,na.rm=T), add_ds=ds2 )
   ds2 <- getSumStat(data=ds,name='percent_cv', func= function(x) sd(x,na.rm=T)/mean(x,na.rm=T)*100, add_ds=ds2  )
   ds2 <- getSumStat(data=ds,name='cutoff', func= function(y) hormCutoff(y, criteria=x$criteria ), add_ds=ds2 )
   ds2 <- getSumStat(data=ds,name='min', func= function(x) min(x,na.rm=T), add_ds=ds2 )

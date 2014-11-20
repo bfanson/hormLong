@@ -19,6 +19,7 @@
 
 hormPlot <- function(x, plot_per_page=4, save_plot=TRUE, plot_height=2, plot_width=6,
                      yscale='free', xscale='free',...){
+  
 #--- main check ---#
   if( class(x)!='hormLong'){
       stop('Object needs to be hormLong.  Run hormBaseline() first')
@@ -56,7 +57,6 @@ hormPlot <- function(x, plot_per_page=4, save_plot=TRUE, plot_height=2, plot_wid
 
   if( save_plot ){
     pdf('hormPlot.pdf', height=plot_per_page * plot_height, width = plot_width )
-    cat( paste0('\n *********\nNote: plots are saved at: \n', getwd(),'/hormPlot.pdf \n***** \n\n')  )
   }
 
   par(mfrow=c(plot_per_page,1), mar=c(2,4,2,0.5),oma=c(2,2,2,0))
@@ -87,12 +87,16 @@ hormPlot <- function(x, plot_per_page=4, save_plot=TRUE, plot_height=2, plot_wid
       points(ds_sub[,time_var], ds_sub[,conc_var],pch=19)
       mtext(unique(ds_sub$plot_title),side=3,line=0.25)
       abline(h = baseline, lty=2)
-      for(l in 1:nrow(events)){
-        arrows(x0=events[l,time_var],x1 =events[l,time_var],y0=ymax*0.95,y1=ymax*0.8, length = 0.1)
-        text(x=events[l,time_var],y=ymax*0.99, events[l,'event'])
+      if( nrow(events)>0 ){
+        for(l in 1:nrow(events)){
+          arrows(x0=events[l,time_var],x1 =events[l,time_var],y0=ymax*0.95,y1=ymax*0.8, length = 0.1)
+          text(x=events[l,time_var],y=ymax*0.99, events[l,'event'])
+        }
       }
   }
-  if( save_plot ){  dev.off()  }
+  if( save_plot ){  dev.off()
+      cat( paste0('\n *********\nNote: plots are saved at: \n', getwd(),'/hormPlot.pdf \n***** \n\n')  )
+  }
 }
 
 

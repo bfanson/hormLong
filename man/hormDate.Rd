@@ -3,12 +3,14 @@
 \alias{hormDate}
 \title{Helper function to work with dates}
 \usage{
-hormDate(date, time)
+hormDate(data, date_var, time_var)
 }
 \arguments{
-\item{date}{date column in format '2014-jan-01'}
+\item{data}{data set with the variables to convert}
 
-\item{time}{time column in format '10:10 PM'}
+\item{date_var}{variable name for date column in format '2014-jan-01'}
+
+\item{time_var}{variable name for the time column in format '10:10 PM'}
 }
 \value{
 new datetime variable
