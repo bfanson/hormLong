@@ -12,12 +12,10 @@
 #' result <- hormSmooth(data=hormone2, by_var='sp, id', group_var='horm_type', time_var='date', conc_var='conc')
  
 
-hormSmooth <- function(data,by_var,group_var,time_var,conc_var, overlay=T, plot_per_page=4,
+hormSmooth <- function(data,by_var,group_var,time_var,conc_var, plot_per_page=4,
                        plot_height=2, plot_width=6, yscale='free', xscale='free',
                        smoothness=c(0.7,0.7), shape=c(19,20), colour=c('red','blue'), line_type=c(1,2),
-                       line_width=c(1,1),
-                       ...) {
-  stop('function under development')
+                       line_width=c(1,1),   ...) {
   
 #--- add in checks ---#
   
@@ -33,12 +31,9 @@ hormSmooth <- function(data,by_var,group_var,time_var,conc_var, overlay=T, plot_
     data$plot_title <- do.call(paste1, data[,c(by_var_v)] )
     
 #--- create plots ---#
-  #opar <- par()  # save user's par()
-  #on.exit(par(opar))
-
   if( save_plot ){
     pdf('hormSmooth.pdf', height=plot_per_page * plot_height, width = plot_width )
-    cat( paste0('\n *********\nNote: plots are saved at: \n', getwd(),'/hormPlot.pdf \n***** \n\n')  )
+    cat( paste0('\n *********\nNote: plots are saved at: \n', getwd(),'/hormSmooth.pdf \n***** \n\n')  )
   }
 
   par(mfrow=c(plot_per_page,1), mar=c(2,4,2,0.5),oma=c(2,2,2,0))
@@ -76,6 +71,5 @@ hormSmooth <- function(data,by_var,group_var,time_var,conc_var, overlay=T, plot_
       }
       legend('topleft',legend=levels(ds_sub[,group_var]),col=colour,pch=shape, lty=line_type,bty='n')
   }
-  if( save_plot ){  dev.off()  }
-  
+  if( save_plot ){  dev.off() }
 }
