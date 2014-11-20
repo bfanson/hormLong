@@ -3,15 +3,21 @@
 \alias{hormBaseline}
 \title{Run iterative process to calculate baseline.}
 \usage{
-hormBaseline(data, by_var, criteria = 2, conc_var, time_var)
+hormBaseline(data, by_var, conc_var, time_var, criteria = 2)
 }
 \arguments{
 \item{data}{dataset.}
 
-\item{grp}{grouping variable.}
+\item{by_var}{grouping variable.}
+
+\item{conc_var}{grouping variable.}
+
+\item{time_var}{grouping variable.}
+
+\item{criteria}{grouping variable.}
 }
 \value{
-sumarised dataset.
+hormLong object.
 }
 \description{
 Run iterative process to calculate baseline.

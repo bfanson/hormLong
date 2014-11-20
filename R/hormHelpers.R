@@ -42,6 +42,30 @@ hormCutoff <- function(x, criteria){
 }
 
 
+#' Helper function to work with dates
+#' 
+#' @param date date column in format '2014-jan-01'
+#' @param time time column in format '10:10 PM'
+#' @return new datetime variable
+#' @export
+#' @examples
+#' 
+#' date <- c('2014-jan-01','2014-jan-02')
+#' time <- c('10:10 Am', '10:30 pm')
+#' hormDate(date,time)
+
+hormDate <- function(date,time){
+  if( any( grepl('-',date)==F ) ){
+    stop('check format of date.  It should be in from: 2014-jan-01')
+  }
+  if( any( (grepl('pm',tolower(time))==F |  grepl('am',tolower(time))==F)==F ) ){
+    stop('check format of date.  It should be in from: 10:00 AM')
+  }
+  datetime <- as.POSIXct(paste(date,time), format="%Y-%b-%d %I:%M %p", tz='GMT' )
+  return(datetime)
+}
+  
+
 #' Read hormone data from a csv file
 #' 
 #' @param none  no arguments
@@ -58,7 +82,6 @@ hormRead <- function( ){
   print( head(ds) )
   return(ds)
 }
-
 
 
 #' Automated function that runs baseline calculation, make plots, outputs dataset as csv

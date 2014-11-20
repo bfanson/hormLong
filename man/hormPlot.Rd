@@ -4,7 +4,7 @@
 \title{Plot longitudinal hormone data with baseline information}
 \usage{
 hormPlot(x, plot_per_page = 4, save_plot = TRUE, plot_height = 2,
-  plot_width = 6, ...)
+  plot_width = 6, yscale = "free", xscale = "free", ...)
 }
 \arguments{
 \item{x}{hormLong object (produced from hormBaseline)}
@@ -17,6 +17,12 @@ hormPlot(x, plot_per_page = 4, save_plot = TRUE, plot_height = 2,
 by both plot_per_page and plot_height.}
 
 \item{plot_width}{the width of the pdf page.}
+
+\item{yscale}{determines if y-axis should be free ('free') to change for each panel or
+remain the same ('fixed') for all panels}
+
+\item{xscale}{determines if x-axis should be free ('free') to change for each panel or
+remain the same ('fixed') for all panels}
 }
 \value{
 NA
@@ -26,6 +32,6 @@ Plot longitudinal hormone data with baseline information
 }
 \examples{
 result <- hormBaseline(data=hormone, by_var='sp, sex, id', time_var='date', conc_var='conc' )
-hormPlot(result)
+hormPlot(result, yscale='fixed',xscale='fixed' )
 }
 

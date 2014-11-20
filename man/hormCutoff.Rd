@@ -17,8 +17,7 @@ nothing
 Helper function to calculate baseline cutoff
 }
 \examples{
-result <- hormBaseline(data=hormone, by_var='sp, sex, id', time_var='date', conc_var='conc' )
-hormPlot(result)
-hormWrite(result, file_out='data_out.csv', file_type='csv' )
+conc <- rnorm(100)
+hormCutoff(conc, 2)
 }
 
