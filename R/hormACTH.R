@@ -9,7 +9,9 @@
 #' @export
 #' @examples
 #' 
-#' result <- hormBaseline(data=hormone, by_var='sp, sex, id', time_var='date', conc_var='conc' )
+#' result <- hormACTH(data=ACTH)
  
 
 hormACTH <- function(data) {
+  stop('in progress')
+}
