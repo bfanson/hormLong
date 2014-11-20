@@ -9,9 +9,9 @@
 #' @export
 #' @examples
 #' 
-#' result <- hormACTH(data=ACTH)
+#' result <- hormSmooth(data=ACTH)
  
 
 hormSmooth <- function(data) {
-  stop('in progress')
+  stop('function under development')
 }
