@@ -9,7 +9,7 @@
 #' @export
 #' @examples
 #' 
-#' result <- hormSmooth(data=hormone2, by_var='sp, id', group_var='horm_type', time_var='date', conc_var='conc')
+#' hormSmooth(data=hormone2, by_var='sp, id', group_var='horm_type', time_var='date', conc_var='conc')
  
 
 hormSmooth <- function(data,by_var,group_var,time_var,conc_var, plot_per_page=4,
@@ -18,10 +18,49 @@ hormSmooth <- function(data,by_var,group_var,time_var,conc_var, plot_per_page=4,
                        line_width=c(1,1),   ...) {
   
 #--- add in checks ---#
-  
+   if(missing(data)){
+      stop('data must be specified')
+    }
+  if(!is.data.frame(data)){
+      stop('data must be a data.frame object')
+    }
+  if(missing(by_var)){
+    message('Warning: No by_var included ... baseline value is for whole dataset')
+    data$hold_id <- 1    # set-up a new by_var
+    by_var <- 'hold_id'  
+    }
+  if(!is.character(by_var)){
+    stop('by_var must be a character string')
+    }
+  if(missing(group_var)){
+    message('Warning: No group_var included ... only one line per plot')
+    data$hold_grp <- 1    # set-up a new by_var
+    group_var <- 'hold_grp'  
+    }
+  if(!is.character(group_var)){
+    stop('group_var must be a character string')
+    }
+
+  by_var_v <- cleanByvar(by_var) # make by_var a vector
+  if( sum(!( c(by_var_v,conc_var,time_var)  %in% names(data) ))>0 ){
+      stop('not all variables are present in data.set.  check your column names')
+    }
+  if(missing(conc_var)){
+      stop('conc_var (e.g. the response variable containing the concentration) must be specified')
+    }
+  if(!is.numeric(data[,conc_var])){
+    stop('conc_var must be numeric')
+    }
+  if(missing(time_var)){
+      stop('time_var must be specified')
+    }
+  if( !( class(data[,time_var]) %in% c('Date','numeric') ) ){
+    time_class <- class(class(data[,time_var]))
+    stop(paste0('time_var must be numeric or Date (your time_var is "',time_class,'" variable') )
+    }
+
   
 #-- set-up ---#
-  by_var_v <- by_var_v <- cleanByvar(by_var) 
   time_var <- time_var
   conc_var <- conc_var
   data <- data[ do.call(order, data[c(by_var_v,group_var,time_var)]), ]
