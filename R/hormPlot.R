@@ -14,7 +14,7 @@
 #' @export
 #' @examples
 #' 
-#' result <- hormBaseline(data=hormone, by_var='sp, sex, id', time_var='date', conc_var='conc' )
+#' result <- hormBaseline(data=hormone, criteria=1, by_var='sp, sex, id', time_var='date', conc_var='conc' )
 #' hormPlot(result, yscale='fixed',xscale='fixed' )
 
 hormPlot <- function(x, plot_per_page=4, save_plot=TRUE, plot_height=2, plot_width=6,
