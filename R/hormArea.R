@@ -22,8 +22,9 @@
 #' hormArea(result)
 
 hormArea <- function(x, method='trapezoid'){
+  stop('function under development')
   if( method!='trapezoid'){ 
-    stop('no other method currently implemented ')}
+    stop('no other method currently implemented ')
   }
   by_var_v <- by_var_v <- cleanByvar(x$by_var) 
   time_var <- x$time_var
@@ -97,8 +98,6 @@ hormArea <- function(x, method='trapezoid'){
       geom_hline(yintercept=10)+ 
       geom_text(aes(x=as.Date(t_adj),y=c_adj*1.1,label=peak_num),vjust=0.3) +
       facet_grid(plot_title~.)
-
-
 
 }
 
