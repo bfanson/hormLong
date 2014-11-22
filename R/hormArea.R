@@ -35,20 +35,22 @@ hormArea <- function(x, method='trapezoid'){
   ds[i] <- lapply(ds[i], as.character)
 
 #--- AUC funciton ---#
-  getAUC <- function(t,c){
-    require(zoo)
-    (AUC <- sum(diff(t[order(t)])*rollmean(c[order(t)],2)))
-  }  
   shiftByCutoff <- function(t, c,cutoff){ 
       c <- c - cutoff
       m <- diff(c)/diff(t)
       b <- c[1:(length(c)-1)] - m*t[1:(length(c)-1)]
       t0 <- -b/m
-      t_new <- t
+      t_new <- as.character(t)
       c_new <- pmax(c,0)
-      for(i in 1:(length(t)-1) ){
-        if(c[i]<0 & c[i+1]>0 ) t_new[i]   <- t0[i] 
-        if(c[i]>0 & c[i+1]<0 ) t_new[i+1] <- t0[i]
+
+      if(c[1]<0 & c[1+1]>0 ) t_new[1]   <- as.character(t0[1]) # increasing 
+      if(c[1]>0 & c[1+1]<0 ) t_new[1+1] <- as.character(t0[1]) # decreasing
+
+      for(i in 2:(length(t)-1) ){
+        if(c[i]<0 & c[i+1]>0 ) t_new[i]   <- as.character(t0[i]) # increasing 
+        if(c[i]>0 & c[i+1]<0 ) t_new[i+1] <- as.character(t0[i]) # decreasing
+        if( c[i-1]>0 & c[i]<0 & c[i+1]>0 ) t_new[i] <- 
+              paste(as.character(t0[i]),as.character(t0[i+1]),sep='-')  # both decresing and increasing
       }
     return( data.frame(t_adj=t_new,c_adj=c_new) )
   }
@@ -101,4 +103,53 @@ hormArea <- function(x, method='trapezoid'){
 
 }
 
+getAUC <- function(t,c){
+    require(zoo)
+    (AUC <- sum(diff(t)*rollmean(c,2)))
+  }  
+
+getPeakInfo <- function(k){
+  cutoff=10
+  t<-as.numeric(k$date)
+  c<-k$conc - cutoff
+  c_t <- k$conc_type
+  row_id <- 1:nrow(k)
+ 
+  #-- assign peak number ---#
+    num <- 0
+    peak_num <- rep(0,length(t) )
+    if(c_t[1]=='peak'){ num <- num+1; peak_num[1] <- num} 
+    for(i in 2:length(t) ){
+      if( c_t[i]=='peak' & c_t[i-1]=='base' ){ num <- num+1; peak_num[i] <- num}
+    }
+  
+  #-- grab each peak and calculate stats --#
+  if(max(peak_num)>0){
+    peaks <- list( )
+    for( p in 1:max(k$peak_num) ){
+      st <-  max(1, min( which(peak_num==p) )-1 )
+      end <-  min(length(t), which(peak_num==p)+1 )  
+    #-- cap t and c in case a peak starts or ends the sampling period --#
+        
+    
+    #-- calculate point that slope crosses cutoff --#
+      m <- diff(c[st:end])/diff(t[st:end])
+      b <- c[st:(end-1)] - m*t[st:(end-1)]
+      t0 <- -b[unique(c(1,length(b)))]/m[unique(c(1,length(m)))]
+      if( length(m)==1 & st==1){ t0 <-c(t[st],t0)}   
+      if( length(m)==1 & st>1){ t0  <-c(t0,t[end])}   
+    
+      t_new <- rep(t[st:end],each=2)
+      t_new[c(1:2,(length(t_new)-1):length(t_new))] <- rep(t0,each=2) 
+        
+      c_new <- rep(c[st:end],each=2)
+      c_new[c(1,length(c_new))] <- 0
+      c_new[c(2,(length(c_new)-1))] <- pmax(c_new[c(2,(length(c_new)-1))],0)
+      
+      AUC <- getAUC(t_new,c_new)
+      peaks[p] <- list( data.frame(peak_num=p,t=t_new, c=c_new, cutoff=cutoff, AUC=AUC) )
+    }
+  }
+  return( do.call(rbind, peaks))
+}  
 
