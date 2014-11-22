@@ -161,6 +161,21 @@ write.rtf <- function(x,file){
   done(rtf)
 }
 
+
+getPlotTitle <- function(data){
+  #-- create titles--#
+    paste1 <- function(...) paste(...,sep='; ')
+    if( length(by_var_v)>1){
+        plot_title <- do.call(paste1, data[,c(by_var_v)] )
+     }else{plot_title <- data[,c(by_var_v)] }
+}
+
+
+getAUC <- function(t,c){
+    require(zoo)
+    (AUC <- sum(diff(t)*rollmean(c,2)))
+  }  
+
 #' Helper to get aggregate statistics
 #' 
 

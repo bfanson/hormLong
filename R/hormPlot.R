@@ -47,14 +47,10 @@ hormPlot <- function(x, plot_per_page=4, save_plot=TRUE, plot_height=2, plot_wid
   data <- x$data
   data <- data[ do.call(order, data[c(by_var_v,time_var)]), ]
   
-  #-- create titles--#
-    paste1 <- function(...) paste(...,sep='; ')
-    data$plot_title <- do.call(paste1, data[,c(by_var_v)] )
+  data$plot_title <- getPlotTitle(data)
+
     
 #--- create plots ---#
-  #opar <- par()  # save user's par()
-  #on.exit(par(opar))
-
   if( save_plot ){
     pdf('hormPlot.pdf', height=plot_per_page * plot_height, width = plot_width )
   }
