@@ -9,10 +9,10 @@
 #' @export
 #' @examples
 #' 
-#' result <- hormBaseline(data=hormone, by_var='sp, sex, id', time_var='date', conc_var='conc' )
+#' result <- hormBaseline(data=hormone, by_var='sp, sex, id', time_var='date', conc_var='conc', event_var='Event' )
  
 
-hormBaseline <- function(data, by_var,conc_var, time_var,criteria=2 ) {
+hormBaseline <- function(data, by_var,conc_var, time_var,criteria=2, event_var ) {
 #--- initial checks of arguments ---#
   if(missing(data)){
       stop('data must be specified')
@@ -35,16 +35,13 @@ hormBaseline <- function(data, by_var,conc_var, time_var,criteria=2 ) {
     stop('criteria must be numeric')
     }
 
-  by_var_v <- cleanByvar(by_var) # make by_var a vector
-  if( sum(!( c(by_var_v,conc_var,time_var)  %in% names(data) ))>0 ){
-      stop('not all variables are present in data.set.  check your column names')
-    }
   if(missing(conc_var)){
       stop('conc_var (e.g. the response variable containing the concentration) must be specified')
     }
   if(!is.numeric(data[,conc_var])){
     stop('conc_var must be numeric')
     }
+
   if(missing(time_var)){
       stop('time_var must be specified')
     }
@@ -52,6 +49,17 @@ hormBaseline <- function(data, by_var,conc_var, time_var,criteria=2 ) {
     time_class <- class(class(data[,time_var]))
     stop(paste0('time_var must be numeric or Date (your time_var is "',time_class,'" variable') )
     }
+  
+  if(missing(event_var)){
+    event_var <- NULL    
+  }
+
+  
+  by_var_v <- cleanByvar(by_var) # make by_var a vector
+  if( sum(!( c(by_var_v,conc_var,time_var)  %in% names(data) ))>0 ){
+      stop('not all variables are present in data.set.  check your column names')
+    }
+
 
 #--- checks of data.frame ---#
   data$row_id <- 1:nrow(data) 
@@ -77,7 +85,7 @@ hormBaseline <- function(data, by_var,conc_var, time_var,criteria=2 ) {
   loop <- 0
   while(total>0){
     hold <- hold[hold$exclude==0,] 
-    hold_add <- aggregate(data1[,conc_var], by = data1[c(by_var_v)], FUN = function(x)hormCutoff(x,criteria=criteria) )
+    hold_add <- aggregate(data1[,conc_var], by = data1[c(by_var_v)], FUN = function(x)getCutoff(x,criteria=criteria) )
     hold <- merge(hold, hold_add )
     hold$exclude <- ifelse( hold[,conc_var] > hold$x, 1,0 ) 
     total <- sum(hold$exclude)
@@ -91,7 +99,8 @@ hormBaseline <- function(data, by_var,conc_var, time_var,criteria=2 ) {
   data1$conc_type <- ifelse(data1$exclude==1,'peak','base') 
  
   data2 <- merge(data, data1[,c('row_id','conc_type')],by='row_id',all.x=T)
-  data_class <- list( data=data2, by_var=by_var, time_var=time_var,conc_var=conc_var, criteria=criteria) 
+  data_class <- list( data=data2, by_var=by_var, time_var=time_var,
+                      conc_var=conc_var, event_var=event_var, criteria=criteria) 
   class(data_class) <- 'hormLong'
   return(data_class)
 }

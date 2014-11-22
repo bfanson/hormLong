@@ -47,7 +47,7 @@ hormPlot <- function(x, plot_per_page=4, save_plot=TRUE, plot_height=2, plot_wid
   data <- x$data
   data <- data[ do.call(order, data[c(by_var_v,time_var)]), ]
   
-  data$plot_title <- getPlotTitle(data)
+  data$plot_title <- getPlotTitle(data, by_var=by_var_v)
 
     
 #--- create plots ---#
@@ -59,9 +59,11 @@ hormPlot <- function(x, plot_per_page=4, save_plot=TRUE, plot_height=2, plot_wid
   for( i in unique(data$plot_title)){
     ds_sub <- data[data$plot_title==i, ]
     baseline <- hormCutoff( ds_sub[ds_sub$conc_type=='base',conc_var], criteria=x$criteria )
-    events <- ds_sub[ !is.na(ds_sub$event) & ds_sub$event!='',c('event',time_var)]
+    if(!is.null(x$event_var)){
+      events <- ds_sub[ !is.na(ds_sub[,x$event_var]) & ds_sub[,x$event_var]!='',c(x$event_var,time_var)]
+      }else{events <- data.frame()}
     ds_sub <- ds_sub[!is.na(ds_sub[,conc_var]),]
-    
+
     #--- set up scales
       if( yscale=='free'){
         ymin <- min(ds_sub[,conc_var])*0.95
@@ -86,7 +88,7 @@ hormPlot <- function(x, plot_per_page=4, save_plot=TRUE, plot_height=2, plot_wid
       if( nrow(events)>0 ){
         for(l in 1:nrow(events)){
           arrows(x0=events[l,time_var],x1 =events[l,time_var],y0=ymax*0.95,y1=ymax*0.8, length = 0.1)
-          text(x=events[l,time_var],y=ymax*0.99, events[l,'event'])
+          text(x=events[l,time_var],y=ymax*0.99, events[l,x$event_var])
         }
       }
   }

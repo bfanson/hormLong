@@ -37,7 +37,7 @@ hormWrite <- function(x, filename, file_type='csv',... ){
 #' conc <- rnorm(100)
 #' hormCutoff(conc, 2)
 
-hormCutoff <- function(x, criteria){ 
+getCutoff <- function(x, criteria){ 
   mean(x, na.rm=T)+sd(x, na.rm=T)*criteria 
 }
 
@@ -162,13 +162,13 @@ write.rtf <- function(x,file){
 }
 
 
-getPlotTitle <- function(data){
+getPlotTitle <- function(data, by_var=by_var_v){
   #-- create titles--#
-    paste1 <- function(...) paste(...,sep='; ')
-    if( length(by_var_v)>1){
-        plot_title <- do.call(paste1, data[,c(by_var_v)] )
-     }else{plot_title <- data[,c(by_var_v)] }
+    if( length(by_var)>1){
+        plot_title <- do.call(paste1, data[,c(by_var)] )
+     }else{plot_title <- data[,c(by_var)] }
 }
+paste1 <- function(...) paste(...,sep='; ')
 
 
 getAUC <- function(t,c){
@@ -176,12 +176,73 @@ getAUC <- function(t,c){
     (AUC <- sum(diff(t)*rollmean(c,2)))
   }  
 
+
+#' Helper to get peaks and their boundaries (based on cutoff from hormBaseline)
+#' 
+getPeakInfo <- function(k, date=time_var,conc=conc_var){
+  if( !any(k$conc_type=='peak')){
+    return(data.frame(peak_num=0,t=0, c=0, cutoff=k$cutoff[1], AUC=0))
+  }else{
+    cutoff <- k$cutoff[1] 
+    t<-as.numeric(k[,date])
+    c<-k[,conc] - cutoff
+    c_t <- k$conc_type
+
+  #-- assign peak number ---#
+    num <- 0
+    peak_num <- rep(0,length(t) )
+    if(c_t[1]=='peak'){ num <- num+1; peak_num[1] <- num} 
+    for(i in 2:length(t) ){
+        if( c_t[i]=='peak' & c_t[i-1]=='base' ){ num <- num+1}
+        if( c_t[i]=='peak'){ peak_num[i] <- num} 
+      }
+  
+  #-- extract peak AUC info ---#
+   if(max(peak_num)>0){
+      peaks <- list( )
+      for( p in 1:max(peak_num) ){
+        st <-  max(1, min( which(peak_num==p) )-1 )
+        end <- min(length(t), max(which(peak_num==p))+1 )
+        st_ind <- ifelse( min( which(peak_num==p))==1,1,0)
+        
+      #-- calculate point that slope crosses cutoff --#
+        m <- diff(c[st:end])/diff(t[st:end])
+        b <- c[st:(end-1)] - m*t[st:(end-1)]
+        t0 <- -b[unique(c(1,length(b)))]/m[unique(c(1,length(m)))]
+        if( length(m)==1 & st==1){ t0 <-c(t[st],t0)}   
+        if( length(m)==1 & st>1){ t0  <-c(t0,t[end])}   
+        if( st_ind==1){ t0[1] <-c(t[st])  }
+      
+        t_new <- t[c(st,st:end,end)]
+        t_new[c(1:2,(length(t_new)-1):length(t_new))] <- rep(t0,each=2) 
+          
+        c_new <- c[c(st,st:end,end)]
+        c_new[c(1,length(c_new))] <- 0
+        c_new[c(2,(length(c_new)-1))] <- pmax(c_new[c(2,(length(c_new)-1))],0)
+        
+        AUC <- getAUC(t_new,c_new)
+        peaks[p] <- list( data.frame(peak_num=p,t=t_new, c=c_new, cutoff=cutoff, AUC=AUC) )
+        #plot(c_new~t_new)
+      }
+    }
+  return( do.call(rbind, peaks) )
+  }
+}  
+
 #' Helper to get aggregate statistics
 #' 
 
-  getSumStat <- function(data=ds,name='mean', func=function(x)mean(x,na.rm=T), add_ds ){
-    ds1 <- aggregate(data[,conc_var], by = data[c(by_var_v)], FUN = func )
+  getSumStat <- function(data=ds,name='mean', func=function(x)mean(x,na.rm=T), add_ds, c_var=conc_var,by_var=by_var_v ){
+    ds1 <- aggregate(data[,c_var], by = data[c(by_var)], FUN = func )
       names(ds1)[ncol(ds1)] <- name
       if(!missing(add_ds)){ ds1 <- merge(add_ds,ds1,all=T)}
       return(ds1)
   }    
+
+#' Helper to get rid of factor
+#' 
+ridFactor <- function(data){ 
+  i <- sapply(data, is.factor)
+  data[i] <- lapply(data[i], as.character)
+  return(data)
+}

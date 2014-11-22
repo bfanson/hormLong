@@ -3,19 +3,20 @@
 \alias{hormArea}
 \title{Get area under the curve}
 \usage{
-hormArea(x, method = "trapezoid")
+hormArea(x, method = "trapezoid", plot_per_page = 4, plot_height = 2,
+  plot_width = 6, save_plot = T)
 }
 \arguments{
 \item{x}{hormLong object (produced from hormBaseline)}
 
 \item{plot_per_page}{the number of plot panels per page, by row.}
 
-\item{save_plot}{indicates whether}
-
 \item{plot_height}{the height of individual plot panels (in inches).  Pdf page height is determined
 by both plot_per_page and plot_height.}
 
 \item{plot_width}{the width of the pdf page.}
+
+\item{save_plot}{indicates whether}
 
 \item{yscale}{determines if y-axis should be free ('free') to change for each panel or
 remain the same ('fixed') for all panels}
@@ -34,7 +35,7 @@ Citation: Variation within and between Birds in Corticosterone Responses of Grea
 General and Comparative Endocrinology, Volume 125, Issue 2, February 2002, Pages 197–206
 J.F. Cockrem, B. Silverin
 
-result <- hormBaseline(data=hormone, criteria=1, by_var='sp, sex, id', time_var='date', conc_var='conc' )
+result <- hormBaseline(data=hormone, criteria=2, by_var='sp, sex, id', time_var='date', conc_var='conc' )
 hormArea(result)
 }
 
