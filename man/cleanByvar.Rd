@@ -5,7 +5,16 @@
 \usage{
 cleanByvar(x)
 }
+\arguments{
+\item{x}{by_var to be cleans (e.g. 'species, hormone' )}
+}
+\value{
+x split and trimmed of whitespace
+}
 \description{
 Splits and trims by_var
+}
+\examples{
+ds <- hormRead()
 }
 

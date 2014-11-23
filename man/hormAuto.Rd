@@ -3,11 +3,10 @@
 \alias{hormAuto}
 \title{Automated function that runs baseline calculation, make plots, outputs dataset as csv}
 \usage{
-hormAuto(file_method = "write", by_var, time_var, conc_var,
-  filename = "test")
+hormAuto(by_var, time_var, conc_var, filename = "test")
 }
 \arguments{
-\item{file_method}{if 'choose' then user is prompted. if 'write' then user writes the name}
+\item{none}{}
 }
 \value{
 nothing in R.  Output hormPlot.pdf and horm_data_out.csv

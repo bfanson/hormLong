@@ -3,9 +3,20 @@
 \alias{write.rtf}
 \title{Write results to rtf file}
 \usage{
-write.rtf(x, file)
+write.rtf(x, filename)
+}
+\arguments{
+\item{x}{dataframe to be writen to a file}
+
+\item{file}{filename}
+}
+\value{
+x split and trimmed of whitespace
 }
 \description{
 Write results to rtf file
+}
+\examples{
+write.rtf(cars,'cars.rtf')
 }
 

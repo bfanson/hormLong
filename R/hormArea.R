@@ -1,4 +1,4 @@
-#' Get area under the curve 
+#' Plot the area under the curve for peak values 
 #' 
 #' @param x hormLong object (produced from hormBaseline)
 #' @param plot_per_page the number of plot panels per page, by row.

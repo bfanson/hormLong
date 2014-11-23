@@ -58,7 +58,7 @@ hormPlot <- function(x, plot_per_page=4, save_plot=TRUE, plot_height=2, plot_wid
   par(mfrow=c(plot_per_page,1), mar=c(2,4,2,0.5),oma=c(2,2,2,0))
   for( i in unique(data$plot_title)){
     ds_sub <- data[data$plot_title==i, ]
-    baseline <- hormCutoff( ds_sub[ds_sub$conc_type=='base',conc_var], criteria=x$criteria )
+    baseline <- getCutoff( ds_sub[ds_sub$conc_type=='base',conc_var], criteria=x$criteria )
     if(!is.null(x$event_var)){
       events <- ds_sub[ !is.na(ds_sub[,x$event_var]) & ds_sub[,x$event_var]!='',c(x$event_var,time_var)]
       }else{events <- data.frame()}

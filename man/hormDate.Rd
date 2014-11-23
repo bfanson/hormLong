@@ -3,14 +3,16 @@
 \alias{hormDate}
 \title{Helper function to work with dates}
 \usage{
-hormDate(data, date_var, time_var)
+hormDate(data, date_var, time_var, name = "datetime")
 }
 \arguments{
 \item{data}{data set with the variables to convert}
 
-\item{date_var}{variable name for date column in format '2014-jan-01'}
+\item{date_var}{variable name for date column in format '2014-01-01'}
 
 \item{time_var}{variable name for the time column in format '10:10 PM'}
+
+\item{name}{name of the new date variable created by the function}
 }
 \value{
 new datetime variable
@@ -19,8 +21,9 @@ new datetime variable
 Helper function to work with dates
 }
 \examples{
-date <- c('2014-jan-01','2014-jan-02')
-time <- c('10:10 Am', '10:30 pm')
-hormDate(date,time)
+date <- c('2014-01-01','2014-01-01')
+time <- c('10:10 AM', '10:30 PM')
+ds <- data.frame(date=date,time=time)
+hormDate(ds,date_var='date',time_var='time',name='datetime' )
 }
 

@@ -11,9 +11,7 @@ hormWrite(x, filename, file_type = "csv", ...)
 \item{filename}{name of file to be saved. Unless path is specified, file will be
 saved in your current working directory}
 
-\item{file_type}{determines type of file (e.g. csv, tab-delimited)}
-
-\item{...}{options for write.csv}
+\item{file_type}{determines type of file (only csv currently)}
 }
 \value{
 nothing
@@ -23,6 +21,6 @@ Write data from a hormLong object to a file
 }
 \examples{
 result <- hormBaseline(data=hormone, by_var='sp, sex, id', time_var='date', conc_var='conc' )
-hormWrite(result, filename='data_out.csv', file_type='csv' )
+head(result)
 }
 

@@ -3,14 +3,13 @@
 #' @param x hormLong object (produced from hormBaseline)
 #' @param filename name of file to be saved. Unless path is specified, file will be
 #' saved in your current working directory 
-#' @param file_type  determines type of file (e.g. csv, tab-delimited) 
-#' @param ...  options for write.csv 
+#' @param file_type  determines type of file (only csv currently)  
 #' @return nothing
 #' @export
 #' @examples
 #' 
 #' result <- hormBaseline(data=hormone, by_var='sp, sex, id', time_var='date', conc_var='conc' )
-#' hormWrite(result, filename='data_out.csv', file_type='csv' )
+#' head(result)
 
 hormWrite <- function(x, filename, file_type='csv',... ){
 #--- main check ---#
@@ -30,12 +29,12 @@ hormWrite <- function(x, filename, file_type='csv',... ){
 #' 
 #' @param x hormone concentration
 #' @param criteria the number of standard deviations above baseline 
-#' @return nothing
+#' @return cutoff value
 #' @export
 #' @examples
 #' 
 #' conc <- rnorm(100)
-#' hormCutoff(conc, 2)
+#' getCutoff(conc, 2)
 
 getCutoff <- function(x, criteria){ 
   mean(x, na.rm=T)+sd(x, na.rm=T)*criteria 
@@ -45,20 +44,22 @@ getCutoff <- function(x, criteria){
 #' Helper function to work with dates
 #' 
 #' @param data data set with the variables to convert
-#' @param date_var variable name for date column in format '2014-jan-01'
+#' @param date_var variable name for date column in format '2014-01-01'
 #' @param time_var variable name for the time column in format '10:10 PM'
+#' @param name name of the new date variable created by the function
 #' @return new datetime variable
 #' @export
 #' @examples
 #' 
-#' date <- c('2014-jan-01','2014-jan-02')
-#' time <- c('10:10 Am', '10:30 pm')
-#' hormDate(date,time)
+#' date <- c('2014-01-01','2014-01-01')
+#' time <- c('10:10 AM', '10:30 PM')
+#' ds <- data.frame(date=date,time=time)
+#' hormDate(ds,date_var='date',time_var='time',name='datetime' )
 
-hormDate <- function(data,date_var,time_var){
+hormDate <- function(data,date_var,time_var,name='datetime'){
   if( missing(date_var) ){stop('please provide date_var. Time_var is optional ')}
   if( !missing(time_var) & any( grepl('-',data[,date_var])==F ) ){
-    stop('check format of date_var.  It should be in from: 01-jan-2014')
+    stop('check format of date_var.  It should be in from: 2014-01-01')
   }
   if( !missing(time_var)){
     if(any( (grepl('pm',tolower(data[,time_var]))==F |  
@@ -71,10 +72,12 @@ hormDate <- function(data,date_var,time_var){
   if(!missing(date_var) & missing(time_var)){
     datetime <- as.Date(data[,date_var])
   }
-  data$datetime<-datetime  
+  data$rename_this<-datetime  
+  names(data)[ncol(data)] <- name
   return(data)
 }
   
+
 
 #' Read hormone data from a csv file
 #' 
@@ -93,58 +96,14 @@ hormRead <- function( ){
   return(ds)
 }
 
-
-#' Automated function that runs baseline calculation, make plots, outputs dataset as csv
-#' 
-#' @param file_method  if 'choose' then user is prompted. if 'write' then user writes the name 
-#' @return nothing in R.  Output hormPlot.pdf and horm_data_out.csv
-#' @export
-#' @examples
-#' 
-#' ds <- hormAuto(by_var='sp, sex, id', time_var='date', conc_var='conc')
-
-hormAuto<- function(file_method='write',by_var, time_var, conc_var, filename='test' ){
-  ds  <- hormRead()
-  ds <- hormone
-  res <- hormBaseline(data=ds, by_var=by_var,time_var=time_var,conc_var=conc_var)
-  hormPlot(res)
-  hormWrite(res,'horm_data_out.csv')
-#   if( file_method=='write'){ 
-#     if(missing(filename){ }
-}
-
-
-#' Run iterative process to calculate baseline.
-#' 
-#' @param data dataset.
-#' @param by_var grouping variable.
-#' @param time_var grouping variable.
-#' @param conc_var grouping variable.
-#' 
-#' @return hormLong object.
-#' @export
-#' @examples
-#' 
-#' result <- hormACTH(x=result)
- 
-hormACTH <- function(x, start=0, end=10) {
-  if( class(x)!='hormLong'){
-      stop('Object needs to be hormLong.  Run hormBaseline() first')
-  }
-  ds <- x$data
-  by_var_v <- cleanByvar(x$by_var)
-  time_var <- x$time_var
-  conc_var <- x$conc_var
-  ds <- ds[ start <= ds[,time_var] & ds[,time_var] <= start, ]
-  ds_base <- getSumStat( ds[ ds[,'conc_type']=='base',], name='baseline', func=function(x) mean(x,na.rm=T) )
-  ds <- merge(ds, ds_base, all.x=T)
-  ds$conc_baseline <- ds[,conc_var]/ x$baseline
-  
-}
-
-
-
 #' Splits and trims by_var
+#' 
+#' @param x by_var to be cleans (e.g. 'species, hormone' )
+#' @return x split and trimmed of whitespace
+#' @export
+#' @examples
+#' 
+#' ds <- hormRead()
 
 cleanByvar <- function(x){
   by_var_v <- gsub("^\\s+|\\s+$", "", unlist(strsplit(x,',')) )
@@ -152,14 +111,32 @@ cleanByvar <- function(x){
 }
 
 #' Write results to rtf file
+#'
+#' @param x dataframe to be writen to a file
+#' @param file filename 
+#' @return x split and trimmed of whitespace
+#' @export
+#' @examples
 #' 
+#' write.rtf(cars,'cars.rtf')
 
-write.rtf <- function(x,file){
+write.rtf <- function(x,filename){
   require(rtf)
-  rtf<-RTF(file, width=7, height=11, font.size=9, omi=c(3,1,1,1))
+  rtf<-RTF(filename, width=7, height=11, font.size=9, omi=c(3,1,1,1))
       addTable.RTF(rtf, x)
   done(rtf)
 }
+
+
+#' Combined the columns listed in the by_var_v
+#'
+#' @param data dataframe containing the variables in by_var_v
+#' @param by_var the by_var_v (vector of names) 
+#' @return the combined columns as a single vector, separated by a semicolon
+#' @export
+#' @examples
+#' 
+#' (plot_title <- getPlotTitle(hormone,by_var=c('sp','sex')))
 
 
 getPlotTitle <- function(data, by_var=by_var_v){
@@ -171,14 +148,36 @@ getPlotTitle <- function(data, by_var=by_var_v){
 paste1 <- function(...) paste(...,sep='; ')
 
 
+#' Get the area under a curve using trapezoid method
+#'
+#' @param t time vector
+#' @param c response vector (e.g. hormone concentration) 
+#' @return calculates the area under the curve for the curve
+#' @export
+#' @examples
+#' 
+#' time <- 1:10
+#' conc <- c( rep(0,4),2,2,rep(0,4))
+#' plot(conc~time,type='l')
+#' getAUC(time,conc)
+
 getAUC <- function(t,c){
     require(zoo)
     (AUC <- sum(diff(t)*rollmean(c,2)))
   }  
 
+#' Assigns peak number and get area under curve for each peak
+#'
+#' @param k dataframe (broken first by by_var)
+#' @param date time variable
+#' @param conc response variable (e.g. concentration)
+#' @return return dataset with peaks identified and AUC calculated
+#' @export
+#' @examples
+#'   
+#' head(hormone) 
 
-#' Helper to get peaks and their boundaries (based on cutoff from hormBaseline)
-#' 
+
 getPeakInfo <- function(k, date=time_var,conc=conc_var){
   if( !any(k$conc_type=='peak')){
     return(data.frame(peak_num=0,t=0, c=0, cutoff=k$cutoff[1], AUC=0))
@@ -229,18 +228,40 @@ getPeakInfo <- function(k, date=time_var,conc=conc_var){
   }
 }  
 
-#' Helper to get aggregate statistics
+#' Helper function to get aggregate statistics
+#'
+#' @param data dataframe
+#' @param name new name for variable being produced
+#' @param func function to be used in aggregate()
+#' @param add_ds optional dataframe - if included, the new variable will be added to the supplied dataframe 
+#' @param c_var name of the conc_var (e.g. concentration)
+#' @param by_var vector of by_var (usually use by_var_v )
+#' @return return either new variable by itself or in the dataframe listed in add_ds 
+#' @export
+#' @examples
 #' 
+#' ds <- getSumStat(hormone, name='mean_var', func= function(x) mean(x,na.rm=T), by_var=c('sp','sex'), c_var='conc' )
+#' ds
 
-  getSumStat <- function(data=ds,name='mean', func=function(x)mean(x,na.rm=T), add_ds, c_var=conc_var,by_var=by_var_v ){
+getSumStat <- function(data=ds,name='mean', func=function(x)mean(x,na.rm=T), add_ds, c_var=conc_var,by_var=by_var_v ){
     ds1 <- aggregate(data[,c_var], by = data[c(by_var)], FUN = func )
       names(ds1)[ncol(ds1)] <- name
       if(!missing(add_ds)){ ds1 <- merge(add_ds,ds1,all=T)}
       return(ds1)
   }    
 
-#' Helper to get rid of factor
+#' Helper function that converts all factors to string in a dataset
+#'
+#' @param data dataframe
+#' @return dataframe with all factors converted to strings 
+#' @export
+#' @examples
+#'
+#' sapply(iris,class)
+#' ds <- ridFactor(iris)
+#' sapply(ds,class)
 #' 
+
 ridFactor <- function(data){ 
   i <- sapply(data, is.factor)
   data[i] <- lapply(data[i], as.character)
