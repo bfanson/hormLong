@@ -32,7 +32,7 @@ hormSumTable <- function(x, file_type='rtf', num_decimals=2){
   ds2 <- getSumStat(data=ds,name='mean', func=function(x)mean(x,na.rm=T), add_ds=ds_b,c_var=conc_var,by_var = by_var_v  )
   ds2 <- getSumStat(data=ds,name='sd', func=function(x)sd(x,na.rm=T), add_ds=ds2,c_var=conc_var,by_var = by_var_v )
   ds2 <- getSumStat(data=ds,name='percent_cv', func= function(x) sd(x,na.rm=T)/mean(x,na.rm=T)*100, add_ds=ds2,c_var=conc_var,by_var = by_var_v  )
-  ds2 <- getSumStat(data=ds[ds$conc_type=='base',],name='cutoff', func= function(y) getCutoff(y, criteria=x$criteria, ctype=conc_type), add_ds=ds2,c_var=conc_var,by_var = by_var_v )
+  ds2 <- getSumStat(data=ds[ds$conc_type=='base',],name='cutoff', func= function(y) getCutoff(y, criteria=x$criteria), add_ds=ds2,c_var=conc_var,by_var = by_var_v )
   ds2 <- getSumStat(data=ds,name='min', func= function(x) min(x,na.rm=T), add_ds=ds2,c_var=conc_var,by_var = by_var_v )
   ds2 <- getSumStat(data=ds,name='max', func= function(x) max(x,na.rm=T), add_ds=ds2,c_var=conc_var,by_var = by_var_v )
   ds2 <- getSumStat(data=ds,name='median', func= function(x) median(x,na.rm=T), add_ds=ds2,c_var=conc_var,by_var = by_var_v )
