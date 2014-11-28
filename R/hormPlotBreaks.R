@@ -76,7 +76,7 @@ hormPlotBreaks <- function(x, break_cutoff=40, break_buffer=60,
       points(ds_sub1$x_adj,ds_sub1[,conc_var])
       lines(ds_sub1$x_adj,ds_sub1[,conc_var])
     #  text(ds_sub1$x_adj,-2+rnorm(length(ds_sub1$x_adj)),labels=ds_sub1$x,cex=0.6)
-        p_at <-pretty( c(min(ds_sub1$x_adj),max(ds_sub1$x_adj),n=12*nrow(ds_sub1)/nrow(ds_sub) ) )
+        p_at <-pretty( c(min(ds_sub1$x_adj), max(ds_sub1$x_adj), n=12*nrow(ds_sub1)/nrow(ds_sub) ) )
         axis(1,at=p_at, labels = c(p_at[1:(length(p_at)-1)]+ds_sub1$x_diff[1],NA) )
 
 #     if(!is.null(x$event_var)){

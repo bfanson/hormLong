@@ -1,10 +1,10 @@
 #' Run iterative process to calculate baseline.
 #' 
 #' @param data dataset.
-#' @param by_var grouping variable.
-#' @param time_var grouping variable.
-#' @param conc_var grouping variable.
-#' @param criteria grouping variable.
+#' @param by_var names of the grouping variables (e.g. 'id', 'species, id' )
+#' @param time_var name of the time variable (e.g. 'date', 'datetime', 'days').
+#' @param conc_var name of theconcentration variable.
+#' @param criteria baseline criteria (mean + criterias * SD)
 #' @return hormLong object.
 #' @export
 #' @examples
@@ -20,6 +20,8 @@ hormBaseline <- function(data, by_var,conc_var, time_var,criteria=2, event_var )
   if(!is.data.frame(data)){
       stop('data must be a data.frame object')
     }
+  data <- ridFactor(data) # get rid of all factors
+  
   if(missing(by_var)){
     message('Warning: No by_var included ... baseline value is for whole dataset')
     data$hold_id <- 1    # set-up a new by_var
@@ -39,7 +41,12 @@ hormBaseline <- function(data, by_var,conc_var, time_var,criteria=2, event_var )
       stop('conc_var (e.g. the response variable containing the concentration) must be specified')
     }
   if(!is.numeric(data[,conc_var])){
-    stop('conc_var must be numeric')
+    cat('WARNING: conc_var should be numeric. Program will convert automatically.  Non-numeric
+         values will be become missing.  Any non_numeric values are listed below:\n\n')
+    print('------')
+    print( data[ is.na(as.numeric( data[,conc_var])),] )
+    cat('\n')
+    data[,conc_var] <- as.numeric(data[,conc_var])
     }
 
   if(missing(time_var)){
@@ -81,11 +88,13 @@ hormBaseline <- function(data, by_var,conc_var, time_var,criteria=2, event_var )
 #--- iterative algorithm ---#
   hold <- data1
   hold$exclude <- 0
+  hold$x <- 0
   total <- 99
   loop <- 0
+  print('*---  Iteration History   ----*')
   while(total>0){
-    hold <- hold[hold$exclude==0,] 
-    hold_add <- aggregate(data1[,conc_var], by = data1[c(by_var_v)], FUN = function(x)getCutoff(x,criteria=criteria) )
+    hold <- subset( hold, exclude==0, -x ) 
+    hold_add <- aggregate(hold[,conc_var], by = hold[c(by_var_v)], FUN = function(x) getCutoff(x,criteria=criteria) )
     hold <- merge(hold, hold_add )
     hold$exclude <- ifelse( hold[,conc_var] > hold$x, 1,0 ) 
     total <- sum(hold$exclude)

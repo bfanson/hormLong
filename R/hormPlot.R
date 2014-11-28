@@ -96,29 +96,3 @@ hormPlot <- function(x, plot_per_page=4, save_plot=TRUE, plot_height=2, plot_wid
       cat( paste0('\n *********\nNote: plots are saved at: \n', getwd(),'/hormPlot.pdf \n***** \n\n')  )
   }
 }
-
-
-
-#' Boxplot of individual concentrations 
-#' 
-#' @param data dataset 
-#' @param id_var name of the individual variable
-#' @return NA
-#' @export
-#' @examples
-#' 
-#' hormBoxplot(data=hormone, conc_var='conc',id_var='id')
-#' 
-
-hormBoxplot <- function(data, conc_var, id_var, plot_height=4, plot_width=6, save_plot=T){
-  if( save_plot ){
-    pdf('hormBoxplot.pdf', height=plot_height, width = plot_width )
-    cat( paste0('\n *********\nNote: plots are saved at: \n', getwd(),'/hormBoxplot.pdf \n***** \n\n')  )
-  }
-  par(mar=c(3,4,1,1))
-  boxplot( data[,conc_var] ~ data[,id_var],ylab=conc_var )  
-    points(as.numeric(as.factor(data[,id_var])), data[,conc_var] )
-  if( save_plot ){  dev.off() }
-}
-
-
