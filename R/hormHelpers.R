@@ -36,7 +36,7 @@ hormWrite <- function(x, filename, file_type='csv',... ){
 #' conc <- rnorm(100)
 #' getCutoff(conc, 2)
 
-getCutoff <- function(x, criteria){ 
+getCutoff <- function(x, criteria){
   mean(x, na.rm=T)+sd(x, na.rm=T)*criteria 
 }
 

@@ -34,13 +34,15 @@ hormArea <- function(x, method='trapezoid',plot_per_page=4,plot_height=2, plot_w
   data <- data[!is.na(data[,conc_var]),]
   data <-ridFactor(data)
   data$plot_title <- getPlotTitle(data,by_var=by_var_v)
-  data <- getSumStat(data=data,name='cutoff', func= function(y) getCutoff(y, criteria=x$criteria ), add_ds=data, by_var=by_var_v, c_var=conc_var )
+  data <- getSumStat(data=data[data$conc_type=='base',], name='cutoff', func= function(y) getCutoff(y, criteria=x$criteria ), 
+                                                by_var=by_var_v, c_var=conc_var,add_ds=data  )
 
 #--- peak analysis ---#
   #-- shift curve by cutoff ---#
     # k <- data[data$plot_title==unique(data$plot_title)[1],]
     ds_pk <- do.call("rbind", as.list(by(data, data[,by_var_v], 
-                            function(k, date=time_var,conc=conc_var) data.frame(getPeakInfo(k,date,conc),plot_title=unique(k$plot_title ) ) ) ) ) 
+                            function(k, date=time_var,conc=conc_var) data.frame(getPeakInfo(k,date,conc),
+                                        plot_title=unique(k$plot_title ) ) ) ) ) 
     ds_pk <- ds_pk[ds_pk$peak_num>0,]  # get rid individuals with no peaks       
 
 #-- plot out results ---#
