@@ -9,11 +9,13 @@ __Overview:__  This package is for ....
 
 1. install.packages('devtools')
 
-2. library(devtools)
+2. install.packages('Rcurl')
 
-3. install_github('bfanson/hormLong')
+3. library(devtools)
 
-4. library(hormLong)
+4. install_github('bfanson/hormLong')
+
+5. library(hormLong)
 
 
 
