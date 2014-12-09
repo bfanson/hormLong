@@ -5,7 +5,7 @@
 #' @param time_var name of the time variable (e.g. 'date', 'datetime', 'days') [required].
 #' @param conc_var name of the concentration variable (response variable) [required].
 #' @param event_var name of event variable  [optional]
-#' @param criteria baseline criteria (mean + criterias * SD) [defualt=2]
+#' @param criteria baseline criteria (mean + criterias * SD) [default=2]
 #' @return hormLong object.
 #' @export
 #' @examples
