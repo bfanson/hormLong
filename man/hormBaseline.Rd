@@ -6,15 +6,17 @@
 hormBaseline(data, by_var, conc_var, time_var, criteria = 2, event_var)
 }
 \arguments{
-\item{data}{dataset.}
+\item{data}{dataset. [required]}
 
-\item{by_var}{grouping variable.}
+\item{by_var}{names of the grouping variables (e.g. 'id', 'species, id' ) [optional]}
 
-\item{conc_var}{grouping variable.}
+\item{conc_var}{name of the concentration variable (response variable) [required].}
 
-\item{time_var}{grouping variable.}
+\item{time_var}{name of the time variable (e.g. 'date', 'datetime', 'days') [required].}
 
-\item{criteria}{grouping variable.}
+\item{criteria}{baseline criteria (mean + criterias * SD) [defualt=2]}
+
+\item{event_var}{name of event variable  [optional]}
 }
 \value{
 hormLong object.

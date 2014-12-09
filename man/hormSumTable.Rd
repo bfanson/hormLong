@@ -3,17 +3,15 @@
 \alias{hormSumTable}
 \title{Summarise results from baseline calculation.}
 \usage{
-hormSumTable(x, file_type = "rtf", num_decimals = 2)
+hormSumTable(x, num_decimals = 2)
 }
 \arguments{
-\item{x}{hormLong object (produced from hormBaseline)}
+\item{x}{hormLong object (produced from hormBaseline) [required]}
 
-\item{file_type}{choose either rtf or csv}
-
-\item{num_decimals}{number of decimal places}
+\item{num_decimals}{number of decimal places [default = 2]}
 }
 \value{
-hormLong object.
+nothing  Produces a file saved to current working directory
 }
 \description{
 Summarise results from baseline calculation.

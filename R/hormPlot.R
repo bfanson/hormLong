@@ -1,16 +1,16 @@
 #' Plot longitudinal hormone data with baseline information
 #' 
-#' @param x hormLong object (produced from hormBaseline)
-#' @param plot_per_page the number of plot panels per page, by row.
-#' @param save_plot indicates whether 
+#' @param x hormLong object (produced from hormBaseline) [required]
+#' @param plot_per_page the number of plot panels per page, by row. [default = 4]
+#' @param save_plot indicates whether to save plot as a file [default = TRUE]
 #' @param plot_height  the height of individual plot panels (in inches).  Pdf page height is determined
-#' by both plot_per_page and plot_height.
-#' @param plot_width  the width of the pdf page.
+#' by both plot_per_page and plot_height. [default = 2]
+#' @param plot_width  the width of the pdf page. [default = 6]
 #' @param yscale  determines if y-axis should be free ('free') to change for each panel or
-#' remain the same ('fixed') for all panels 
+#' remain the same ('fixed') for all panels [default = 'free']
 #' @param xscale  determines if x-axis should be free ('free') to change for each panel or
-#' remain the same ('fixed') for all panels 
-#' @return NA
+#' remain the same ('fixed') for all panels  [default = 'free']
+#' @return nothing  Produces a pdf file saved at current working directory
 #' @export
 #' @examples
 #' 

@@ -1,10 +1,10 @@
 #' Write data from a hormLong object to a file
 #' 
-#' @param x hormLong object (produced from hormBaseline)
+#' @param x hormLong object (produced from hormBaseline) [required]
 #' @param filename name of file to be saved. Unless path is specified, file will be
-#' saved in your current working directory 
-#' @param file_type  determines type of file (only csv currently)  
-#' @return nothing
+#' saved in your current working directory [required]
+#' @param file_type  determines type of file (only csv currently) [defualt = 'csv'] 
+#' @return nothing  Produces an output file saved to current working directory
 #' @export
 #' @examples
 #' 
@@ -41,40 +41,47 @@ getCutoff <- function(x, criteria){
 }
 
 
-#' Helper function to work with dates
+#' Helper function to work with dates.  User needs to specify at least date_var and date_order. 
+#' If time_var is included, then it will output a date_time variable
 #' 
-#' @param data data set with the variables to convert
-#' @param date_var variable name for date column in format '2014-01-01'
-#' @param time_var variable name for the time column in format '10:10 PM'
-#' @param name name of the new date variable created by the function
-#' @return new datetime variable
+#' @param data data set with the variables to convert [required]
+#' @param date_var variable name for date column.  Form should be a standard date form 
+#' (e.g. '12AUG2014','01/01/2014') [required]
+#' @param time_var variable name for the time column in 24-hour format (e.g. '20:10:01', '01:04:01') [optional]
+#' @param name name of the new date variable created by the function [default = 'datetime']
+#' @param date_order specifies the day, month, year order in abbreviated form (e.g. 'ymd','mdy','dmy'). 
+#' [defualt='ymd']
+#' @return dataset with the new date/time variable
 #' @export
 #' @examples
 #' 
 #' date <- c('2014-01-01','2014-01-01')
-#' time <- c('10:10 AM', '10:30 PM')
+#' time <- c('10:10:01', '20:30:23')
 #' ds <- data.frame(date=date,time=time)
-#' hormDate(ds,date_var='date',time_var='time',name='datetime' )
+#' hormDate(ds,date_var='date',time_var='time',name='datetime', date_order='ymd' )
 
-hormDate <- function(data,date_var,time_var,name='datetime'){
-  if( missing(date_var) ){stop('please provide date_var. Time_var is optional ')}
-  if( !missing(time_var) & any( grepl('-',data[,date_var])==F ) ){
-    stop('check format of date_var.  It should be in from: 2014-01-01')
-  }
+hormDate <- function(data, date_var, time_var, name='datetime', date_order='ymd') {
+  date_order <- tolower(date_order)
+  if( missing(date_var)   ){stop('please provide date_var. time_var is optional ')}
+  if( missing(date_order) ){stop('please provide date_order...e.g. ymd, dmy, mdy')}
+  if( (date_order %in% c('ymd','ydm','mdy','dmy' ))==F ){stop('date_order must be ymd,ydm,mdy, or dmy ')}
+
   if( !missing(time_var)){
-    if(any( (grepl('pm',tolower(data[,time_var]))==F |  
-                              grepl('am',tolower(time_var))==F)==F ) ){
-    stop('check format of date_var.  It should be in from: 10:00 AM')
-  }}
-  if(!missing(date_var) & !missing(time_var)){
-    datetime <- as.POSIXct(paste(data[,date_var],data[,time_var]), format="%Y-%m-%d %I:%M %p", tz='GMT' )
+    if(any( (grepl('pm',tolower(data[,time_var]))==T |  
+                                grepl('am',tolower(data[,time_var]))==T)==T ) ){
+      stop('check format of date_var.  It should be in 24-hour format with hours,minutes and seconds (e.g. 20:10:01)')
+    }
   }
-  if(!missing(date_var) & missing(time_var)){
-    datetime <- as.Date(data[,date_var])
-  }
-  data$rename_this<-datetime  
-  names(data)[ncol(data)] <- name
-  return(data)
+  
+  #--- calculate new date --#
+    if(!missing(date_var) & missing(time_var)){
+      datetime <- do.call( date_order, list(data[,date_var]))
+    }else if(!missing(date_var) & !missing(time_var) ){
+      datetime <- as.POSIXct(paste( do.call( date_order, list(data[,date_var])),data[,time_var]), format="%Y-%m-%d %H:%M:%S", tz='UTC' )
+    }
+    data$rename_this<-datetime  
+    names(data)[ncol(data)] <- name
+    return(data)
 }
   
 
@@ -110,22 +117,6 @@ cleanByvar <- function(x){
   return(by_var_v)
 }
 
-#' Write results to rtf file
-#'
-#' @param x dataframe to be writen to a file
-#' @param file filename 
-#' @return x split and trimmed of whitespace
-#' @export
-#' @examples
-#' 
-#' write.rtf(cars,'cars.rtf')
-
-write.rtf <- function(x,filename){
-  require(rtf)
-  rtf<-RTF(filename, width=7, height=11, font.size=9, omi=c(3,1,1,1))
-      addTable.RTF(rtf, x)
-  done(rtf)
-}
 
 
 #' Combined the columns listed in the by_var_v

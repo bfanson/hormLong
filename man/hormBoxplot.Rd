@@ -7,12 +7,14 @@ hormBoxplot(data, conc_var, id_var, plot_height = 4, plot_width = 6,
   save_plot = T)
 }
 \arguments{
-\item{data}{dataset}
+\item{data}{dataset [required]}
 
-\item{id_var}{name of the individual variable}
+\item{id_var}{name of the individual variable [required]}
+
+\item{conc_car}{name of the concentration variable [required]}
 }
 \value{
-NA
+nothing...Produces a pdf file with the graph in current working directory
 }
 \description{
 Boxplot of individual concentrations

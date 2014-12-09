@@ -1,25 +1,23 @@
 #' Summarise results from baseline calculation.
 #' 
-#' @param x hormLong object (produced from hormBaseline)
-#' @param file_type choose either rtf or csv
-#' @param num_decimals number of decimal places
-#' @return hormLong object.
+#' @param x hormLong object (produced from hormBaseline) [required]
+#' @param num_decimals number of decimal places [default = 2]
+#' @return nothing  Produces a file saved to current working directory
 #' @export
 #' @examples
 #' 
 #' result <- hormBaseline(data=hormone, by_var='sp, sex, id', time_var='date', conc_var='conc' )
 #' hormSumTable(result) 
 
-hormSumTable <- function(x, file_type='rtf', num_decimals=2){
+hormSumTable <- function(x,  num_decimals=2){
 #-- checks --#  
   if( class(x)!='hormLong'){
       stop('Object needs to be hormLong.  Run hormBaseline() first')
     }
-  if( !(file_type %in% c('rtf','csv') ) ){
-      stop( paste('xscale must be either "rtf" or "csv", not:',file_type) )
-    }
+
+  
 #--- set-up info ---#
-  ds <- x$data
+  ds <- ridFactor(x$data)
   conc_var <- x$conc_var
   by_var_v <- cleanByvar(x$by_var) 
 
@@ -40,12 +38,6 @@ hormSumTable <- function(x, file_type='rtf', num_decimals=2){
   ds_out <- cbind( ds2[,by_var_v], sapply(ds2[,(length(by_var_v)+1):ncol(ds2)],round,num_decimals) )
 
 #--- output table ---#
-  if( file_type=='csv'){
     write.csv(ds_out,file='hormSumTable.csv',quote=F, row.names=F)
     cat( paste0('\n *********\nNote: table saved at: \n', getwd(),'/hormSumTable.csv \n***** \n\n')  )
-  }
-  if( file_type=='rtf'){
-    write.rtf(ds_out,filename='hormSumTable.rtf')
-    cat( paste0('\n *********\nNote: table saved at: \n', getwd(),'/hormSumTable.rtf \n***** \n\n')  )
-  }
 }

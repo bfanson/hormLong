@@ -1,8 +1,9 @@
 #' Boxplot of individual concentrations 
 #' 
-#' @param data dataset 
-#' @param id_var name of the individual variable
-#' @return NA
+#' @param data dataset [required]
+#' @param id_var name of the individual variable [required]
+#' @param conc_car name of the concentration variable [required]
+#' @return nothing...Produces a pdf file with the graph in current working directory
 #' @export
 #' @examples
 #' 

@@ -1,10 +1,11 @@
 #' Run iterative process to calculate baseline.
 #' 
-#' @param data dataset.
-#' @param by_var names of the grouping variables (e.g. 'id', 'species, id' )
-#' @param time_var name of the time variable (e.g. 'date', 'datetime', 'days').
-#' @param conc_var name of theconcentration variable.
-#' @param criteria baseline criteria (mean + criterias * SD)
+#' @param data dataset. [required]
+#' @param by_var names of the grouping variables (e.g. 'id', 'species, id' ) [optional]
+#' @param time_var name of the time variable (e.g. 'date', 'datetime', 'days') [required].
+#' @param conc_var name of the concentration variable (response variable) [required].
+#' @param event_var name of event variable  [optional]
+#' @param criteria baseline criteria (mean + criterias * SD) [defualt=2]
 #' @return hormLong object.
 #' @export
 #' @examples
