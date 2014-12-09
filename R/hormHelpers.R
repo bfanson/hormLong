@@ -62,6 +62,7 @@ getCutoff <- function(x, criteria){
 
 hormDate <- function(data, date_var, time_var, name='datetime', date_order='ymd') {
   date_order <- tolower(date_order)
+  if( is.numeric(data[,date_var]) ) data[,date_var] <- as.character(data[,date_var]) 
   if( missing(date_var)   ){stop('please provide date_var. time_var is optional ')}
   if( missing(date_order) ){stop('please provide date_order...e.g. ymd, dmy, mdy')}
   if( (date_order %in% c('ymd','ydm','mdy','dmy' ))==F ){stop('date_order must be ymd,ydm,mdy, or dmy ')}
@@ -74,14 +75,15 @@ hormDate <- function(data, date_var, time_var, name='datetime', date_order='ymd'
   }
   
   #--- calculate new date --#
-    if(!missing(date_var) & missing(time_var)){
+   if(!missing(date_var) & missing(time_var)){
       datetime <- do.call( date_order, list(data[,date_var]))
     }else if(!missing(date_var) & !missing(time_var) ){
       datetime <- as.POSIXct(paste( do.call( date_order, list(data[,date_var])),data[,time_var]), format="%Y-%m-%d %H:%M:%S", tz='UTC' )
     }
-    data$rename_this<-datetime  
-    names(data)[ncol(data)] <- name
-    return(data)
+  
+   data$rename_this <- datetime  
+   names(data)[ncol(data)] <- name
+   return(data)
 }
   
 

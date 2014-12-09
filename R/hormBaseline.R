@@ -53,7 +53,7 @@ hormBaseline <- function(data, by_var,conc_var, time_var,criteria=2, event_var )
   if(missing(time_var)){
       stop('time_var must be specified')
     }
-  if( !( class(data[,time_var]) %in% c('Date','numeric') ) ){
+  if( !( class(data[,time_var])[1] %in% c('Date','numeric','POSIXct') ) ){
     time_class <- class(class(data[,time_var]))
     stop(paste0('time_var must be numeric or Date (your time_var is "',time_class,'" variable') )
     }
