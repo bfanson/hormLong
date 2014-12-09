@@ -11,10 +11,7 @@ hormPlotOverlap(x, hormone_var = "horm_type", date_format = "\%d-\%b",
 \arguments{
 \item{x}{hormLong object (produced from hormBaseline) [required]}
 
-\item{hormone_var}{the name of the hormone variable.  It has to be part of the by_var defined
-in hormBaseline. [required]}
-
-\item{date_format}{the format of the date variable on x-axis. See help for examples of other formats [default = '%d-%b']}
+\item{date_format}{the format of the date variable on x-axis. See help for examples of other formats [default = ]}
 
 \item{colors}{vector of colors for the fills. It needs to have as many colors as hormone types  [default=c('red','blue')]}
 
@@ -39,6 +36,9 @@ nothing  Produces a pdf file saved at current working directory
 Plot overlapping longitudinal hormone data
 }
 \examples{
-hormPlotOverlap(result, yscale='fixed',xscale='fixed' )
+ds <- hormDate(hormone2,date_var = 'date', date_order = 'ymd')
+  res <- hormBaseline(data=ds,criteria=1,by_var='sp,horm_type,id',conc_var = 'conc',time_var='date',
+                     event_var='event')
+hormPlotOverlap(res )
 }
 
