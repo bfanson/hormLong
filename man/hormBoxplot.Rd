@@ -4,12 +4,14 @@
 \title{Boxplot of individual concentrations}
 \usage{
 hormBoxplot(data, conc_var, id_var, plot_height = 4, plot_width = 6,
-  save_plot = T)
+  save_plot = T, log_scale = "n")
 }
 \arguments{
 \item{data}{dataset [required]}
 
 \item{id_var}{name of the individual variable [required]}
+
+\item{log_scale}{determines if y-axis is log10-scale or not. log-scale='y' makes log scale [default='n']}
 
 \item{conc_car}{name of the concentration variable [required]}
 }

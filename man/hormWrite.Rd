@@ -3,15 +3,15 @@
 \alias{hormWrite}
 \title{Write data from a hormLong object to a file}
 \usage{
-hormWrite(x, filename, file_type = "csv", ...)
+hormWrite(x, file_type = "csv", ...)
 }
 \arguments{
 \item{x}{hormLong object (produced from hormBaseline) [required]}
 
+\item{file_type}{determines type of file (only csv currently) [default = 'csv']}
+
 \item{filename}{name of file to be saved. Unless path is specified, file will be
 saved in your current working directory [required]}
-
-\item{file_type}{determines type of file (only csv currently) [default = 'csv']}
 }
 \value{
 nothing  Produces an output file saved to current working directory

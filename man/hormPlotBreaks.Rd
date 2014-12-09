@@ -3,11 +3,13 @@
 \alias{hormPlotBreaks}
 \title{Longitudinal graph with breaks}
 \usage{
-hormPlotBreaks(x, break_cutoff = 40, break_buffer = 60, plot_per_page = 4,
-  save_plot = TRUE, plot_height = 2, plot_width = 6)
+hormPlotBreaks(x, break_cutoff = 40, break_buffer = 60, log_scale = "n",
+  plot_per_page = 4, save_plot = TRUE, plot_height = 2, plot_width = 6)
 }
 \arguments{
 \item{x}{hormLong object (produced from hormBaseline) [required]}
+
+\item{log_scale}{determines if y-axis is log10-scale or not. log-scale='y' makes log scale [default='n']}
 
 \item{plot_per_page}{the number of plot panels per page, by row. [default = 4]}
 

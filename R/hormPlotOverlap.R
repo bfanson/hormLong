@@ -1,8 +1,8 @@
 #' Plot overlapping longitudinal hormone data 
 #' 
 #' @param x hormLong object (produced from hormBaseline) [required]
+#' @param colors vector of colors for the fills. It needs to have as many colors as hormone types  [default=c('red','blue')]
 #' @param date_format the format of the date variable on x-axis. See help for examples of other formats [default = '%d-%b']
-#' @param log_scale determines if y-axis is log10-scale or not. log-scale='y' makes log scale [default='n']  
 #' @param plot_per_page the number of plot panels per page, by row. [default = 4]
 #' @param save_plot indicates whether to save plot as a file [default = TRUE]
 #' @param plot_height  the height of individual plot panels (in inches).  Pdf page height is determined by both plot_per_page and plot_height. [default = 2]
@@ -14,7 +14,10 @@
 #' @export
 #' @examples
 #' 
-#' hormPlotOverlap(result, yscale='fixed',xscale='fixed' )
+#'   ds <- hormDate(hormone2,date_var = 'date', date_order = 'ymd')
+#'   res <- hormBaseline(data=ds,criteria=1,by_var='sp,horm_type,id',conc_var = 'conc',time_var='date',
+#'                      event_var='event')
+#' hormPlotOverlap(res )
 #' 
 
 hormPlotOverlap <- function(x, hormone_var='horm_type', date_format='%d-%b', colors=c('red','blue'), 
