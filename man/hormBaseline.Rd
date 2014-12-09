@@ -14,7 +14,7 @@ hormBaseline(data, by_var, conc_var, time_var, criteria = 2, event_var)
 
 \item{time_var}{name of the time variable (e.g. 'date', 'datetime', 'days') [required].}
 
-\item{criteria}{baseline criteria (mean + criterias * SD) [defualt=2]}
+\item{criteria}{baseline criteria (mean + criterias * SD) [default=2]}
 
 \item{event_var}{name of event variable  [optional]}
 }

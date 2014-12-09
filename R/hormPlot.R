@@ -1,23 +1,23 @@
 #' Plot longitudinal hormone data with baseline information
 #' 
 #' @param x hormLong object (produced from hormBaseline) [required]
+#' @param date_format the format of the date variable on x-axis. See help for examples of other formats [defauly = '%d-%b']
 #' @param plot_per_page the number of plot panels per page, by row. [default = 4]
 #' @param save_plot indicates whether to save plot as a file [default = TRUE]
-#' @param plot_height  the height of individual plot panels (in inches).  Pdf page height is determined
-#' by both plot_per_page and plot_height. [default = 2]
+#' @param plot_height  the height of individual plot panels (in inches).  Pdf page height is determined by both plot_per_page and plot_height. [default = 2]
 #' @param plot_width  the width of the pdf page. [default = 6]
-#' @param yscale  determines if y-axis should be free ('free') to change for each panel or
-#' remain the same ('fixed') for all panels [default = 'free']
-#' @param xscale  determines if x-axis should be free ('free') to change for each panel or
-#' remain the same ('fixed') for all panels  [default = 'free']
+#' @param yscale  determines if y-axis should be free ('free') to change for each panel or remain the same ('fixed') for all panels [default = 'free']
+#' @param xscale  determines if x-axis should be free ('free') to change for each panel or remain the same ('fixed') for all panels  [default = 'free']
+#' @param ...   generic plotting options [optional]  
 #' @return nothing  Produces a pdf file saved at current working directory
 #' @export
 #' @examples
 #' 
 #' result <- hormBaseline(data=hormone, criteria=1, by_var='sp, sex, id', time_var='date', conc_var='conc' )
 #' hormPlot(result, yscale='fixed',xscale='fixed' )
+#' 
 
-hormPlot <- function(x, plot_per_page=4, save_plot=TRUE, plot_height=2, plot_width=6,
+hormPlot <- function(x, date_format='%d-%b', plot_per_page=4, save_plot=TRUE, plot_height=2, plot_width=6,
                      yscale='free', xscale='free',...){
   
 #--- main check ---#
@@ -55,7 +55,7 @@ hormPlot <- function(x, plot_per_page=4, save_plot=TRUE, plot_height=2, plot_wid
     pdf('hormPlot.pdf', height=plot_per_page * plot_height, width = plot_width )
   }
 
-  par(mfrow=c(plot_per_page,1), mar=c(2,4,2,0.5),oma=c(2,2,2,0))
+  par(mfrow=c(plot_per_page,1), mar=c(2,4,2,0.5),oma=c(2,2,2,1))
   for( i in unique(data$plot_title)){
     ds_sub <- data[data$plot_title==i, ]
     baseline <- getCutoff( ds_sub[ds_sub$conc_type=='base',conc_var], criteria=x$criteria )
@@ -81,7 +81,14 @@ hormPlot <- function(x, plot_per_page=4, save_plot=TRUE, plot_height=2, plot_wid
       }    
     #--- main plot
     plot(ds_sub[,conc_var] ~ ds_sub[,time_var], type='l',xlim=c(xmin,xmax), ylim=c(ymin,ymax), 
-          xlab=NA, ylab=conc_var)
+          xlab=NA, ylab=conc_var, xaxt='n')
+      if(is.numeric(ds_sub[,time_var])){ axis(1)
+      }else if( is.Date(ds_sub[,time_var]) ){
+          axis.Date(1,ds_sub[,time_var], format=date_format)
+      }else if( is.POSIXct(ds_sub[,time_var]) ){
+          axis.POSIXct(1,ds_sub[,time_var],format=date_format)
+      } 
+    
       points(ds_sub[,time_var], ds_sub[,conc_var],pch=19)
       mtext(unique(ds_sub$plot_title),side=3,line=0.25)
       abline(h = baseline, lty=2)

@@ -35,9 +35,13 @@ hormBoxplot <- function(data, conc_var, id_var, plot_height=4, plot_width=6, sav
   
   
   
-  par(mar=c(3,4,1,1))
-  boxplot( data[,conc_var] ~ data[,id_var],ylab=conc_var )  
+  par(mar=c(5,4,1,1))
+  data <- data[ order(data[,id_var]),]
+  h<-boxplot( data[,conc_var] ~ data[,id_var],ylab=conc_var, xaxt='n' )  
     points(as.numeric(as.factor(data[,id_var])), data[,conc_var] )
+    axis(1,at=1:length(h$names),labels=NA)
+    text(1:length(h$names), par("usr")[3] - 10, srt = 315, adj = 0,  
+        labels = h$names, xpd = TRUE)
   if( save_plot ){  dev.off() }
 }
 

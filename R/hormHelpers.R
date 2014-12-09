@@ -55,12 +55,18 @@ getCutoff <- function(x, criteria){
 #' @export
 #' @examples
 #' 
-#' date <- c('2014-01-01','2014-01-01')
+#' date <- c('2014-01-01','2014-Mar-01')
 #' time <- c('10:10:01', '20:30:23')
 #' ds <- data.frame(date=date,time=time)
 #' hormDate(ds,date_var='date',time_var='time',name='datetime', date_order='ymd' )
+#
+#' date <- c('01-01-2014','01-Mar-2014','01/April/2014')
+#' ds <- data.frame(date=date)
+#' hormDate(ds,date_var='date',name='datetime', date_order='dmy' )
 
-hormDate <- function(data, date_var, time_var, name='datetime', date_order='ymd') {
+
+hormDate <- function(data, date_var, time_var, name='datetime', date_order='dmy') {
+  require(lubridate)
   date_order <- tolower(date_order)
   if( is.numeric(data[,date_var]) ) data[,date_var] <- as.character(data[,date_var]) 
   if( missing(date_var)   ){stop('please provide date_var. time_var is optional ')}

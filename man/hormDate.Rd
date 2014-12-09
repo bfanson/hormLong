@@ -4,7 +4,7 @@
 \title{Helper function to work with dates.  User needs to specify at least date_var and date_order.
 If time_var is included, then it will output a date_time variable}
 \usage{
-hormDate(data, date_var, time_var, name = "datetime", date_order = "ymd")
+hormDate(data, date_var, time_var, name = "datetime", date_order = "dmy")
 }
 \arguments{
 \item{data}{data set with the variables to convert [required]}
@@ -17,7 +17,7 @@ hormDate(data, date_var, time_var, name = "datetime", date_order = "ymd")
 \item{name}{name of the new date variable created by the function [default = 'datetime']}
 
 \item{date_order}{specifies the day, month, year order in abbreviated form (e.g. 'ymd','mdy','dmy').
-[defualt='ymd']}
+[default='ymd']}
 }
 \value{
 dataset with the new date/time variable
@@ -27,9 +27,12 @@ Helper function to work with dates.  User needs to specify at least date_var and
 If time_var is included, then it will output a date_time variable
 }
 \examples{
-date <- c('2014-01-01','2014-01-01')
+date <- c('2014-01-01','2014-Mar-01')
 time <- c('10:10:01', '20:30:23')
 ds <- data.frame(date=date,time=time)
 hormDate(ds,date_var='date',time_var='time',name='datetime', date_order='ymd' )
+date <- c('01-01-2014','01-Mar-2014','01/April/2014')
+ds <- data.frame(date=date)
+hormDate(ds,date_var='date',name='datetime', date_order='dmy' )
 }
 
