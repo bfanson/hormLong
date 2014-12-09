@@ -1,6 +1,7 @@
 #' Longitudinal graph with breaks 
 #' 
 #' @param x hormLong object (produced from hormBaseline) [required]
+#' @param log_scale determines if y-axis is log10-scale or not. log-scale='y' makes log scale [default='n']  
 #' @param plot_per_page the number of plot panels per page, by row. [default = 4]
 #' @param save_plot indicates whether to save plot as a file [default = TRUE]
 #' @param plot_height  the height of individual plot panels (in inches).  Pdf page height is determined
@@ -15,7 +16,7 @@
 #' 
 #' 
 
-hormPlotBreaks <- function(x, break_cutoff=40, break_buffer=60,
+hormPlotBreaks <- function(x, break_cutoff=40, break_buffer=60, log_scale='n',
                            plot_per_page=4, save_plot=TRUE, plot_height=2, plot_width=6){
 
   #stop('function under development')
@@ -67,8 +68,12 @@ hormPlotBreaks <- function(x, break_cutoff=40, break_buffer=60,
     baseline <- getCutoff( ds_sub[ds_sub$conc_type=='base',conc_var], criteria=x$criteria )
     ds_sub <- ds_sub[!is.na(ds_sub[,conc_var]),]
 
+  if(log_scale=='y'){
+   plot(ds_sub[,conc_var]~ds_sub$x_adj, type='n', xaxt='n',ylab=conc_var, log='y') 
+  }else{
    plot(ds_sub[,conc_var]~ds_sub$x_adj, type='n', xaxt='n',ylab=conc_var) 
-     mtext(unique(ds_sub$plot_title),side=3,line=0.25)
+  }
+   mtext(unique(ds_sub$plot_title),side=3,line=0.25)
      abline(h = baseline, lty=2)
 
    for(b in 1:max(ds_sub$brk)){

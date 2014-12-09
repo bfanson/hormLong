@@ -11,24 +11,22 @@
 #' result <- hormBaseline(data=hormone, by_var='sp, sex, id', time_var='date', conc_var='conc' )
 #' head(result)
 
-hormWrite <- function(x, filename, file_type='csv',... ){
+
+hormWrite <- function(x, file_type='csv',... ){
 #--- main check ---#
-  if( missing(filename) ){
-      stop('please specify a filename')
-  }
   if( file_type!='csv' ){
       stop('only csv file type has currently been implemented')
   }
   
-  write.csv( x$data, file=filename, quote=FALSE, row.names=FALSE,...) 
+  write.csv( x$data, file='Data_out.csv', quote=FALSE, row.names=FALSE,...) 
   cat(paste0('*****\nNote: If no file location was specified, then file is at:\n',getwd(),'\n***') )
 }
 
 
 #' Helper function to calculate baseline cutoff
 #' 
-#' @param x hormone concentration
-#' @param criteria the number of standard deviations above baseline 
+#' @param  x hormone concentration
+#' @param  criteria the number of standard deviations above baseline 
 #' @return cutoff value
 #' @export
 #' @examples
@@ -96,7 +94,7 @@ hormDate <- function(data, date_var, time_var, name='datetime', date_order='dmy'
 
 #' Read hormone data from a csv file
 #' 
-#' @param none  no arguments
+#' @param none no arguments
 #' @return imported dataset
 #' @export
 #' @examples
@@ -202,14 +200,16 @@ getPeakInfo <- function(k, date=time_var,conc=conc_var){
         st <-  max(1, min( which(peak_num==p) )-1 )
         end <- min(length(t), max(which(peak_num==p))+1 )
         st_ind <- ifelse( min( which(peak_num==p))==1,1,0)
+        end_ind <- ifelse( k$conc_type[end]=='peak' ,1,0)
         
       #-- calculate point that slope crosses cutoff --#
         m <- diff(c[st:end])/diff(t[st:end])
         b <- c[st:(end-1)] - m*t[st:(end-1)]
         t0 <- -b[unique(c(1,length(b)))]/m[unique(c(1,length(m)))]
-        if( length(m)==1 & st==1){ t0 <-c(t[st],t0)}   
-        if( length(m)==1 & st>1){ t0  <-c(t0,t[end])}   
-        if( st_ind==1){ t0[1] <-c(t[st])  }
+        if( length(m)==1 & st==1){ t0 <- c(t[st],t0)}   
+        if( length(m)==1 & st>1){ t0  <- c(t0,t[end])}   
+        if( st_ind==1){ t0[1] <- c(t[st])  }
+        if( end_ind ){ t0[length(t0)] <- as.numeric(k[end,date])}
       
         t_new <- t[c(st,st:end,end)]
         t_new[c(1:2,(length(t_new)-1):length(t_new))] <- rep(t0,each=2) 

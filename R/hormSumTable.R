@@ -15,7 +15,6 @@ hormSumTable <- function(x,  num_decimals=2){
       stop('Object needs to be hormLong.  Run hormBaseline() first')
     }
 
-  
 #--- set-up info ---#
   ds <- ridFactor(x$data)
   conc_var <- x$conc_var
@@ -26,6 +25,7 @@ hormSumTable <- function(x,  num_decimals=2){
     ds_b <- merge( subset(ds_b,conc_type=='base',-conc_type), subset(ds_b,conc_type=='peak',-conc_type),
                    by=by_var_v,all=T )
     names(ds_b)[(ncol(ds_b)-1):ncol(ds_b)] <- c('base_mean','peak_mean')
+    ds_b$peak_base <- ds_b$peak_mean/ds_b$base_mean
 
   ds2 <- getSumStat(data=ds,name='mean', func=function(x)mean(x,na.rm=T), add_ds=ds_b,c_var=conc_var,by_var = by_var_v  )
   ds2 <- getSumStat(data=ds,name='sd', func=function(x)sd(x,na.rm=T), add_ds=ds2,c_var=conc_var,by_var = by_var_v )
@@ -34,10 +34,12 @@ hormSumTable <- function(x,  num_decimals=2){
   ds2 <- getSumStat(data=ds,name='min', func= function(x) min(x,na.rm=T), add_ds=ds2,c_var=conc_var,by_var = by_var_v )
   ds2 <- getSumStat(data=ds,name='max', func= function(x) max(x,na.rm=T), add_ds=ds2,c_var=conc_var,by_var = by_var_v )
   ds2 <- getSumStat(data=ds,name='median', func= function(x) median(x,na.rm=T), add_ds=ds2,c_var=conc_var,by_var = by_var_v )
+  
+  ds2 <- merge(ds2,ds_b[,c(by_var_v, 'peak_base')],all=T)
 
   ds_out <- cbind( ds2[,by_var_v], sapply(ds2[,(length(by_var_v)+1):ncol(ds2)],round,num_decimals) )
 
 #--- output table ---#
-    write.csv(ds_out,file='hormSumTable.csv',quote=F, row.names=F)
+    write.csv(ds_out,file='hormSumTable.csv',quote=F, row.names=F,na='')
     cat( paste0('\n *********\nNote: table saved at: \n', getwd(),'/hormSumTable.csv \n***** \n\n')  )
 }
