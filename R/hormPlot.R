@@ -60,7 +60,9 @@ hormPlot <- function(x, date_format='%d-%b', log_scale='n', plot_per_page=4, sav
   par(mfrow=c(plot_per_page,1), mar=c(2,4,2,0.5),oma=c(2,2,2,1))
   for( i in unique(data$plot_title)){
     ds_sub <- data[data$plot_title==i, ]
-    baseline <- getCutoff( ds_sub[ds_sub$conc_type=='base',conc_var], criteria=x$criteria )
+    if(!is.null(x$criteria)){
+       baseline <- getCutoff( ds_sub[ds_sub$conc_type=='base',conc_var], criteria=x$criteria )
+      }else{ baseline <- 1 }
     if(!is.null(x$event_var)){
       events <- ds_sub[ !is.na(ds_sub[,x$event_var]) & ds_sub[,x$event_var]!='',c(x$event_var,time_var)]
       }else{events <- data.frame()}
@@ -82,12 +84,13 @@ hormPlot <- function(x, date_format='%d-%b', log_scale='n', plot_per_page=4, sav
         xmax <- max( data[,time_var],na.rm=T)
       }    
     #--- main plot
+    if( is.null(x$y_lab) ){x$y_lab <- conc_var}
     if( log_scale=='y' ){
         plot(ds_sub[,conc_var] ~ ds_sub[,time_var], type='l',xlim=c(xmin,xmax), ylim=c(ymin,ymax), 
-            xlab=NA, ylab=conc_var, xaxt='n', log=log_scale)
+            xlab=NA, ylab=x$y_lab, xaxt='n', log=log_scale)
     }else{
         plot(ds_sub[,conc_var] ~ ds_sub[,time_var], type='l',xlim=c(xmin,xmax), ylim=c(ymin,ymax), 
-            xlab=NA, ylab=conc_var, xaxt='n')
+            xlab=NA, ylab=x$y_lab, xaxt='n')
     }
       if(is.numeric(ds_sub[,time_var])){ axis(1)
       }else if( is.Date(ds_sub[,time_var]) ){

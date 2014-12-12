@@ -64,7 +64,6 @@ hormPlotOverlap <- function(x, hormone_var='horm_type', date_format='%d-%b', col
   par(mfrow=c(plot_per_page,1), mar=c(2,4,2,0.5),oma=c(2,2,2,1))
   for( i in unique(data$plot_title) ){
     ds_sub <- data[data$plot_title==i, ]
-    #baseline <- getCutoff( ds_sub[ds_sub$conc_type=='base',conc_var], criteria=x$criteria )
     if(!is.null(x$event_var)){
       events <- unique( ds_sub[ !is.na(ds_sub[,x$event_var]) & ds_sub[,x$event_var]!='',c(x$event_var,time_var)])
       }else{events <- data.frame()}
@@ -73,7 +72,7 @@ hormPlotOverlap <- function(x, hormone_var='horm_type', date_format='%d-%b', col
     #--- set up scales
       if( yscale=='free'){
         ymin <- min(ds_sub[,conc_var])*0.95
-        ymax <- max(baseline, max(ds_sub[,conc_var]) )*1.1
+        ymax <- max(0, max(ds_sub[,conc_var]) )*1.1
       }else{
         ymin <- min(data[,conc_var],na.rm=T)*0.95
         ymax <- max(data[,conc_var],na.rm=T)*1.1
@@ -108,8 +107,7 @@ hormPlotOverlap <- function(x, hormone_var='horm_type', date_format='%d-%b', col
       } 
     
       mtext(unique(ds_sub$plot_title),side=3,line=0.25)
-      #abline(h = baseline, lty=2)
-      if( nrow(events)>0 ){
+       if( nrow(events)>0 ){
         for(l in 1:nrow(events)){
           arrows(x0=events[l,time_var],x1 =events[l,time_var],y0=ymax*0.95,y1=ymax*0.8, length = 0.1)
           text(x=events[l,time_var],y=ymax*0.99, events[l,x$event_var])
