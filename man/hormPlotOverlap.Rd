@@ -11,7 +11,7 @@ hormPlotOverlap(x, hormone_var = "horm_type", date_format = "\%d-\%b",
 \arguments{
 \item{x}{hormLong object (produced from hormBaseline) [required]}
 
-\item{date_format}{the format of the date variable on x-axis. See help for examples of other formats [default = ]}
+\item{date_format}{the format of the date variable on x-axis. See help for examples of other formats [default = '%d-%b']}
 
 \item{colors}{vector of colors for the fills. It needs to have as many colors as hormone types  [default=c('red','blue')]}
 
