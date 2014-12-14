@@ -1,6 +1,10 @@
 #' Longitudinal graph with breaks 
 #' 
 #' @param x hormLong object (produced from hormBaseline) [required]
+#' @param break_cutoff the maximum number of days between consecutive points. 
+#' Above this cutoff value, a break is created  [default = 40]
+#' @param break_buffer minimum almost space between breaks (in number of days).  Larger values will
+#' create larger spaces between data groups. [default = 60]
 #' @param log_scale determines if y-axis is log10-scale or not. log-scale='y' makes log scale [default='n']  
 #' @param plot_per_page the number of plot panels per page, by row. [default = 4]
 #' @param save_plot indicates whether to save plot as a file [default = TRUE]

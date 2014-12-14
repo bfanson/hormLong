@@ -48,7 +48,7 @@ getCutoff <- function(x, criteria){
 #' @param time_var variable name for the time column in 24-hour format (e.g. '20:10:01', '01:04:01') [optional]
 #' @param name name of the new date variable created by the function [default = 'datetime']
 #' @param date_order specifies the day, month, year order in abbreviated form (e.g. 'ymd','mdy','dmy'). 
-#' [default='ymd']
+#' [default='dmy']
 #' @return dataset with the new date/time variable
 #' @export
 #' @examples
