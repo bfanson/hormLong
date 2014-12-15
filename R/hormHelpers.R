@@ -1,28 +1,3 @@
-#' Write data from a hormLong object to a file
-#' 
-#' @param x hormLong object (produced from hormBaseline) [required]
-#' @param filename name of file to be saved. Unless path is specified, file will be
-#' saved in your current working directory [required]
-#' @param file_type  determines type of file (only csv currently) [default = 'csv'] 
-#' @return nothing  Produces an output file saved to current working directory
-#' @export
-#' @examples
-#' 
-#' result <- hormBaseline(data=hormone, by_var='sp, sex, id', time_var='date', conc_var='conc' )
-#' head(result)
-
-
-hormWrite <- function(x, file_type='csv',... ){
-#--- main check ---#
-  if( file_type!='csv' ){
-      stop('only csv file type has currently been implemented')
-  }
-  
-  write.csv( x$data, file='Data_out.csv', quote=FALSE, row.names=FALSE,...) 
-  cat(paste0('*****\nNote: If no file location was specified, then file is at:\n',getwd(),'\n***') )
-}
-
-
 #' Helper function to calculate baseline cutoff
 #' 
 #' @param  x hormone concentration

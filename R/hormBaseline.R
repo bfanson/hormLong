@@ -6,6 +6,7 @@
 #' @param conc_var name of the concentration variable (response variable) [required].
 #' @param event_var name of event variable  [optional]
 #' @param criteria baseline criteria (mean + criterias * SD) [default=2]
+#' @param save_data determines if the output dataset should be saved to a csv file [default = T ]
 #' @return hormLong object.
 #' @export
 #' @examples
@@ -13,7 +14,7 @@
 #' result <- hormBaseline(data=hormone, by_var='sp, sex, id', time_var='date', conc_var='conc', event_var='Event' )
  
 
-hormBaseline <- function(data, by_var,conc_var, time_var,criteria=2, event_var ) {
+hormBaseline <- function(data, by_var,conc_var, time_var,criteria=2, event_var, save_data=T ) {
 #--- initial checks of arguments ---#
   if(missing(data)){
       stop('data must be specified')
@@ -112,6 +113,14 @@ hormBaseline <- function(data, by_var,conc_var, time_var,criteria=2, event_var )
   data_class <- list( data=data2, by_var=by_var, time_var=time_var,
                       conc_var=conc_var, event_var=event_var, criteria=criteria) 
   class(data_class) <- 'hormLong'
+
+    #--- write dataset ---#
+  if( save_data ){
+      write.csv(data2,file='hormBaseData.csv',quote=F, row.names=F)
+      cat( paste0('\n *********\nNote: table saved at: \n', getwd(),'/hormBaseData.csv \n***** \n\n')  )
+  }
+
   return(data_class)
+
 }
 

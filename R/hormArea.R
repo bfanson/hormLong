@@ -1,6 +1,9 @@
 #' Plot the area under the curve for peak values 
 #' 
 #' @param x hormLong object (produced from hormBaseline) [required]
+#' @param lower_bound the lower limit to caculate the area under the curve. This can be
+#' 'origin', 'baseline', or 'peak' [default = 'origin']
+#' @param method the AUC method to use.  Currently,only trapezoid method has been implemented [default = 'trapezoid']
 #' @param plot_per_page the number of plot panels per page, by row. [default = 4]
 #' @param save_plot indicates whether [default = TRUE]
 #' @param plot_height  the height of individual plot panels (in inches).  Pdf page height is determined
@@ -10,7 +13,7 @@
 #' remain the same ('fixed') for all panels  [default = 'free']
 #' @param xscale  determines if x-axis should be free ('free') to change for each panel or
 #' remain the same ('fixed') for all panels  [default = 'free']
-#' @return nothing is returned.  Pdf file is produced and saved to working directory
+#' @return nothing is returned.  Pdf file is produced and a summary table 
 #' @export
 #' @examples
 #' 
@@ -21,11 +24,14 @@
 #' result <- hormBaseline(data=hormone, criteria=2, by_var='sp, sex, id', time_var='date', conc_var='conc' )
 #' hormArea(result)
 
-hormArea <- function(x, method='trapezoid',plot_per_page=4,plot_height=2, plot_width=6, save_plot=T, 
-                     yscale='free',xscale='free'){
-  #stop('function under development')
+hormArea <- function(x, lower_bound = 'origin' , method='trapezoid',
+                     plot_per_page=4, plot_height=2, plot_width=6, save_plot=T, 
+                     yscale='free', xscale='free'){
   if( method!='trapezoid'){ 
     stop('no other method currently implemented ')
+  }
+  if( !(lower_bound %in% c('origin','baseline','peak') ) ){ 
+    stop(paste0("lower_bound is incorrect.  It must be 'origin', 'baseline', 'peak': you wrote '", lower_bound,"'") )
   }
   by_var_v <- cleanByvar(x$by_var) 
   time_var <- x$time_var
@@ -34,8 +40,21 @@ hormArea <- function(x, method='trapezoid',plot_per_page=4,plot_height=2, plot_w
   data <- data[!is.na(data[,conc_var]),]
   data <-ridFactor(data)
   data$plot_title <- getPlotTitle(data,by_var=by_var_v)
-  data <- getSumStat(data=data[data$conc_type=='base',], name='cutoff', func= function(y) getCutoff(y, criteria=x$criteria ), 
+  if( lower_bound =='origin'){
+    data$cutoff <- 0
+    data$conc_type[ data[,conc_var] >=0 ] <- 'peak'
+  }else if(lower_bound=='baseline'){
+    getBaseline <- function(c){
+      return( mean( c, na.rm=T ) )
+    }
+    data <- getSumStat(data=data[data$conc_type=='base',], name='cutoff', func= function(y) getBaseline(y), 
                                                 by_var=by_var_v, c_var=conc_var,add_ds=data  )
+    data$conc_type[ data[,conc_var] >= data$cutoff ] <- 'peak'
+ 
+  }else if(lower_bound=='peak'){
+    data <- getSumStat(data=data[data$conc_type=='base',], name='cutoff', func= function(y) getCutoff(y, criteria=x$criteria ), 
+                                                by_var=by_var_v, c_var=conc_var,add_ds=data  )
+  }
 
 #--- peak analysis ---#
   #-- shift curve by cutoff ---#
