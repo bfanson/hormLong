@@ -3,11 +3,17 @@
 \alias{hormArea}
 \title{Plot the area under the curve for peak values}
 \usage{
-hormArea(x, method = "trapezoid", plot_per_page = 4, plot_height = 2,
-  plot_width = 6, save_plot = T, yscale = "free", xscale = "free")
+hormArea(x, lower_bound = "origin", method = "trapezoid",
+  plot_per_page = 4, plot_height = 2, plot_width = 6, save_plot = T,
+  yscale = "free", xscale = "free")
 }
 \arguments{
 \item{x}{hormLong object (produced from hormBaseline) [required]}
+
+\item{lower_bound}{the lower limit to caculate the area under the curve. This can be
+'origin', 'baseline', or 'peak' [default = 'origin']}
+
+\item{method}{the AUC method to use.  Currently,only trapezoid method has been implemented [default = 'trapezoid']}
 
 \item{plot_per_page}{the number of plot panels per page, by row. [default = 4]}
 
@@ -25,7 +31,7 @@ remain the same ('fixed') for all panels  [default = 'free']}
 remain the same ('fixed') for all panels  [default = 'free']}
 }
 \value{
-nothing is returned.  Pdf file is produced and saved to working directory
+nothing is returned.  Pdf file is produced and a summary table
 }
 \description{
 Plot the area under the curve for peak values

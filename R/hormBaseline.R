@@ -62,7 +62,6 @@ hormBaseline <- function(data, by_var,conc_var, time_var,criteria=2, event_var, 
   if(missing(event_var)){
     event_var <- NULL    
   }
-
   
   by_var_v <- cleanByvar(by_var) # make by_var a vector
   if( sum(!( c(by_var_v,conc_var,time_var)  %in% names(data) ))>0 ){
@@ -86,6 +85,23 @@ hormBaseline <- function(data, by_var,conc_var, time_var,criteria=2, event_var, 
       stop('program stopped. Remove these groups')
     }
     rm(hold)
+
+  #--- do event by_var include any not in by_var conc ---#
+  if( !missing(event_var) ){
+    event_by_var <- data[ !is.na(data[,event_var]), ] 
+    event_by_var <- event_by_var [ event_by_var [,event_var]!=''  , ]
+    event_by_var <- do.call(paste,unique( event_by_var[,by_var_v]) )
+    data_by_var  <- do.call(paste,unique( data1[,by_var_v] ) )
+    if( !( event_by_var %in% data_by_var ) ){
+      stop( 'by_var for events has no concentration values.  Please remove or check spelling')
+    }
+  }
+
+  #--- check capitalization ---#
+    if( length(tolower(data_by_var)) != length( data_by_var ) ){
+      stop( paste0('Check capitalization for by_var') )
+    }
+
 
 #--- iterative algorithm ---#
   hold <- data1

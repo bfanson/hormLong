@@ -3,7 +3,8 @@
 \alias{hormBaseline}
 \title{Run iterative process to calculate baseline.}
 \usage{
-hormBaseline(data, by_var, conc_var, time_var, criteria = 2, event_var)
+hormBaseline(data, by_var, conc_var, time_var, criteria = 2, event_var,
+  save_data = T)
 }
 \arguments{
 \item{data}{dataset. [required]}
@@ -17,6 +18,8 @@ hormBaseline(data, by_var, conc_var, time_var, criteria = 2, event_var)
 \item{criteria}{baseline criteria (mean + criterias * SD) [default=2]}
 
 \item{event_var}{name of event variable  [optional]}
+
+\item{save_data}{determines if the output dataset should be saved to a csv file [default = T ]}
 }
 \value{
 hormLong object.

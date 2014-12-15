@@ -94,9 +94,11 @@ hormPlot <- function(x, date_format='%d-%b', log_scale='n', plot_per_page=4, sav
     }
       if(is.numeric(ds_sub[,time_var])){ axis(1)
       }else if( is.Date(ds_sub[,time_var]) ){
-          axis.Date(1,ds_sub[,time_var], format=date_format)
+          ats <- seq( xmin, xmax, length.out = 5)
+          axis.Date(1,at=ats, format=date_format)
       }else if( is.POSIXct(ds_sub[,time_var]) ){
-          axis.POSIXct(1,ds_sub[,time_var],format=date_format)
+          ats <- seq( xmin, xmax, length.out = 5)
+          axis.POSIXct(1,at=ats,format=date_format)
       } 
     
       points(ds_sub[,time_var], ds_sub[,conc_var],pch=19)

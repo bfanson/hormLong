@@ -17,7 +17,7 @@ hormDate(data, date_var, time_var, name = "datetime", date_order = "dmy")
 \item{name}{name of the new date variable created by the function [default = 'datetime']}
 
 \item{date_order}{specifies the day, month, year order in abbreviated form (e.g. 'ymd','mdy','dmy').
-[default='ymd']}
+[default='dmy']}
 }
 \value{
 dataset with the new date/time variable
