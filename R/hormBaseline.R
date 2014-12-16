@@ -95,13 +95,12 @@ hormBaseline <- function(data, by_var,conc_var, time_var,criteria=2, event_var, 
     if( !( event_by_var %in% data_by_var ) ){
       stop( 'by_var for events has no concentration values.  Please remove or check spelling')
     }
-  }
 
   #--- check capitalization ---#
     if( length(tolower(data_by_var)) != length( data_by_var ) ){
       stop( paste0('Check capitalization for by_var') )
     }
-
+  }
 
 #--- iterative algorithm ---#
   hold <- data1
