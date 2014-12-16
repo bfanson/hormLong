@@ -70,6 +70,7 @@ hormBaseline <- function(data, by_var,conc_var, time_var,criteria=2, event_var, 
 
 
 #--- checks of data.frame ---#
+  data <- data[ order(data[by_var_v],data[time_var]), ] 
   data$row_id <- 1:nrow(data) 
   data1 <- data[,c('row_id',by_var_v,conc_var,time_var)] # keep only columns needed
 
@@ -85,6 +86,7 @@ hormBaseline <- function(data, by_var,conc_var, time_var,criteria=2, event_var, 
       stop('program stopped. Remove these groups')
     }
     rm(hold)
+
 
   #--- do event by_var include any not in by_var conc ---#
 #   if( !missing(event_var) ){
