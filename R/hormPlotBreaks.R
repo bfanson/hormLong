@@ -5,6 +5,7 @@
 #' Above this cutoff value, a break is created  [default = 40]
 #' @param break_buffer minimum almost space between breaks (in number of days).  Larger values will
 #' create larger spaces between data groups. [default = 60]
+#' @param date_format the format of the date variable on x-axis. See help for examples of other formats [default = '%d-%b']
 #' @param log_scale determines if y-axis is log10-scale or not. log-scale='y' makes log scale [default='n']  
 #' @param plot_per_page the number of plot panels per page, by row. [default = 4]
 #' @param save_plot indicates whether to save plot as a file [default = TRUE]
@@ -20,7 +21,7 @@
 #' 
 #' 
 
-hormPlotBreaks <- function(x, break_cutoff=40, break_buffer=60, log_scale='n',
+hormPlotBreaks <- function(x, break_cutoff=40, break_buffer=60, date_format='%d-%b', log_scale='n',
                            plot_per_page=4, save_plot=TRUE, plot_height=2, plot_width=6){
 
   #stop('function under development')

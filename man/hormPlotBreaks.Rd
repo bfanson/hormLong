@@ -3,8 +3,9 @@
 \alias{hormPlotBreaks}
 \title{Longitudinal graph with breaks}
 \usage{
-hormPlotBreaks(x, break_cutoff = 40, break_buffer = 60, log_scale = "n",
-  plot_per_page = 4, save_plot = TRUE, plot_height = 2, plot_width = 6)
+hormPlotBreaks(x, break_cutoff = 40, break_buffer = 60,
+  date_format = "\%d-\%b", log_scale = "n", plot_per_page = 4,
+  save_plot = TRUE, plot_height = 2, plot_width = 6)
 }
 \arguments{
 \item{x}{hormLong object (produced from hormBaseline) [required]}
@@ -14,6 +15,8 @@ Above this cutoff value, a break is created  [default = 40]}
 
 \item{break_buffer}{minimum almost space between breaks (in number of days).  Larger values will
 create larger spaces between data groups. [default = 60]}
+
+\item{date_format}{the format of the date variable on x-axis. See help for examples of other formats [default = '%d-%b']}
 
 \item{log_scale}{determines if y-axis is log10-scale or not. log-scale='y' makes log scale [default='n']}
 
