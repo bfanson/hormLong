@@ -3,15 +3,23 @@
 \alias{hormBoxplot}
 \title{Boxplot of individual concentrations}
 \usage{
-hormBoxplot(data, conc_var, id_var, plot_height = 4, plot_width = 6,
-  save_plot = T, log_scale = "n")
+hormBoxplot(data, conc_var, id_var, by_var, plot_height = 5, plot_width = 6,
+  save_plot = T, log_scale = "n", plot_per_page = 1)
 }
 \arguments{
 \item{data}{dataset [required]}
 
 \item{id_var}{name of the individual variable [required]}
 
+\item{by_var}{name of variable to break up plots by  [optional]}
+
+\item{plot_height}{the height of individual plot panels (in inches).  Pdf page height is determined by both plot_per_page and plot_height. [default = 2]}
+
+\item{plot_width}{the width of the pdf page. [default = 6]}
+
 \item{log_scale}{determines if y-axis is log10-scale or not. log-scale='y' makes log scale [default='n']}
+
+\item{plot_per_page}{the number of plot panels per page, by row. [default = 4]}
 
 \item{conc_car}{name of the concentration variable [required]}
 }
@@ -22,6 +30,6 @@ nothing...Produces a pdf file with the graph in current working directory
 Boxplot of individual concentrations
 }
 \examples{
-hormBoxplot(data=hormone, conc_var='conc',id_var='id')
+hormBoxplot(data=hormone, conc_var='conc',id_var='id', by_var='sex')
 }
 
