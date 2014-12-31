@@ -70,7 +70,7 @@ hormBaseline <- function(data, by_var,conc_var, time_var,criteria=2, event_var, 
 
 
 #--- checks of data.frame ---#
-  data <- data[ order(data[by_var_v],data[time_var]), ] 
+  data <- data[ do.call('order', data[c(by_var_v,time_var)]), ] 
   data$row_id <- 1:nrow(data) 
   data1 <- data[,c('row_id',by_var_v,conc_var,time_var)] # keep only columns needed
 
