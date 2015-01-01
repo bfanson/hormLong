@@ -17,7 +17,7 @@
 hormPlotRatio <- function(x, hormone_var, hormone_num, hormone_denom, ...){
   
 #--- main check ---#
-  graphics.off() # just to make sure not devices are open
+  graphics.off() # just to make sure no devices are open
 
   if( class(x)!='hormLong'){
       stop('Object needs to be hormLong.  Run hormBaseline() first')

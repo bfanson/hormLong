@@ -24,7 +24,7 @@ hormPlotOverlap <- function(x, hormone_var='horm_type', date_format='%d-%b', col
                      plot_height=2, plot_width=6, yscale='free', xscale='free',...){
   
 #--- main check ---#
-  graphics.off() # just to make sure not devices are open
+  graphics.off() # just to make sure no devices are open
 
   if( class(x)!='hormLong'){
       stop('Object needs to be hormLong.  Run hormBaseline() first')

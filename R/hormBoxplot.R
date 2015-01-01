@@ -1,14 +1,14 @@
 #' Boxplot of individual concentrations 
 #' 
 #' @param data dataset [required]
+#' @param conc_var name of the concentration variable [required]
 #' @param id_var name of the individual variable [required]
 #' @param by_var name of variable to break up plots by  [optional]
-#' @param conc_car name of the concentration variable [required]
 #' @param log_scale determines if y-axis is log10-scale or not. log-scale='y' makes log scale [default='n']  
 #' @param plot_per_page the number of plot panels per page, by row. [default = 4]
 #' @param plot_height  the height of individual plot panels (in inches).  Pdf page height is determined by both plot_per_page and plot_height. [default = 2]
 #' @param plot_width  the width of the pdf page. [default = 6]
-#' @return nothing...Produces a pdf file with the graph in current working directory
+#' @return nothing Produces a pdf file with the graph in current working directory
 #' @export
 #' @examples
 #' 
@@ -18,6 +18,7 @@
 hormBoxplot <- function(data, conc_var, id_var, by_var, plot_height=5, plot_width=6, 
                         save_plot=T, log_scale='n', plot_per_page=2){
   
+  graphics.off() # just to make sure no devices are open
   if(missing(conc_var)){
       stop('conc_var (e.g. the response variable containing the concentration) must be specified')
     }
