@@ -52,7 +52,6 @@ hormPlotOverlap <- function(x, hormone_var='horm_type', date_format='%d-%b', col
   time_var <- x$time_var
   conc_var <- x$conc_var
   data <- x$data
-  data <- ridFactor(data) # get rid of all factors
   data <- data[ do.call(order, data[c(by_var_v,time_var,hormone_var)]), ]
   
   data$plot_title <- getPlotTitle(data, by_var=by_var_v)
@@ -89,7 +88,7 @@ hormPlotOverlap <- function(x, hormone_var='horm_type', date_format='%d-%b', col
     #--- main plot
       require(lubridate)
       loop <- 0
-      for(h in unique(ds_sub[,hormone_var])){
+      for(h in sort(unique(ds_sub[,hormone_var]))){
         loop <- loop+1
         ds_sub1 <- ds_sub[ds_sub[,hormone_var]==h,]
         if(loop==1){
@@ -100,7 +99,7 @@ hormPlotOverlap <- function(x, hormone_var='horm_type', date_format='%d-%b', col
         c_order <- c(rep(0,length(ds_sub1[,conc_var])),rev(ds_sub1[,conc_var])) 
         polygon(t_order,c_order,col=adjustcolor(colors[loop], alpha=0.25)) 
       }
-      legend('topleft',legend=unique(ds_sub[,hormone_var]),fill=adjustcolor(colors, alpha=0.25),
+      legend('topleft',legend=sort(unique(ds_sub[,hormone_var])),fill=adjustcolor(colors, alpha=0.25),
               bty='n',cex=0.9,bg=NA, pt.cex=0.6)
       if(is.numeric(ds_sub[,time_var])){ axis(1)
       }else if( is.Date(ds_sub[,time_var]) ){
