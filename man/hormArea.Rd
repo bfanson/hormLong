@@ -37,11 +37,11 @@ nothing is returned.  Pdf file is produced and a summary table
 Plot the area under the curve for peak values
 }
 \examples{
-Citation: Variation within and between Birds in Corticosterone Responses of Great Tits (Parus major)
-General and Comparative Endocrinology, Volume 125, Issue 2, February 2002, Pages 197–206
-J.F. Cockrem, B. Silverin
+Citation: Cockrem JF and Silverin B. 2002. Variation within and between Birds in Corticosterone
+Responses of Great Tits (Parus major).  General and Comparative Endocrinology 125:197–206.
 
-result <- hormBaseline(data=hormone, criteria=2, by_var='sp, sex, id', time_var='date', conc_var='conc' )
+
+result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', time_var='Date', conc_var='Conc' )
 hormArea(result)
 }
 

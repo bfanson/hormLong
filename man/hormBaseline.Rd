@@ -28,6 +28,6 @@ hormLong object.
 Run iterative process to calculate baseline.
 }
 \examples{
-result <- hormBaseline(data=hormone, by_var='sp, sex, id', time_var='date', conc_var='conc', event_var='Event' )
+result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', time_var='Date', conc_var='Conc' )
 }
 

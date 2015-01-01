@@ -35,7 +35,8 @@ nothing  Produces a pdf file saved at current working directory
 Plot longitudinal hormone data with baseline information
 }
 \examples{
-result <- hormBaseline(data=hormone, criteria=1, by_var='sp, sex, id', time_var='date', conc_var='conc' )
+result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', time_var='Date', conc_var='Conc' )
+hormPlot(result )
 hormPlot(result, yscale='fixed',xscale='fixed' )
 }
 

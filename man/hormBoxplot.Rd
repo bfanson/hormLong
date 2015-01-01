@@ -4,7 +4,7 @@
 \title{Boxplot of individual concentrations}
 \usage{
 hormBoxplot(data, conc_var, id_var, by_var, plot_height = 5, plot_width = 6,
-  save_plot = T, log_scale = "n", plot_per_page = 1)
+  save_plot = T, log_scale = "n", plot_per_page = 2)
 }
 \arguments{
 \item{data}{dataset [required]}
@@ -30,6 +30,6 @@ nothing...Produces a pdf file with the graph in current working directory
 Boxplot of individual concentrations
 }
 \examples{
-hormBoxplot(data=hormone, conc_var='conc',id_var='id', by_var='sex')
+hormBoxplot(data=hormLynx, conc_var='Conc',id_var='AnimalID', by_var='Hormone', plot_per_page=1)
 }
 

@@ -1,6 +1,7 @@
 #' Plot overlapping longitudinal hormone data 
 #' 
 #' @param x hormLong object (produced from hormBaseline) [required]
+#' @param hormone_var name for the hormone variable.  It must be listed in by_var during hormBaseline [required]
 #' @param colors vector of colors for the fills. It needs to have as many colors as hormone types  [default=c('red','blue')]
 #' @param date_format the format of the date variable on x-axis. See help for examples of other formats [default = '%d-%b']
 #' @param plot_per_page the number of plot panels per page, by row. [default = 4]
@@ -14,10 +15,8 @@
 #' @export
 #' @examples
 #' 
-#'   ds <- hormDate(hormone2,date_var = 'date', date_order = 'ymd')
-#'   res <- hormBaseline(data=ds,criteria=1,by_var='sp,horm_type,id',conc_var = 'conc',time_var='date',
-#'                      event_var='event')
-#' hormPlotOverlap(res )
+#' result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', time_var='Date', conc_var='Conc' )
+#' hormPlotOverlap( result, hormone_var='Hormone', colors=c('red','blue','yellow') )
 #' 
 
 hormPlotOverlap <- function(x, hormone_var='horm_type', date_format='%d-%b', colors=c('red','blue'), 
@@ -25,6 +24,8 @@ hormPlotOverlap <- function(x, hormone_var='horm_type', date_format='%d-%b', col
                      plot_height=2, plot_width=6, yscale='free', xscale='free',...){
   
 #--- main check ---#
+  graphics.off() # just to make sure not devices are open
+
   if( class(x)!='hormLong'){
       stop('Object needs to be hormLong.  Run hormBaseline() first')
   }

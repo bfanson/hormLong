@@ -9,7 +9,7 @@
 #' @export
 #' @examples
 #' 
-#' hormSmooth(data=hormone2, by_var='sp, id', group_var='horm_type', time_var='date', conc_var='conc')
+#' result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', time_var='Date', conc_var='Conc' )
  
 
 hormSmooth <- function(data,by_var,group_var,time_var,conc_var, plot_per_page=4,
@@ -17,6 +17,7 @@ hormSmooth <- function(data,by_var,group_var,time_var,conc_var, plot_per_page=4,
                        smoothness=0.7, shape=1, colour='black', line_type=1,
                        line_width=1, add_points=T,...) {
 stop('function under development')
+  graphics.off() # just to make sure not devices are open
 
 #--- add in checks ---#
    if(missing(data)){

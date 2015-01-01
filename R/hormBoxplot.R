@@ -12,11 +12,11 @@
 #' @export
 #' @examples
 #' 
-#' hormBoxplot(data=hormone, conc_var='conc',id_var='id', by_var='sex')
+#' hormBoxplot(data=hormLynx, conc_var='Conc',id_var='AnimalID', by_var='Hormone', plot_per_page=1)
 #' 
 
 hormBoxplot <- function(data, conc_var, id_var, by_var, plot_height=5, plot_width=6, 
-                        save_plot=T, log_scale='n', plot_per_page=1){
+                        save_plot=T, log_scale='n', plot_per_page=2){
   
   if(missing(conc_var)){
       stop('conc_var (e.g. the response variable containing the concentration) must be specified')
@@ -47,7 +47,7 @@ hormBoxplot <- function(data, conc_var, id_var, by_var, plot_height=5, plot_widt
   
   by_var_v <- cleanByvar(by_var ) 
   data$plot_title <- getPlotTitle(data, by_var=by_var_v) 
-  par(mfrow=c(plot_per_page,1), mar=c(2,4,2,0.5),oma=c(2,2,2,1))
+  par(mfrow=c(plot_per_page,1), mar=c(4,4,2,0.5),oma=c(2,2,2,2))
   for(p in unique( data$plot_title ) ){
     data1 <- subset(data, plot_title == p )
     data1 <- data1[ order(data1[,id_var]),]

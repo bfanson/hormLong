@@ -3,17 +3,17 @@
 \alias{hormPlotRatio}
 \title{Plot longitudinal hormone ratios}
 \usage{
-hormPlotRatio(x, horm_var, horm_num, horm_denom, ...)
+hormPlotRatio(x, hormone_var, hormone_num, hormone_denom, ...)
 }
 \arguments{
 \item{x}{hormLong object (produced from hormBaseline) [required]}
 
-\item{horm_var}{name of the hormone variable.  This must have been included
+\item{hormone_var}{name of the hormone variable.  This must have been included
 as part of by_var in hormBaseline  [required]}
 
-\item{horm_num}{name of the hormone that is the numerator in the ratio. [required]}
+\item{hormone_num}{name of the hormone that is the numerator in the ratio. [required]}
 
-\item{horm_denom}{name of the hormone that is the denominator in the ratio. [required]}
+\item{hormone_denom}{name of the hormone that is the denominator in the ratio. [required]}
 
 \item{...}{arguments for hormPlot [optional]}
 }
@@ -24,9 +24,7 @@ nothing  Produces a pdf file saved at current working directory
 Plot longitudinal hormone ratios
 }
 \examples{
-ds <- hormDate(hormone2,date_var = 'date', date_order = 'ymd')
-res <- hormBaseline(data=ds,criteria=1,by_var='sp,horm_type,id',conc_var = 'conc',time_var='date',
-                     event_var='event')
-hormPlotRatio( x=res, horm_var='horm_type', horm_num='E', horm_denom='prog' )
+result <- hormBaseline(data=hormElephant, criteria=2, by_var='ID, Hormone', time_var='Date', conc_var='conc_ng_ml' )
+hormPlotRatio( x=result, hormone_var='Hormone', hormone_num='LH', hormone_denom='Progesterone' )
 }
 

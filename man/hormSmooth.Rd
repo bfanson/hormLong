@@ -26,6 +26,6 @@ hormLong object.
 Create longitudinal plot with smoothers
 }
 \examples{
-hormSmooth(data=hormone2, by_var='sp, id', group_var='horm_type', time_var='date', conc_var='conc')
+result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', time_var='Date', conc_var='Conc' )
 }
 

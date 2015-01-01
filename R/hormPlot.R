@@ -14,7 +14,8 @@
 #' @export
 #' @examples
 #' 
-#' result <- hormBaseline(data=hormone, criteria=1, by_var='sp, sex, id', time_var='date', conc_var='conc' )
+#' result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', time_var='Date', conc_var='Conc' )
+#' hormPlot(result )
 #' hormPlot(result, yscale='fixed',xscale='fixed' )
 #' 
 
@@ -22,6 +23,7 @@ hormPlot <- function(x, date_format='%d-%b', log_scale='n', plot_per_page=4, sav
                      plot_height=2, plot_width=6, yscale='free', xscale='free',...){
   
 #--- main check ---#
+  graphics.off() # just to make sure not devices are open
   if( class(x)!='hormLong'){
       stop('Object needs to be hormLong.  Run hormBaseline() first')
   }
@@ -53,6 +55,7 @@ hormPlot <- function(x, date_format='%d-%b', log_scale='n', plot_per_page=4, sav
 
     
 #--- create plots ---#
+  require(lubridate)
   if( save_plot ){
     pdf('hormPlot.pdf', height=plot_per_page * plot_height, width = plot_width )
   }

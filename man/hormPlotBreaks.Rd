@@ -41,4 +41,8 @@ nothing  Produces a pdf file saved at current working directory
 \description{
 Longitudinal graph with breaks
 }
+\examples{
+result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', time_var='Date', conc_var='Conc' )
+hormPlotBreaks( result )
+}
 
