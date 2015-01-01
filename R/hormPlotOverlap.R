@@ -87,6 +87,7 @@ hormPlotOverlap <- function(x, hormone_var='horm_type', date_format='%d-%b', col
         xmax <- max( data[,time_var],na.rm=T)
       }    
     #--- main plot
+      require(lubridate)
       loop <- 0
       for(h in unique(ds_sub[,hormone_var])){
         loop <- loop+1
