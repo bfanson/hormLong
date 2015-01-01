@@ -9,6 +9,8 @@ hormBoxplot(data, conc_var, id_var, by_var, plot_height = 5, plot_width = 6,
 \arguments{
 \item{data}{dataset [required]}
 
+\item{conc_var}{name of the concentration variable [required]}
+
 \item{id_var}{name of the individual variable [required]}
 
 \item{by_var}{name of variable to break up plots by  [optional]}
@@ -20,11 +22,9 @@ hormBoxplot(data, conc_var, id_var, by_var, plot_height = 5, plot_width = 6,
 \item{log_scale}{determines if y-axis is log10-scale or not. log-scale='y' makes log scale [default='n']}
 
 \item{plot_per_page}{the number of plot panels per page, by row. [default = 4]}
-
-\item{conc_car}{name of the concentration variable [required]}
 }
 \value{
-nothing...Produces a pdf file with the graph in current working directory
+nothing Produces a pdf file with the graph in current working directory
 }
 \description{
 Boxplot of individual concentrations
