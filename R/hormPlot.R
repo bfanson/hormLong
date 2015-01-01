@@ -9,6 +9,7 @@
 #' @param plot_width  the width of the pdf page. [default = 6]
 #' @param yscale  determines if y-axis should be free ('free') to change for each panel or remain the same ('fixed') for all panels [default = 'free']
 #' @param xscale  determines if x-axis should be free ('free') to change for each panel or remain the same ('fixed') for all panels  [default = 'free']
+#' @param filename  the filename of the pdf file [default = 'hormPlot']
 #' @param ...   generic plotting options [optional]  
 #' @return nothing  Produces a pdf file saved at current working directory
 #' @export
@@ -20,7 +21,7 @@
 #' 
 
 hormPlot <- function(x, date_format='%d-%b', log_scale='n', plot_per_page=4, save_plot=TRUE, 
-                     plot_height=2, plot_width=6, yscale='free', xscale='free',...){
+                     plot_height=2, plot_width=6, yscale='free', xscale='free', filename='hormPlot',...){
   
 #--- main check ---#
   graphics.off() # just to make sure no devices are open
@@ -57,7 +58,7 @@ hormPlot <- function(x, date_format='%d-%b', log_scale='n', plot_per_page=4, sav
 #--- create plots ---#
   require(lubridate)
   if( save_plot ){
-    pdf('hormPlot.pdf', height=plot_per_page * plot_height, width = plot_width )
+    pdf(paste0(filename,'.pdf'), height=plot_per_page * plot_height, width = plot_width )
   }
 
   par(mfrow=c(plot_per_page,1), mar=c(2,4,2,0.5),oma=c(2,2,2,1))
@@ -115,6 +116,6 @@ hormPlot <- function(x, date_format='%d-%b', log_scale='n', plot_per_page=4, sav
       }
   }
   if( save_plot ){  dev.off()
-      cat( paste0('\n *********\nNote: plots are saved at: \n', getwd(),'/hormPlot.pdf \n***** \n\n')  )
+      cat( paste0('\n *********\nNote: plots are saved at: \n', getwd(),'/',filename,'.pdf \n***** \n\n')  )
   }
 }

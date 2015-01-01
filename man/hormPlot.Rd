@@ -5,7 +5,7 @@
 \usage{
 hormPlot(x, date_format = "\%d-\%b", log_scale = "n", plot_per_page = 4,
   save_plot = TRUE, plot_height = 2, plot_width = 6, yscale = "free",
-  xscale = "free", ...)
+  xscale = "free", filename = "hormPlot", ...)
 }
 \arguments{
 \item{x}{hormLong object (produced from hormBaseline) [required]}
@@ -25,6 +25,8 @@ hormPlot(x, date_format = "\%d-\%b", log_scale = "n", plot_per_page = 4,
 \item{yscale}{determines if y-axis should be free ('free') to change for each panel or remain the same ('fixed') for all panels [default = 'free']}
 
 \item{xscale}{determines if x-axis should be free ('free') to change for each panel or remain the same ('fixed') for all panels  [default = 'free']}
+
+\item{filename}{the filename of the pdf file [default = 'hormPlot']}
 
 \item{...}{generic plotting options [optional]}
 }

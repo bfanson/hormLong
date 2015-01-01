@@ -79,6 +79,6 @@ hormPlotRatio <- function(x, hormone_var, hormone_num, hormone_denom, ...){
 
 
 #--- call hormPlot with new hormLong object ---#
-  hormPlot(x=new_x, ...)
+  hormPlot(x=new_x, filename='hormRatio', ...)
 
 }
