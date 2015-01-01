@@ -19,7 +19,10 @@
 #' @return nothing  Produces a pdf file saved at current working directory
 #' @export
 #' 
+<<<<<<< HEAD
 #' @examples
+=======
+>>>>>>> afb8ce34fc73e92c2b85edbc9d1434e0e4166d52
 #' result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', time_var='Date', conc_var='Conc' )
 #' hormPlotBreaks( result ) 
 
