@@ -10,7 +10,7 @@ hormPlot(x, date_format = "\%d-\%b", log_scale = "n", plot_per_page = 4,
 \arguments{
 \item{x}{hormLong object (produced from hormBaseline) [required]}
 
-\item{date_format}{the format of the date variable on x-axis. See help for examples of other formats [default = '%d-%b']}
+\item{date_format}{the format of the date variable on x-axis. See help for examples of other formats [default = '\%d-\%b']}
 
 \item{log_scale}{determines if y-axis is log10-scale or not. log-scale='y' makes log scale [default='n']}
 
@@ -37,6 +37,6 @@ Plot longitudinal hormone data with baseline information
 \examples{
 result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', time_var='Date', conc_var='Conc' )
 hormPlot(result )
-hormPlot(result, yscale='fixed',xscale='fixed' )
+hormPlot(result, yscale='fixed', xscale='fixed' )
 }
 

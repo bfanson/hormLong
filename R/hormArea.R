@@ -21,12 +21,13 @@
 #' Responses of Great Tits (Parus major).  General and Comparative Endocrinology 125:197–206.
 #' 
 #' 
-#' result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', time_var='Date', conc_var='Conc' )
-#' hormArea(result)
+#' result <- hormBaseline(data=hormLynx,  criteria=2, by_var='AnimalID, Hormone', time_var='Date', conc_var='Conc' )
+#' hormArea(result,lower_bound='baseline')
 
 hormArea <- function(x, lower_bound = 'origin' , method='trapezoid',
                      plot_per_page=4, plot_height=2, plot_width=6, save_plot=T, 
                      yscale='free', xscale='free'){
+#-- initial checking ---#  
   if( method!='trapezoid'){ 
     stop('no other method currently implemented ')
   }
@@ -34,6 +35,8 @@ hormArea <- function(x, lower_bound = 'origin' , method='trapezoid',
     stop(paste0("lower_bound is incorrect.  It must be 'origin', 'baseline', 'peak': you wrote '", lower_bound,"'") )
   }
   graphics.off() # just to make sure not devices are open
+
+#--- get hormLong object and break up ---#  
   by_var_v <- cleanByvar(x$by_var) 
   time_var <- x$time_var
   conc_var <- x$conc_var
@@ -55,6 +58,14 @@ hormArea <- function(x, lower_bound = 'origin' , method='trapezoid',
   }else if(lower_bound=='peak'){
     data <- getSumStat(data=data[data$conc_type=='base',], name='cutoff', func= function(y) getCutoff(y, criteria=x$criteria ), 
                                                 by_var=by_var_v, c_var=conc_var,add_ds=data  )
+  }
+
+#--- deal with duplicate time points ---#
+  if( any( duplicated( data[,c(by_var_v,time_var)] )==T ) ){
+    cat('Warning: There are duplicated date/time, so only the lowest concentration is kept.
+          The duplicated rows are listed below: \n\n')
+    print( data[ duplicated( data[,c(by_var_v,time_var)] )==T,c(by_var_v,time_var,conc_var)] )
+    data <- data[ duplicated( data[,c(by_var_v,time_var)] )==F,]
   }
 
 #--- peak analysis ---#

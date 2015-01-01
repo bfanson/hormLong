@@ -9,8 +9,7 @@
 hormLynx
 }
 \description{
-Longitudinal hormone data for three species, both sexes, and multiple
-individuals
+Longitudinal hormone data for cort for multiple lynx individuals
 }
 \details{
 Reference: Fanson KV,  Wielebnowski NC, Shenk TM, Lucas JR. Comparative patterns of adrenal activity in

@@ -3,7 +3,7 @@
 #' @param x hormLong object (produced from hormBaseline) [required]
 #' @param hormone_var name for the hormone variable.  It must be listed in by_var during hormBaseline [required]
 #' @param colors vector of colors for the fills. It needs to have as many colors as hormone types  [default=c('red','blue')]
-#' @param date_format the format of the date variable on x-axis. See help for examples of other formats [default = '%d-%b']
+#' @param date_format the format of the date variable on x-axis. See help for examples of other formats [default = '\%d-\%b']
 #' @param plot_per_page the number of plot panels per page, by row. [default = 4]
 #' @param save_plot indicates whether to save plot as a file [default = TRUE]
 #' @param plot_height  the height of individual plot panels (in inches).  Pdf page height is determined by both plot_per_page and plot_height. [default = 2]
