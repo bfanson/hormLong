@@ -52,6 +52,7 @@ hormPlotOverlap <- function(x, hormone_var='horm_type', date_format='%d-%b', col
   time_var <- x$time_var
   conc_var <- x$conc_var
   data <- x$data
+  data <- ridFactor(data) # get rid of all factors
   data <- data[ do.call(order, data[c(by_var_v,time_var,hormone_var)]), ]
   
   data$plot_title <- getPlotTitle(data, by_var=by_var_v)
