@@ -1,49 +1,50 @@
 #' Plot longitudinal hormone ratios  
 #' 
 #' @param x hormLong object (produced from hormBaseline) [required]
-#' @param horm_var name of the hormone variable.  This must have been included 
+#' @param hormone_var name of the hormone variable.  This must have been included 
 #' as part of by_var in hormBaseline  [required]
-#' @param horm_num name of the hormone that is the numerator in the ratio. [required]
-#' @param horm_denom name of the hormone that is the denominator in the ratio. [required]
+#' @param hormone_num name of the hormone that is the numerator in the ratio. [required]
+#' @param hormone_denom name of the hormone that is the denominator in the ratio. [required]
 #' @param ... arguments for hormPlot [optional]  
 #' @return nothing  Produces a pdf file saved at current working directory
 #' @export
 #' @examples
 #' 
-#' ds <- hormDate(hormone2,date_var = 'date', date_order = 'ymd')
-#' res <- hormBaseline(data=ds,criteria=1,by_var='sp,horm_type,id',conc_var = 'conc',time_var='date',
-#'                      event_var='event')
-#' hormPlotRatio( x=res, horm_var='horm_type', horm_num='E', horm_denom='prog' )
+#' result <- hormBaseline(data=hormElephant, criteria=2, by_var='ID, Hormone', time_var='Date', conc_var='conc_ng_ml' )
+#' hormPlotRatio( x=result, hormone_var='Hormone', hormone_num='LH', hormone_denom='Progesterone' )
 #' 
 
-hormPlotRatio <- function(x, horm_var, horm_num, horm_denom, ...){
+hormPlotRatio <- function(x, hormone_var, hormone_num, hormone_denom, ...){
+  
 #--- main check ---#
+  graphics.off() # just to make sure not devices are open
+
   if( class(x)!='hormLong'){
       stop('Object needs to be hormLong.  Run hormBaseline() first')
   }
-  if( missing(horm_var) | missing(horm_num) | missing(horm_denom)){
-      stop('horm_var and horm_num and horm_denom must be specified')
+  if( missing(hormone_var) | missing(hormone_num) | missing(hormone_denom)){
+      stop('hormone_var and hormone_num and hormone_denom must be specified')
   }
   
   by_var_v <- cleanByvar(x$by_var) 
-  if( !(horm_var %in% by_var_v) ){
-    stop('horm_var must have been specified in by_var when running hormBaseline')
+  if( !(hormone_var %in% by_var_v) ){
+    stop('hormone_var must have been specified in by_var when running hormBaseline')
   }
-  if( !horm_num %in% unique(x$data[,horm_var])){
-    stop('horm_num must be a level in horm_var.  check spelling and capitalization')
+  if( !hormone_num %in% unique(x$data[,hormone_var])){
+    stop('hormone_num must be a level in hormone_var.  check spelling and capitalization')
   }  
-  if( !horm_denom %in% unique(x$data[,horm_var]) ){
-    stop('horm_denom must be a level in horm_var.  check spelling and capitalization')
+  if( !hormone_denom %in% unique(x$data[,hormone_var]) ){
+    stop('hormone_denom must be a level in hormone_var.  check spelling and capitalization')
   }  
 
 #-- set-up a new hormLong object ---#
-  new_by_var <- by_var_v[ by_var_v!=horm_var ]
+  new_by_var <- by_var_v[ by_var_v!=hormone_var ]
   ds_new <- x$data
-  ds_new <- ds_new[ ds_new[,horm_var] %in% c(horm_num,horm_denom), c(by_var_v,x$time_var,x$conc_var) ]
-  ds_new_n <- ds_new[ ds_new[,horm_var]==horm_num,   ]
-    ds_new_n[,horm_var] <- NULL
-  ds_new_d <- ds_new[ ds_new[,horm_var]==horm_denom, ] 
-    ds_new_d[,horm_var] <- NULL
+  ds_new <- ds_new[ ds_new[,hormone_var] %in% c(hormone_num,hormone_denom), c(by_var_v,x$time_var,x$conc_var) ]
+  ds_new_n <- ds_new[ ds_new[,hormone_var]==hormone_num,   ]
+    ds_new_n[,hormone_var] <- NULL
+  ds_new_d <- ds_new[ ds_new[,hormone_var]==hormone_denom, ] 
+    ds_new_d[,hormone_var] <- NULL
   names(ds_new_n)[ which( names(ds_new_n)==x$conc_var) ] <- 'num_conc'
   names(ds_new_d)[ which( names(ds_new_d)==x$conc_var) ] <- 'denom_conc'
   ds_new <- merge( ds_new_n, ds_new_d) # inner merge
@@ -51,6 +52,13 @@ hormPlotRatio <- function(x, horm_var, horm_num, horm_denom, ...){
   ds_new <- ds_new[ !is.na(ds_new$ratio), ]
     ds_new$num_conc <- NULL 
     ds_new$denom_conc <- NULL 
+
+  #--- remove any undefined ratios ---#
+    if( max(ds_new$ratio)==Inf ){
+      cat('WARNING: ratio contains Infinity which is due to denominator being zero.  All Infinity ratios
+            will be removed. \n\n')
+      ds_new <- subset( ds_new, ratio < Inf )
+    }
 
 #--- add in events ---#
   if(!is.null(x$event_var) ){
@@ -67,7 +75,7 @@ hormPlotRatio <- function(x, horm_var, horm_num, horm_denom, ...){
   new_x$criteria <- NULL 
   new_x$conc_var <- 'ratio'
   new_x$data <- ds_new
-  new_x$y_lab <- paste0( horm_num, '/', horm_denom )
+  new_x$y_lab <- paste0( hormone_num, '/', hormone_denom )
 
 
 #--- call hormPlot with new hormLong object ---#

@@ -19,12 +19,15 @@
 #' @return nothing  Produces a pdf file saved at current working directory
 #' @export
 #' 
-#' 
+#' result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', time_var='Date', conc_var='Conc' )
+#' hormPlotBreaks( result ) 
+
 
 hormPlotBreaks <- function(x, break_cutoff=40, break_buffer=60, date_format='%d-%b', log_scale='n',
                            plot_per_page=4, save_plot=TRUE, plot_height=2, plot_width=6){
 
   #stop('function under development')
+  graphics.off() # just to make sure not devices are open
 
   by_var_v <- cleanByvar(x$by_var) 
   time_var <- x$time_var

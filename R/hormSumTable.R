@@ -6,7 +6,7 @@
 #' @export
 #' @examples
 #' 
-#' result <- hormBaseline(data=hormone, by_var='sp, sex, id', time_var='date', conc_var='conc' )
+#' result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', time_var='Date', conc_var='Conc' )
 #' hormSumTable(result) 
 
 hormSumTable <- function(x,  num_decimals=2){

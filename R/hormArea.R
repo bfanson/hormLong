@@ -17,11 +17,11 @@
 #' @export
 #' @examples
 #' 
-#' Citation: Variation within and between Birds in Corticosterone Responses of Great Tits (Parus major)
-#' General and Comparative Endocrinology, Volume 125, Issue 2, February 2002, Pages 197–206
-#' J.F. Cockrem, B. Silverin
+#' Citation: Cockrem JF and Silverin B. 2002. Variation within and between Birds in Corticosterone 
+#' Responses of Great Tits (Parus major).  General and Comparative Endocrinology 125:197–206.
 #' 
-#' result <- hormBaseline(data=hormone, criteria=2, by_var='sp, sex, id', time_var='date', conc_var='conc' )
+#' 
+#' result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', time_var='Date', conc_var='Conc' )
 #' hormArea(result)
 
 hormArea <- function(x, lower_bound = 'origin' , method='trapezoid',
@@ -33,6 +33,7 @@ hormArea <- function(x, lower_bound = 'origin' , method='trapezoid',
   if( !(lower_bound %in% c('origin','baseline','peak') ) ){ 
     stop(paste0("lower_bound is incorrect.  It must be 'origin', 'baseline', 'peak': you wrote '", lower_bound,"'") )
   }
+  graphics.off() # just to make sure not devices are open
   by_var_v <- cleanByvar(x$by_var) 
   time_var <- x$time_var
   conc_var <- x$conc_var
