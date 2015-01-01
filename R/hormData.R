@@ -14,8 +14,7 @@
 
 #' Canadian Lynx data.
 #' 
-#' Longitudinal hormone data for three species, both sexes, and multiple
-#' individuals
+#' Longitudinal hormone data for cort for multiple lynx individuals 
 #' 
 #' Reference: Fanson KV,  Wielebnowski NC, Shenk TM, Lucas JR. Comparative patterns of adrenal activity in 
 #' captive and wild Canada lynx (Lynx canadensis). Journal of Comparative Physiology B 182:157-165
