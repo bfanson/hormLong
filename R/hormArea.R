@@ -21,8 +21,8 @@
 #' Responses of Great Tits (Parus major).  General and Comparative Endocrinology 125\:197–206.
 #' 
 #' 
-#' result <- hormBaseline(data=hormLynx,  criteria=2, by_var='AnimalID, Hormone', time_var='Date', conc_var='Conc' )
-#' hormArea(result,lower_bound='baseline')
+#' result <- hormBaseline(data=hormLynx,  criteria=3, by_var='AnimalID, Hormone', time_var='datetime', conc_var='Conc' )
+#' hormArea(result,lower_bound='peak')
 
 hormArea <- function(x, lower_bound = 'origin' , method='trapezoid', xscale='free',yscale='free',
                      plot_per_page=4, plot_height=2, plot_width=6, save_plot=T){
@@ -109,7 +109,7 @@ hormArea <- function(x, lower_bound = 'origin' , method='trapezoid', xscale='fre
       points(ds_sub[,time_var], ds_sub[,conc_var],pch=19)
       mtext(unique(ds_sub$plot_title),side=3,line=0.25)
       abline(h = baseline, lty=2)
-      if( max(pk$peak_num)>0 ){
+      if( length(pk$peak_num)>0 ){
         for(p in 1:max(pk$peak_num) ){
           pk1 <- pk[ pk$peak_num==p, ]
           t_order <- c(pk1$t,rev(pk1$t))
