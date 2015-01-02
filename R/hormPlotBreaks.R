@@ -18,32 +18,34 @@
 #' @examples
 #' 
 #' 
-#' result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', time_var='Date', conc_var='Conc' )
+#' result <- hormBaseline(data=hormElephant, criteria=2, by_var='ID, Hormone', time_var='Date', 
+#'              conc_var='conc_ng_ml' , event_var='Event')
 #' hormPlotBreaks( result ) 
 
 
 hormPlotBreaks <- function(x, break_cutoff=40, break_buffer=60, date_format='%d-%b', log_scale='n',
                            plot_per_page=4, plot_height=2, plot_width=6, save_plot=TRUE){
 
-  #stop('function under development')
-  graphics.off() # just to make sure no devices are open
 
+  graphics.off() # just to make sure no devices are open
+  require(lubridate)
   by_var_v <- cleanByvar(x$by_var) 
   time_var <- x$time_var
   conc_var <- x$conc_var
   data <- x$data
-  data <- data[!is.na(data[,conc_var]),]
+  #data <- data[!is.na(data[,conc_var]),]
   data <-ridFactor(data)
   data$plot_title <- getPlotTitle(data,by_var=by_var_v)
   data <- getSumStat(data=data,name='cutoff', func= function(y) getCutoff(y, criteria=x$criteria ), add_ds=data, by_var=by_var_v, c_var=conc_var )
-  data[,time_var] <- as.numeric( data[,time_var] )
+  if( is.Date(data[,time_var]) ){ data[,time_var] <- as.numeric( data[,time_var] ) * 3600*24 
+    }else{  data[,time_var] <- as.numeric( data[,time_var] ) } 
 
 #--- prep data ---#
   #--- calculate breaks using break_cutoff ---#
     data$row_id <- 1:nrow(data)
     tmp <- do.call(rbind,by(data,data$plot_title,FUN=function(x, time=time_var) cbind(row_id=x$row_id,diff=c(-99, diff(x[,time]))  ) ))
     data <- merge(data,tmp,all.x=T)
-    data$brk<-0
+    data$brk <- 0
     for(i in 1:nrow(data)){
       if(data$diff[i] == -99){brk_num=1}
       if(data$diff[i]/(3600*24) > break_cutoff){brk_num=brk_num+1}
@@ -76,19 +78,20 @@ hormPlotBreaks <- function(x, break_cutoff=40, break_buffer=60, date_format='%d-
   for( i in unique(data$plot_title) ){
     ds_sub <- ds1[data$plot_title==i, ]
     baseline <- getCutoff( ds_sub[ds_sub$conc_type=='base',conc_var], criteria=x$criteria )
-    ds_sub <- ds_sub[!is.na(ds_sub[,conc_var]),]
+    #ds_sub <- ds_sub[!is.na(ds_sub[,conc_var]),]
 
+     
   if(log_scale=='y'){
-   plot(ds_sub[,conc_var]~ds_sub$x_adj, type='n', xaxt='n',ylab=conc_var, log='y') 
+   plot(ds_sub[,conc_var]~ds_sub$x_adj, type='n', xaxt='n',ylab=conc_var, xlab=NA, log='y') 
   }else{
-   plot(ds_sub[,conc_var]~ds_sub$x_adj, type='n', xaxt='n',ylab=conc_var) 
+   plot(ds_sub[,conc_var]~ds_sub$x_adj, type='n', xaxt='n',ylab=conc_var, xlab=NA) 
   }
    mtext(unique(ds_sub$plot_title),side=3,line=0.25)
      abline(h = baseline, lty=2)
 
    for(b in 1:max(ds_sub$brk)){
       ds_sub1 <- ds_sub[ds_sub$brk==b,] 
-      points(ds_sub1$x_adj,ds_sub1[,conc_var])
+      points(ds_sub1$x_adj,ds_sub1[,conc_var], pch=19)
       lines(ds_sub1$x_adj,ds_sub1[,conc_var])
     #  text(ds_sub1$x_adj,-2+rnorm(length(ds_sub1$x_adj)),labels=ds_sub1$x,cex=0.6)
         p_at <-pretty( c(min(ds_sub1$x_adj), max(ds_sub1$x_adj), n=ceiling(12*nrow(ds_sub1)/nrow(ds_sub)) ) )
@@ -98,10 +101,17 @@ hormPlotBreaks <- function(x, break_cutoff=40, break_buffer=60, date_format='%d-
         axis(1,at=p_at, labels = 
                format( as.POSIXct( p_at+ds_sub1$x_diff[1] ,origin='1970-01-01'), date_format) )
 
-#     if(!is.null(x$event_var)){
-#       events <- ds_sub1[ !is.na(ds_sub1[,x$event_var]) & ds_sub1[,x$event_var]!='',c(x$event_var,time_var)]
-#       }else{events <- data.frame()}
+     if(!is.null(x$event_var)){
+       events <- ds_sub1[ !is.na(ds_sub1[,x$event_var]) & ds_sub1[,x$event_var]!='',c(x$event_var,'x_adj')]
+       }else{events <- data.frame()}
     
+      if( nrow(events)>0 ){
+        for(l in 1:nrow(events)){
+          ymax_e <- par('usr')[4]
+          arrows(x0=events[l,'x_adj'],x1 =events[l,'x_adj'], y0=ymax_e*0.92,y1=ymax_e*0.76, length = 0.1)
+          text(x=events[l,'x_adj'],y=ymax_e*0.96, events[l,x$event_var])
+        }
+      }
     } # then brk loop
   } # end plot_title  
 
