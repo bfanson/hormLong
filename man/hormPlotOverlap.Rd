@@ -3,19 +3,24 @@
 \alias{hormPlotOverlap}
 \title{Plot overlapping longitudinal hormone data}
 \usage{
-hormPlotOverlap(x, hormone_var = "horm_type", colors = c("red", "blue"),
-  date_format = "\%d-\%b", xscale = "free", yscale = "free",
-  plot_per_page = 4, plot_height = 2, plot_width = 6, save_plot = TRUE,
-  ...)
+hormPlotOverlap(x, hormone_var = "horm_type", colors = "red,blue",
+  date_format = "\%d-\%b", add_fill = TRUE, two_axes = FALSE,
+  xscale = "free", yscale = "free", plot_per_page = 4, plot_height = 2,
+  plot_width = 6, save_plot = TRUE, ...)
 }
 \arguments{
 \item{x}{hormLong object (produced from hormBaseline) [required]}
 
 \item{hormone_var}{name for the hormone variable.  It must be listed in by_var during hormBaseline [required]}
 
-\item{colors}{vector of colors for the fills. It needs to have as many colors as hormone types  [default=c('red','blue')]}
+\item{colors}{list of colors for the fills. It needs to have as many colors as hormone types  [default='red,blue']}
 
 \item{date_format}{the format of the date variable on x-axis. See help for examples of other formats [default = '\%d-\%b']}
+
+\item{add_fill}{should the area under the curve be filled with color (TRUE or FALSE) [default=TRUE]}
+
+\item{two_axes}{if TRUE then second axis will added to right side of plot.  Can only with two hormones
+If there are more than two hormones, function will give an error. [default=FALSE]}
 
 \item{xscale}{determines if x-axis should be free ('free') to change for each panel or remain the same ('fixed') for all panels  [default = 'free']}
 
@@ -38,7 +43,13 @@ nothing  Produces a pdf file saved at current working directory
 Plot overlapping longitudinal hormone data
 }
 \examples{
-result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', time_var='Date', conc_var='Conc' )
-hormPlotOverlap( result, hormone_var='Hormone', colors=c('red','blue','yellow') )
+result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', time_var='datetime', conc_var='Conc' )
+hormPlotOverlap( result, hormone_var='Hormone', colors='red, dark green, blue' )
+hormPlotOverlap( result, hormone_var='Hormone', colors='red, dark green, blue', add_fill=FALSE )
+hormPlotOverlap( result, hormone_var='Hormone', two_axes=T ) # this will produce an error
+
+result <- hormBaseline(data=hormElephant, criteria=2, by_var='ID, Hormone', time_var='Date',
+             conc_var='conc_ng_ml' )
+hormPlotOverlap( result, hormone_var='Hormone', colors='red, dark green', two_axes=TRUE )
 }
 
