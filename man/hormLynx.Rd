@@ -4,7 +4,7 @@
 \alias{hormLynx}
 \title{Canadian Lynx data.}
 \format{A data frame with five variables: \code{AnimalID}, \code{SampleNo},
-  \code{Date}, \code{Hormone}, \code{Conc} and \code{Events}}
+  \code{Date},\code{Time}, \code{Hormone}, \code{Conc}, \code{Events}, and \code{datetime}}
 \usage{
 hormLynx
 }

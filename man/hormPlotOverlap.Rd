@@ -3,9 +3,9 @@
 \alias{hormPlotOverlap}
 \title{Plot overlapping longitudinal hormone data}
 \usage{
-hormPlotOverlap(x, hormone_var = "horm_type", date_format = "\%d-\%b",
-  colors = c("red", "blue"), plot_per_page = 4, save_plot = TRUE,
-  plot_height = 2, plot_width = 6, yscale = "free", xscale = "free",
+hormPlotOverlap(x, hormone_var = "horm_type", colors = c("red", "blue"),
+  date_format = "\%d-\%b", xscale = "free", yscale = "free",
+  plot_per_page = 4, plot_height = 2, plot_width = 6, save_plot = TRUE,
   ...)
 }
 \arguments{
@@ -13,21 +13,21 @@ hormPlotOverlap(x, hormone_var = "horm_type", date_format = "\%d-\%b",
 
 \item{hormone_var}{name for the hormone variable.  It must be listed in by_var during hormBaseline [required]}
 
-\item{date_format}{the format of the date variable on x-axis. See help for examples of other formats [default = '\%d-\%b']}
-
 \item{colors}{vector of colors for the fills. It needs to have as many colors as hormone types  [default=c('red','blue')]}
 
-\item{plot_per_page}{the number of plot panels per page, by row. [default = 4]}
+\item{date_format}{the format of the date variable on x-axis. See help for examples of other formats [default = '\%d-\%b']}
 
-\item{save_plot}{indicates whether to save plot as a file [default = TRUE]}
+\item{xscale}{determines if x-axis should be free ('free') to change for each panel or remain the same ('fixed') for all panels  [default = 'free']}
+
+\item{yscale}{determines if y-axis should be free ('free') to change for each panel or remain the same ('fixed') for all panels [default = 'free']}
+
+\item{plot_per_page}{the number of plot panels per page, by row. [default = 4]}
 
 \item{plot_height}{the height of individual plot panels (in inches).  Pdf page height is determined by both plot_per_page and plot_height. [default = 2]}
 
 \item{plot_width}{the width of the pdf page. [default = 6]}
 
-\item{yscale}{determines if y-axis should be free ('free') to change for each panel or remain the same ('fixed') for all panels [default = 'free']}
-
-\item{xscale}{determines if x-axis should be free ('free') to change for each panel or remain the same ('fixed') for all panels  [default = 'free']}
+\item{save_plot}{indicates whether to save plot as a file [default = TRUE]}
 
 \item{...}{generic plotting options [optional]}
 }

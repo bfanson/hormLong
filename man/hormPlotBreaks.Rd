@@ -5,7 +5,7 @@
 \usage{
 hormPlotBreaks(x, break_cutoff = 40, break_buffer = 60,
   date_format = "\%d-\%b", log_scale = "n", plot_per_page = 4,
-  save_plot = TRUE, plot_height = 2, plot_width = 6)
+  plot_height = 2, plot_width = 6, save_plot = TRUE)
 }
 \arguments{
 \item{x}{hormLong object (produced from hormBaseline) [required]}
@@ -13,7 +13,7 @@ hormPlotBreaks(x, break_cutoff = 40, break_buffer = 60,
 \item{break_cutoff}{the maximum number of days between consecutive points.
 Above this cutoff value, a break is created  [default = 40]}
 
-\item{break_buffer}{minimum almost space between breaks (in number of days).  Larger values will
+\item{break_buffer}{minimum space between breaks (in number of days).  Larger values will
 create larger spaces between data groups. [default = 60]}
 
 \item{date_format}{the format of the date variable on x-axis. See help for examples of other formats [default = '\%d-\%b']}
@@ -22,18 +22,12 @@ create larger spaces between data groups. [default = 60]}
 
 \item{plot_per_page}{the number of plot panels per page, by row. [default = 4]}
 
-\item{save_plot}{indicates whether to save plot as a file [default = TRUE]}
-
 \item{plot_height}{the height of individual plot panels (in inches).  Pdf page height is determined
 by both plot_per_page and plot_height. [default = 2]}
 
 \item{plot_width}{the width of the pdf page.[default = 6]}
 
-\item{yscale}{determines if y-axis should be free ('free') to change for each panel or
-remain the same ('fixed') for all panels [default = 'free']}
-
-\item{xscale}{determines if x-axis should be free ('free') to change for each panel or
-remain the same ('fixed') for all panels [default = 'free']}
+\item{save_plot}{indicates whether to save plot as a file [default = TRUE]}
 }
 \value{
 nothing  Produces a pdf file saved at current working directory

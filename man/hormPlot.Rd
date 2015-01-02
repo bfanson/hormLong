@@ -3,9 +3,9 @@
 \alias{hormPlot}
 \title{Plot longitudinal hormone data with baseline information}
 \usage{
-hormPlot(x, date_format = "\%d-\%b", log_scale = "n", plot_per_page = 4,
-  save_plot = TRUE, plot_height = 2, plot_width = 6, yscale = "free",
-  xscale = "free", filename = "hormPlot", ...)
+hormPlot(x, date_format = "\%d-\%b", log_scale = "n", xscale = "free",
+  yscale = "free", plot_per_page = 4, plot_height = 2, plot_width = 6,
+  filename = "hormPlot", save_plot = TRUE, ...)
 }
 \arguments{
 \item{x}{hormLong object (produced from hormBaseline) [required]}
@@ -14,19 +14,19 @@ hormPlot(x, date_format = "\%d-\%b", log_scale = "n", plot_per_page = 4,
 
 \item{log_scale}{determines if y-axis is log10-scale or not. log-scale='y' makes log scale [default='n']}
 
-\item{plot_per_page}{the number of plot panels per page, by row. [default = 4]}
+\item{xscale}{determines if x-axis should be free ('free') to change for each panel or remain the same ('fixed') for all panels  [default = 'free']}
 
-\item{save_plot}{indicates whether to save plot as a file [default = TRUE]}
+\item{yscale}{determines if y-axis should be free ('free') to change for each panel or remain the same ('fixed') for all panels [default = 'free']}
+
+\item{plot_per_page}{the number of plot panels per page, by row. [default = 4]}
 
 \item{plot_height}{the height of individual plot panels (in inches).  Pdf page height is determined by both plot_per_page and plot_height. [default = 2]}
 
 \item{plot_width}{the width of the pdf page. [default = 6]}
 
-\item{yscale}{determines if y-axis should be free ('free') to change for each panel or remain the same ('fixed') for all panels [default = 'free']}
-
-\item{xscale}{determines if x-axis should be free ('free') to change for each panel or remain the same ('fixed') for all panels  [default = 'free']}
-
 \item{filename}{the filename of the pdf file [default = 'hormPlot']}
+
+\item{save_plot}{indicates whether to save plot as a file [default = TRUE]}
 
 \item{...}{generic plotting options [optional]}
 }

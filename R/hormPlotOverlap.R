@@ -4,12 +4,12 @@
 #' @param hormone_var name for the hormone variable.  It must be listed in by_var during hormBaseline [required]
 #' @param colors vector of colors for the fills. It needs to have as many colors as hormone types  [default=c('red','blue')]
 #' @param date_format the format of the date variable on x-axis. See help for examples of other formats [default = '\%d-\%b']
-#' @param plot_per_page the number of plot panels per page, by row. [default = 4]
-#' @param save_plot indicates whether to save plot as a file [default = TRUE]
-#' @param plot_height  the height of individual plot panels (in inches).  Pdf page height is determined by both plot_per_page and plot_height. [default = 2]
-#' @param plot_width  the width of the pdf page. [default = 6]
 #' @param yscale  determines if y-axis should be free ('free') to change for each panel or remain the same ('fixed') for all panels [default = 'free']
 #' @param xscale  determines if x-axis should be free ('free') to change for each panel or remain the same ('fixed') for all panels  [default = 'free']
+#' @param plot_per_page the number of plot panels per page, by row. [default = 4]
+#' @param plot_height  the height of individual plot panels (in inches).  Pdf page height is determined by both plot_per_page and plot_height. [default = 2]
+#' @param plot_width  the width of the pdf page. [default = 6]
+#' @param save_plot indicates whether to save plot as a file [default = TRUE]
 #' @param ...   generic plotting options [optional]  
 #' @return nothing  Produces a pdf file saved at current working directory
 #' @export
@@ -19,9 +19,9 @@
 #' hormPlotOverlap( result, hormone_var='Hormone', colors=c('red','blue','yellow') )
 #' 
 
-hormPlotOverlap <- function(x, hormone_var='horm_type', date_format='%d-%b', colors=c('red','blue'), 
-                     plot_per_page=4, save_plot=TRUE, 
-                     plot_height=2, plot_width=6, yscale='free', xscale='free',...){
+hormPlotOverlap <- function(x, hormone_var='horm_type', colors=c('red','blue'), date_format='%d-%b',
+                     xscale='free',yscale='free', 
+                     plot_per_page=4, plot_height=2, plot_width=6, save_plot=TRUE,...){
   
 #--- main check ---#
   graphics.off() # just to make sure no devices are open

@@ -3,19 +3,15 @@
 #' @param x hormLong object (produced from hormBaseline) [required]
 #' @param break_cutoff the maximum number of days between consecutive points. 
 #' Above this cutoff value, a break is created  [default = 40]
-#' @param break_buffer minimum almost space between breaks (in number of days).  Larger values will
+#' @param break_buffer minimum space between breaks (in number of days).  Larger values will
 #' create larger spaces between data groups. [default = 60]
 #' @param date_format the format of the date variable on x-axis. See help for examples of other formats [default = '\%d-\%b']
 #' @param log_scale determines if y-axis is log10-scale or not. log-scale='y' makes log scale [default='n']  
 #' @param plot_per_page the number of plot panels per page, by row. [default = 4]
-#' @param save_plot indicates whether to save plot as a file [default = TRUE]
 #' @param plot_height  the height of individual plot panels (in inches).  Pdf page height is determined
 #' by both plot_per_page and plot_height. [default = 2]
 #' @param plot_width  the width of the pdf page.[default = 6]
-#' @param yscale  determines if y-axis should be free ('free') to change for each panel or
-#' remain the same ('fixed') for all panels [default = 'free']
-#' @param xscale  determines if x-axis should be free ('free') to change for each panel or
-#' remain the same ('fixed') for all panels [default = 'free']
+#' @param save_plot indicates whether to save plot as a file [default = TRUE]
 #' @return nothing  Produces a pdf file saved at current working directory
 #' @export
 #' 
@@ -27,7 +23,7 @@
 
 
 hormPlotBreaks <- function(x, break_cutoff=40, break_buffer=60, date_format='%d-%b', log_scale='n',
-                           plot_per_page=4, save_plot=TRUE, plot_height=2, plot_width=6){
+                           plot_per_page=4, plot_height=2, plot_width=6, save_plot=TRUE){
 
   #stop('function under development')
   graphics.off() # just to make sure no devices are open

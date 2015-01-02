@@ -2,14 +2,14 @@
 #' 
 #' @param x hormLong object (produced from hormBaseline) [required]
 #' @param date_format the format of the date variable on x-axis. See help for examples of other formats [default = '\%d-\%b']
+#' @param xscale  determines if x-axis should be free ('free') to change for each panel or remain the same ('fixed') for all panels  [default = 'free']
+#' @param yscale  determines if y-axis should be free ('free') to change for each panel or remain the same ('fixed') for all panels [default = 'free']
 #' @param log_scale determines if y-axis is log10-scale or not. log-scale='y' makes log scale [default='n']  
 #' @param plot_per_page the number of plot panels per page, by row. [default = 4]
-#' @param save_plot indicates whether to save plot as a file [default = TRUE]
 #' @param plot_height  the height of individual plot panels (in inches).  Pdf page height is determined by both plot_per_page and plot_height. [default = 2]
 #' @param plot_width  the width of the pdf page. [default = 6]
-#' @param yscale  determines if y-axis should be free ('free') to change for each panel or remain the same ('fixed') for all panels [default = 'free']
-#' @param xscale  determines if x-axis should be free ('free') to change for each panel or remain the same ('fixed') for all panels  [default = 'free']
 #' @param filename  the filename of the pdf file [default = 'hormPlot']
+#' @param save_plot indicates whether to save plot as a file [default = TRUE]
 #' @param ...   generic plotting options [optional]  
 #' @return nothing  Produces a pdf file saved at current working directory
 #' @export
@@ -20,8 +20,10 @@
 #' hormPlot(result, yscale='fixed', xscale='fixed' )
 #' 
 
-hormPlot <- function(x, date_format='%d-%b', log_scale='n', plot_per_page=4, save_plot=TRUE, 
-                     plot_height=2, plot_width=6, yscale='free', xscale='free', filename='hormPlot',...){
+hormPlot <- function(x, date_format='%d-%b', log_scale='n', 
+                     xscale='free', yscale='free',
+                     plot_per_page=4,plot_height=2, plot_width=6, 
+                     filename='hormPlot',  save_plot=TRUE,...){
   
 #--- main check ---#
   graphics.off() # just to make sure no devices are open

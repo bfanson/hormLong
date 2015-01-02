@@ -20,6 +20,6 @@
 #' captive and wild Canada lynx (Lynx canadensis). Journal of Comparative Physiology B 182:157-165
 #' 
 #' @format A data frame with five variables: \code{AnimalID}, \code{SampleNo}, 
-#'   \code{Date}, \code{Hormone}, \code{Conc} and \code{Events} 
+#'   \code{Date},\code{Time}, \code{Hormone}, \code{Conc}, \code{Events}, and \code{datetime}  
 #'   
 "hormLynx"

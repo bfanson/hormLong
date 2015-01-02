@@ -3,9 +3,9 @@
 \alias{hormArea}
 \title{Plot the area under the curve for peak values}
 \usage{
-hormArea(x, lower_bound = "origin", method = "trapezoid",
-  plot_per_page = 4, plot_height = 2, plot_width = 6, save_plot = T,
-  yscale = "free", xscale = "free")
+hormArea(x, lower_bound = "origin", method = "trapezoid", xscale = "free",
+  yscale = "free", plot_per_page = 4, plot_height = 2, plot_width = 6,
+  save_plot = T)
 }
 \arguments{
 \item{x}{hormLong object (produced from hormBaseline) [required]}
@@ -15,6 +15,12 @@ hormArea(x, lower_bound = "origin", method = "trapezoid",
 
 \item{method}{the AUC method to use.  Currently,only trapezoid method has been implemented [default = 'trapezoid']}
 
+\item{xscale}{determines if x-axis should be free ('free') to change for each panel or
+remain the same ('fixed') for all panels  [default = 'free']}
+
+\item{yscale}{determines if y-axis should be free ('free') to change for each panel or
+remain the same ('fixed') for all panels  [default = 'free']}
+
 \item{plot_per_page}{the number of plot panels per page, by row. [default = 4]}
 
 \item{plot_height}{the height of individual plot panels (in inches).  Pdf page height is determined
@@ -23,12 +29,6 @@ by both plot_per_page and plot_height. [default = 2]}
 \item{plot_width}{the width of the pdf page. [default = 6]}
 
 \item{save_plot}{indicates whether [default = TRUE]}
-
-\item{yscale}{determines if y-axis should be free ('free') to change for each panel or
-remain the same ('fixed') for all panels  [default = 'free']}
-
-\item{xscale}{determines if x-axis should be free ('free') to change for each panel or
-remain the same ('fixed') for all panels  [default = 'free']}
 }
 \value{
 nothing is returned.  Pdf file is produced and a summary table
@@ -38,7 +38,7 @@ Plot the area under the curve for peak values
 }
 \examples{
 Citation: Cockrem JF and Silverin B. 2002. Variation within and between Birds in Corticosterone
-Responses of Great Tits (Parus major).  General and Comparative Endocrinology 125:197–206.
+Responses of Great Tits (Parus major).  General and Comparative Endocrinology 125\\:197–206.
 
 
 result <- hormBaseline(data=hormLynx,  criteria=2, by_var='AnimalID, Hormone', time_var='Date', conc_var='Conc' )
