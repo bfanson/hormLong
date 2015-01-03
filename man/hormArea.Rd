@@ -41,7 +41,7 @@ Citation: Cockrem JF and Silverin B. 2002. Variation within and between Birds in
 Responses of Great Tits (Parus major).  General and Comparative Endocrinology 125\\:197–206.
 
 
-result <- hormBaseline(data=hormLynx,  criteria=2, by_var='AnimalID, Hormone', time_var='datetime', conc_var='Conc' )
-hormArea(result,lower_bound='baseline')
+result <- hormBaseline(data=hormLynx,  criteria=3, by_var='AnimalID, Hormone', time_var='datetime', conc_var='Conc' )
+hormArea(result,lower_bound='peak')
 }
 

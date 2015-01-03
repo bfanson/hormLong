@@ -40,7 +40,6 @@ hormSumTable <- function(x, num_decimals=2){
   ds2[,(length(by_var_v)+1):ncol(ds2)] <- sapply(ds2[,(length(by_var_v)+1):ncol(ds2)],round,num_decimals)  
   ds_out <- ds2[, c(by_var_v, 'mean','median','sd','percent_cv','min','max','cutoff','base_mean','peak_mean','peak_base')]
 
-
 #--- output table ---#
     write.csv(ds_out,file='hormSumTable.csv',quote=F, row.names=F,na='')
     cat( paste0('\n *********\nNote: table saved at: \n', getwd(),'/hormSumTable.csv \n***** \n\n')  )

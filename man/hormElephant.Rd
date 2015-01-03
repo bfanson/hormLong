@@ -3,8 +3,8 @@
 \name{hormElephant}
 \alias{hormElephant}
 \title{Asian Elephant data}
-\format{A data frame with five variables: \code{ID}, \code{Sample_num},
-  \code{Date}, \code{Hormone}, \code{conc_ng_ml} and \code{Event}}
+\format{A data frame with five variables: \code{Ele},
+  \code{Date_collected}, \code{Hormone}, \code{Conc_ng_ml} and \code{Event}}
 \usage{
 hormElephant
 }

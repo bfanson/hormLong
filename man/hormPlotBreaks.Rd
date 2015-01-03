@@ -13,7 +13,7 @@ hormPlotBreaks(x, break_cutoff = 40, break_buffer = 60,
 \item{break_cutoff}{the maximum number of days between consecutive points.
 Above this cutoff value, a break is created  [default = 40]}
 
-\item{break_buffer}{minimum space between breaks (in number of days).  Larger values will
+\item{break_buffer}{size of the gap (in number of days) between data groups.  Larger values will
 create larger spaces between data groups. [default = 60]}
 
 \item{date_format}{the format of the date variable on x-axis. See help for examples of other formats [default = '\%d-\%b']}
@@ -36,7 +36,8 @@ nothing  Produces a pdf file saved at current working directory
 Longitudinal graph with breaks
 }
 \examples{
-result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', time_var='Date', conc_var='Conc' )
+result <- hormBaseline(data=hormElephant, criteria=2, by_var='ID, Hormone', time_var='Date',
+             conc_var='conc_ng_ml' , event_var='Event')
 hormPlotBreaks( result )
 }
 
