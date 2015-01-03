@@ -1,20 +1,22 @@
 #' Run iterative process to calculate baseline.
 #' 
-#' @param data dataset. [required]
-#' @param by_var names of the grouping variables (e.g. 'id', 'species, id' ) [optional]
+#' @param data dataset containing the hormone data. [required]
+#' @param by_var names of the grouping variables.  Column names should be separated by a comma:
+#'  e.g. 'name1' for one column, 'name1, name2' for two columns, 'name1, name2, name3' for three columns,
+#'  etc.  Remember, capitalization matters. [optional]
 #' @param time_var name of the time variable (e.g. 'date', 'datetime', 'days') [required].
 #' @param conc_var name of the concentration variable (response variable) [required].
 #' @param event_var name of event variable  [optional]
-#' @param criteria baseline criteria (mean + criterias * SD) [default=2]
+#' @param criteria baseline criteria (mean + criteria * SD) [default=2]
 #' @param save_data determines if the output dataset should be saved to a csv file [default = T ]
 #' @return hormLong object.
 #' @export
 #' @examples
 #' 
-#' result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', time_var='Date', conc_var='Conc' )
+#' result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', time_var='datetime', conc_var='Conc' )
  
 
-hormBaseline <- function(data, by_var,conc_var, time_var,criteria=2, event_var, save_data=T ) {
+hormBaseline <- function(data, by_var, conc_var, time_var, criteria=2, event_var, save_data=T ) {
 #--- initial checks of arguments ---#
   if(missing(data)){
       stop('data must be specified')

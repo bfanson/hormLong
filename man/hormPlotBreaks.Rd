@@ -16,7 +16,8 @@ Above this cutoff value, a break is created  [default = 40]}
 \item{break_buffer}{size of the gap (in number of days) between data groups.  Larger values will
 create larger spaces between data groups. [default = 60]}
 
-\item{date_format}{the format of the date variable on x-axis. See help for examples of other formats [default = '\%d-\%b']}
+\item{date_format}{the format of the date variable on x-axis. See Appendix 1 in help manual
+for examples of other formats [default = '\%d-\%b']}
 
 \item{log_scale}{determines if y-axis is log10-scale or not. log-scale='y' makes log scale [default='n']}
 

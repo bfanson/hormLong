@@ -6,9 +6,10 @@
 #' @param add_fill should the area under the curve be filled with color (TRUE or FALSE) [default=TRUE]
 #' @param two_axes if TRUE then second axis will added to right side of plot.  Can only with two hormones
 #' If there are more than two hormones, function will give an error. [default=FALSE]
-#' @param date_format the format of the date variable on x-axis. See help for examples of other formats [default = '\%d-\%b']
-#' @param yscale  determines if y-axis should be free ('free') to change for each panel or remain the same ('fixed') for all panels [default = 'free']
-#' @param xscale  determines if x-axis should be free ('free') to change for each panel or remain the same ('fixed') for all panels  [default = 'free']
+#' @param date_format the format of the date variable on x-axis. See Appendix 1 in help manual 
+#' for examples of other formats [default = '\%d-\%b']
+#' @param xscale  determines if x-axis is free ('free') to change for each panel or remain the same ('fixed') for all panels  [default = 'free']
+#' @param yscale  determines if y-axis is free ('free') to change for each panel or remain the same ('fixed') for all panels [default = 'free']
 #' @param plot_per_page the number of plot panels per page, by row. [default = 4]
 #' @param plot_height  the height of individual plot panels (in inches).  Pdf page height is determined by both plot_per_page and plot_height. [default = 2]
 #' @param plot_width  the width of the pdf page. [default = 6]

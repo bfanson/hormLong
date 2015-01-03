@@ -15,16 +15,17 @@ hormPlotOverlap(x, hormone_var = "horm_type", colors = "red,blue",
 
 \item{colors}{list of colors for the fills. It needs to have as many colors as hormone types  [default='red,blue']}
 
-\item{date_format}{the format of the date variable on x-axis. See help for examples of other formats [default = '\%d-\%b']}
+\item{date_format}{the format of the date variable on x-axis. See Appendix 1 in help manual
+for examples of other formats [default = '\%d-\%b']}
 
 \item{add_fill}{should the area under the curve be filled with color (TRUE or FALSE) [default=TRUE]}
 
 \item{two_axes}{if TRUE then second axis will added to right side of plot.  Can only with two hormones
 If there are more than two hormones, function will give an error. [default=FALSE]}
 
-\item{xscale}{determines if x-axis should be free ('free') to change for each panel or remain the same ('fixed') for all panels  [default = 'free']}
+\item{xscale}{determines if x-axis is free ('free') to change for each panel or remain the same ('fixed') for all panels  [default = 'free']}
 
-\item{yscale}{determines if y-axis should be free ('free') to change for each panel or remain the same ('fixed') for all panels [default = 'free']}
+\item{yscale}{determines if y-axis is free ('free') to change for each panel or remain the same ('fixed') for all panels [default = 'free']}
 
 \item{plot_per_page}{the number of plot panels per page, by row. [default = 4]}
 

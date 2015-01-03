@@ -10,13 +10,14 @@ hormPlot(x, date_format = "\%d-\%b", log_scale = "n", xscale = "free",
 \arguments{
 \item{x}{hormLong object (produced from hormBaseline) [required]}
 
-\item{date_format}{the format of the date variable on x-axis. See help for examples of other formats [default = '\%d-\%b']}
+\item{date_format}{the format of the date variable on x-axis. See Appendix 1 in help manual
+for examples of other formats [default = '\%d-\%b']}
 
 \item{log_scale}{determines if y-axis is log10-scale or not. log-scale='y' makes log scale [default='n']}
 
-\item{xscale}{determines if x-axis should be free ('free') to change for each panel or remain the same ('fixed') for all panels  [default = 'free']}
+\item{xscale}{determines if x-axis is free ('free') to change for each panel or remain the same ('fixed') for all panels  [default = 'free']}
 
-\item{yscale}{determines if y-axis should be free ('free') to change for each panel or remain the same ('fixed') for all panels [default = 'free']}
+\item{yscale}{determines if y-axis is free ('free') to change for each panel or remain the same ('fixed') for all panels [default = 'free']}
 
 \item{plot_per_page}{the number of plot panels per page, by row. [default = 4]}
 

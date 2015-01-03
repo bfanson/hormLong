@@ -1,12 +1,16 @@
-#' Plot the area under the curve for peak values 
+#' Plot the area under the curve (AUC)  
 #' 
 #' @param x hormLong object (produced from hormBaseline) [required]
 #' @param lower_bound the lower limit to caculate the area under the curve. This can be
-#' 'origin', 'baseline', or 'peak' [default = 'origin']
-#' @param method the AUC method to use.  Currently,only trapezoid method has been implemented [default = 'trapezoid']
-#' @param xscale  determines if x-axis should be free ('free') to change for each panel or
+#' 'origin', 'baseline', or 'peak'.  Origin is all values above 0.  Baseline is all values above 
+#' baseline mean.  Peak is all values above peak cutoff. [default = 'origin']
+#' @param method the AUC method to use.  Currently, only trapezoid method has been implemented. Units
+#' for AUC is (conc units)^2 per day. [default = 'trapezoid']
+#' @param date_format the format of the date variable on x-axis. See Appendix 1 in help manual 
+#' for examples of other formats [default = '\%d-\%b']
+#' @param xscale  determines if x-axis is free ('free') to change for each panel or
 #' remain the same ('fixed') for all panels  [default = 'free']
-#' @param yscale  determines if y-axis should be free ('free') to change for each panel or
+#' @param yscale  determines if y-axis is free ('free') to change for each panel or
 #' remain the same ('fixed') for all panels  [default = 'free']
 #' @param plot_per_page the number of plot panels per page, by row. [default = 4]
 #' @param save_plot indicates whether [default = TRUE]
@@ -15,19 +19,31 @@
 #' @param plot_width  the width of the pdf page. [default = 6]
 #' @return nothing is returned.  Pdf file is produced and a summary table 
 #' @export
-#' @examples
 #' 
-#' Citation: Cockrem JF and Silverin B. 2002. Variation within and between Birds in Corticosterone 
-#' Responses of Great Tits (Parus major).  General and Comparative Endocrinology 125\:197–206.
+#' @details 
+#' Citation for the AUC used in this example:\cr\cr
+#'   Cockrem JF and Silverin B. 2002. Variation within and between Birds in Corticosterone 
+#'   Responses of Great Tits (Parus major).  General and Comparative Endocrinology 125:197.
 #' 
+#' @examples 
 #' 
-#' result <- hormBaseline(data=hormLynx,  criteria=3, by_var='AnimalID, Hormone', time_var='datetime', conc_var='Conc' )
-#' hormArea(result,lower_bound='peak')
+#' result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', time_var='datetime', conc_var='Conc' )
+#' 
+#'# AUC only for values above cutoff threshold 
+#'#  defined in hormBaseline
+#' hormArea(result,lower_bound='peak')    
+#' 
+#'# AUC only for values above baseline mean 
+#' hormArea(result,lower_bound='baseline') 
+#' 
+#'# AUC only for values above 0 
+#' hormArea(result,lower_bound='origin')   
 
-hormArea <- function(x, lower_bound = 'origin' , method='trapezoid', xscale='free',yscale='free',
+hormArea <- function(x, lower_bound = 'origin' , method='trapezoid', date_format='%d-%b', 
+                     xscale='free',yscale='free',
                      plot_per_page=4, plot_height=2, plot_width=6, save_plot=T){
 #-- initial checking ---#  
-  if( method!='trapezoid'){ 
+  if( method != 'trapezoid'){ 
     stop('no other method currently implemented ')
   }
   if( !(lower_bound %in% c('origin','baseline','peak') ) ){ 
@@ -105,10 +121,20 @@ hormArea <- function(x, lower_bound = 'origin' , method='trapezoid', xscale='fre
       }    
     #--- main plot
     plot(ds_sub[,conc_var] ~ ds_sub[,time_var], type='l',xlim=c(xmin,xmax), ylim=c(ymin,ymax), 
-          xlab=NA, ylab=conc_var)
+          xlab=NA, ylab=conc_var, xaxt='n')
       points(ds_sub[,time_var], ds_sub[,conc_var],pch=19)
       mtext(unique(ds_sub$plot_title),side=3,line=0.25)
       abline(h = baseline, lty=2)
+    
+      if(is.numeric(ds_sub[,time_var])){ axis(1)
+       }else if( is.Date(ds_sub[,time_var]) ){
+          ats <- seq( xmin, xmax, length.out = 5)
+          axis.Date(1,at=ats, format=date_format)
+       }else if( is.POSIXct(ds_sub[,time_var]) ){
+          ats <- seq( xmin, xmax, length.out = 5)
+          axis.POSIXct(1,at=ats,format=date_format)
+      } 
+    
       if( length(pk$peak_num)>0 ){
         for(p in 1:max(pk$peak_num) ){
           pk1 <- pk[ pk$peak_num==p, ]
@@ -128,7 +154,7 @@ hormArea <- function(x, lower_bound = 'origin' , method='trapezoid', xscale='fre
   #--- produce table ---#
     ds_tbl <- unique( ds_pk[,c('plot_title','peak_num','AUC')])    
     ds_tbl <- merge(ds_tbl, unique(data[,c(by_var_v,'plot_title')]), all.x=T)
-    ds_tbl$AUC <- round(ds_tbl$AUC,3)
+    ds_tbl$AUC <- round(ds_tbl$AUC,3) / (3600 * 24)  # get conc^2 per day
     ds_out <- ds_tbl[,c(by_var_v,'peak_num','AUC')]
     names(ds_out)[which(names(ds_out)=='AUC')] <-'peak AUC'    
 

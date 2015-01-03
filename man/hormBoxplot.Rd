@@ -4,7 +4,7 @@
 \title{Boxplot of individual concentrations}
 \usage{
 hormBoxplot(data, conc_var, id_var, by_var, plot_height = 5, plot_width = 6,
-  save_plot = T, log_scale = "n", plot_per_page = 2)
+  save_plot = T, log_scale = "n", plot_per_page = 1)
 }
 \arguments{
 \item{data}{dataset [required]}
@@ -21,7 +21,7 @@ hormBoxplot(data, conc_var, id_var, by_var, plot_height = 5, plot_width = 6,
 
 \item{log_scale}{determines if y-axis is log10-scale or not. log-scale='y' makes log scale [default='n']}
 
-\item{plot_per_page}{the number of plot panels per page, by row. [default = 4]}
+\item{plot_per_page}{the number of plot panels per page, by row. [default = 1]}
 }
 \value{
 nothing Produces a pdf file with the graph in current working directory
