@@ -12,7 +12,8 @@ hormLynx
 Longitudinal hormone data for cort for multiple lynx individuals
 }
 \details{
-Reference: Fanson KV,  Wielebnowski NC, Shenk TM, Lucas JR. Comparative patterns of adrenal activity in
+Data were published in:\cr\cr
+Fanson KV,  Wielebnowski NC, Shenk TM, Lucas JR. Comparative patterns of adrenal activity in
 captive and wild Canada lynx (Lynx canadensis). Journal of Comparative Physiology B 182:157-165
 }
 \keyword{datasets}

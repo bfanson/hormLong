@@ -21,15 +21,20 @@
 #' 
 #' result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', time_var='datetime', conc_var='Conc' )
 #' hormPlotOverlap( result, hormone_var='Hormone', colors='red, dark green, blue' )
+
+#'# no color fill...
 #' hormPlotOverlap( result, hormone_var='Hormone', colors='red, dark green, blue', add_fill=FALSE )
+#'
+#'# Two-axes option is only vaalid if there are only two hormones 
 #' hormPlotOverlap( result, hormone_var='Hormone', two_axes=T ) # this will produce an error
 #'
-#' result <- hormBaseline(data=hormElephant, criteria=2, by_var='ID, Hormone', time_var='Date', 
-#'              conc_var='conc_ng_ml' )
+#'# Let's try again wtih hormElphant that only has two hormones
+#' result <- hormBaseline(data=hormElephant, criteria=2, by_var='Ele, Hormone', time_var='Date', 
+#'              conc_var='Conc_ng_ml' )
 #' hormPlotOverlap( result, hormone_var='Hormone', colors='red, dark green', two_axes=TRUE )
 #' 
 
-hormPlotOverlap <- function(x, hormone_var='horm_type', colors='red,blue', date_format='%d-%b', 
+hormPlotOverlap <- function(x, hormone_var='horm_type', colors='red, blue', date_format='%d-%b', 
                      add_fill=TRUE, two_axes=FALSE,
                      xscale='free',yscale='free', 
                      plot_per_page=4, plot_height=2, plot_width=6, save_plot=TRUE,...){

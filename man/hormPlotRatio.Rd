@@ -24,7 +24,8 @@ nothing  Produces a pdf file saved at current working directory
 Plot longitudinal hormone ratios
 }
 \examples{
-result <- hormBaseline(data=hormElephant, criteria=2, by_var='ID, Hormone', time_var='Date', conc_var='conc_ng_ml' )
-hormPlotRatio( x=result, hormone_var='Hormone', hormone_num='LH', hormone_denom='Progesterone' )
+result <- hormBaseline(data=hormElephant, criteria=2, by_var='Ele, Hormone', time_var='Date',
+conc_var='Conc_ng_ml', event_var='Event' )
+hormPlotRatio( x=result, hormone_var='Hormone', hormone_num='Cortisol', hormone_denom='Progesterone' )
 }
 

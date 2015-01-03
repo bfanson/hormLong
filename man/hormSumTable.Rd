@@ -17,7 +17,7 @@ nothing  Produces a file saved to current working directory
 Summarise results from baseline calculation.
 }
 \examples{
-result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', time_var='Date', conc_var='Conc' )
+result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', time_var='datetime', conc_var='Conc' )
 hormSumTable(result)
 }
 

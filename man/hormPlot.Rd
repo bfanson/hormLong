@@ -3,17 +3,15 @@
 \alias{hormPlot}
 \title{Plot longitudinal hormone data with baseline information}
 \usage{
-hormPlot(x, date_format = "\%d-\%b", log_scale = "n", xscale = "free",
-  yscale = "free", plot_per_page = 4, plot_height = 2, plot_width = 6,
-  filename = "hormPlot", save_plot = TRUE, ...)
+hormPlot(x, date_format = "\%d-\%b", xscale = "free", yscale = "free",
+  plot_per_page = 4, plot_height = 2, plot_width = 6,
+  filename = "hormPlot", save_plot = TRUE)
 }
 \arguments{
 \item{x}{hormLong object (produced from hormBaseline) [required]}
 
-\item{date_format}{the format of the date variable on x-axis. See Appendix 1 in help manual
+\item{date_format}{the format of the date variable on x-axis.  Default is 01-Jan format. See Appendix 1 in help manual
 for examples of other formats [default = '\%d-\%b']}
-
-\item{log_scale}{determines if y-axis is log10-scale or not. log-scale='y' makes log scale [default='n']}
 
 \item{xscale}{determines if x-axis is free ('free') to change for each panel or remain the same ('fixed') for all panels  [default = 'free']}
 
@@ -21,15 +19,14 @@ for examples of other formats [default = '\%d-\%b']}
 
 \item{plot_per_page}{the number of plot panels per page, by row. [default = 4]}
 
-\item{plot_height}{the height of individual plot panels (in inches).  Pdf page height is determined by both plot_per_page and plot_height. [default = 2]}
+\item{plot_height}{the height of individual plot panels (in inches).
+Pdf page height is determined by both plot_per_page and plot_height. [default = 2]}
 
 \item{plot_width}{the width of the pdf page. [default = 6]}
 
 \item{filename}{the filename of the pdf file [default = 'hormPlot']}
 
 \item{save_plot}{indicates whether to save plot as a file [default = TRUE]}
-
-\item{...}{generic plotting options [optional]}
 }
 \value{
 nothing  Produces a pdf file saved at current working directory
@@ -38,8 +35,11 @@ nothing  Produces a pdf file saved at current working directory
 Plot longitudinal hormone data with baseline information
 }
 \examples{
-result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', time_var='Date', conc_var='Conc' )
-hormPlot(result )
-hormPlot(result, yscale='fixed', xscale='fixed' )
+result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', time_var='datetime',
+conc_var='Conc', event_var='Events' )
+hormPlot( result )
+
+# Sometimes you may want to fix y-axis to be same across all plots so heights are comparable
+hormPlot( result, yscale='fixed' )
 }
 

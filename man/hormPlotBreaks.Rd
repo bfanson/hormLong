@@ -4,22 +4,20 @@
 \title{Longitudinal graph with breaks}
 \usage{
 hormPlotBreaks(x, break_cutoff = 40, break_buffer = 60,
-  date_format = "\%d-\%b", log_scale = "n", plot_per_page = 4,
-  plot_height = 2, plot_width = 6, save_plot = TRUE)
+  date_format = "\%d-\%b", plot_per_page = 4, plot_height = 2,
+  plot_width = 6, save_plot = TRUE)
 }
 \arguments{
 \item{x}{hormLong object (produced from hormBaseline) [required]}
 
 \item{break_cutoff}{the maximum number of days between consecutive points.
-Above this cutoff value, a break is created  [default = 40]}
+Above this cutoff value, a break is created. [default = 40]}
 
 \item{break_buffer}{size of the gap (in number of days) between data groups.  Larger values will
 create larger spaces between data groups. [default = 60]}
 
-\item{date_format}{the format of the date variable on x-axis. See Appendix 1 in help manual
+\item{date_format}{the format of the date variable on x-axis. Default is 01-Jan format. See Appendix 1 in help manual
 for examples of other formats [default = '\%d-\%b']}
-
-\item{log_scale}{determines if y-axis is log10-scale or not. log-scale='y' makes log scale [default='n']}
 
 \item{plot_per_page}{the number of plot panels per page, by row. [default = 4]}
 
@@ -37,8 +35,10 @@ nothing  Produces a pdf file saved at current working directory
 Longitudinal graph with breaks
 }
 \examples{
-result <- hormBaseline(data=hormElephant, criteria=2, by_var='ID, Hormone', time_var='Date',
-             conc_var='conc_ng_ml' , event_var='Event')
+result <- hormBaseline(data=hormElephant, criteria=2, by_var='Ele, Hormone', time_var='Date',
+             conc_var='Conc_ng_ml' , event_var='Event')
 hormPlotBreaks( result )
+# compare to regular hormPlot, especially Ele1; Cortisol
+hormPlot( result )
 }
 

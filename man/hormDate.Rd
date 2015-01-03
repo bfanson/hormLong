@@ -7,7 +7,7 @@ If time_var is included, then it will output a date_time variable}
 hormDate(data, date_var, time_var, name = "datetime", date_order = "dmy")
 }
 \arguments{
-\item{data}{data set with the variables to convert [required]}
+\item{data}{dataset with the variables to convert [required]}
 
 \item{date_var}{variable name for date column.  Form should be a standard date form
 (e.g. '12AUG2014','01/01/2014') [required]}
@@ -27,10 +27,13 @@ Helper function to work with dates.  User needs to specify at least date_var and
 If time_var is included, then it will output a date_time variable
 }
 \examples{
+# Combining date and time
 date <- c('2014-01-01','2014-Mar-01')
 time <- c('10:10:01', '20:30:23')
 ds <- data.frame(date=date,time=time)
-hormDate(ds,date_var='date',time_var='time',name='datetime', date_order='ymd' )
+hormDate(ds,date_var='date',time_var='time', name='datetime', date_order='ymd' )
+
+# Function is robust to date formatting as long as day, month, year order are the same
 date <- c('01-01-2014','01-Mar-2014','01/April/2014')
 ds <- data.frame(date=date)
 hormDate(ds,date_var='date',name='datetime', date_order='dmy' )
