@@ -3,7 +3,7 @@
 #' @param x hormLong object (produced from hormBaseline) [required]
 #' @param break_cutoff the maximum number of days between consecutive points. 
 #' Above this cutoff value, a break is created  [default = 40]
-#' @param break_buffer minimum space between breaks (in number of days).  Larger values will
+#' @param break_buffer size of the gap (in number of days) between data groups.  Larger values will
 #' create larger spaces between data groups. [default = 60]
 #' @param date_format the format of the date variable on x-axis. See help for examples of other formats [default = '\%d-\%b']
 #' @param log_scale determines if y-axis is log10-scale or not. log-scale='y' makes log scale [default='n']  
