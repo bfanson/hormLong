@@ -9,7 +9,7 @@
 #' result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', time_var='Date', conc_var='Conc' )
 #' hormSumTable(result) 
 
-hormSumTable <- function(x,  num_decimals=2){
+hormSumTable <- function(x, num_decimals=2){
 #-- checks --#  
   if( class(x)!='hormLong'){
       stop('Object needs to be hormLong.  Run hormBaseline() first')
@@ -37,8 +37,8 @@ hormSumTable <- function(x,  num_decimals=2){
   
   ds2 <- merge(ds2,ds_b[,c(by_var_v, 'peak_base')],all=T)
 
-  ds_out <- cbind( ds2[,by_var_v], sapply(ds2[,(length(by_var_v)+1):ncol(ds2)],round,num_decimals) )
-  ds_out <- ds_out[, c(by_var_v, 'mean','median','sd','percent_cv','min','max','cutoff','base_mean','peak_mean','peak_base')]
+  ds2[,(length(by_var_v)+1):ncol(ds2)] <- sapply(ds2[,(length(by_var_v)+1):ncol(ds2)],round,num_decimals)  
+  ds_out <- ds2[, c(by_var_v, 'mean','median','sd','percent_cv','min','max','cutoff','base_mean','peak_mean','peak_base')]
 
 
 #--- output table ---#
