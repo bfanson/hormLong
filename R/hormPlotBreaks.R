@@ -26,8 +26,15 @@
 hormPlotBreaks <- function(x, break_cutoff=40, break_buffer=60, date_format='%d-%b', log_scale='n',
                            plot_per_page=4, plot_height=2, plot_width=6, save_plot=TRUE){
 
-
+#--- checks for missing values ---#
   graphics.off() # just to make sure no devices are open
+  if( !is.numeric(break_cutoff) | break_cutoff < 0 ){
+    stop('Break_cutoff must be numeric and nonnegative')
+  }
+  if( !is.numeric(break_buffer) | break_buffer < 0 ){
+    stop('Break_buffer must be numeric and nonnegative')
+  }
+#--- set-up data ---#
   require(lubridate)
   by_var_v <- cleanByvar(x$by_var) 
   time_var <- x$time_var

@@ -107,10 +107,10 @@ stop('function under development')
 #     
 #     #--- set up scales
 #       if( yscale=='free'){
-#         ymin <- min(ds_sub[,conc_var])*0.95
+#         ymin <- min(ds_sub[,conc_var])
 #         ymax <- max(max(ds_sub[,conc_var]) )*1.2
 #       }else{
-#         ymin <- min(data[,conc_var],na.rm=T)*0.95
+#         ymin <- min(data[,conc_var],na.rm=T)
 #         ymax <- max(data[,conc_var],na.rm=T)*1.2
 #       }
 #       if( xscale=='free'){

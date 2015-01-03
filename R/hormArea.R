@@ -90,10 +90,10 @@ hormArea <- function(x, lower_bound = 'origin' , method='trapezoid', xscale='fre
     
     #--- set up scales
       if( yscale=='free'){
-        ymin <- min(ds_sub[,conc_var])*0.95
+        ymin <- min(ds_sub[,conc_var])
         ymax <- max(baseline, max(ds_sub[,conc_var]) )*1.1
       }else{
-        ymin <- min(data[,conc_var],na.rm=T)*0.95
+        ymin <- min(data[,conc_var],na.rm=T)
         ymax <- max(data[,conc_var],na.rm=T)*1.1
       }
       if( xscale=='free'){
