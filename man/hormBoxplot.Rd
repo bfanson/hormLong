@@ -3,25 +3,29 @@
 \alias{hormBoxplot}
 \title{Boxplot of individual concentrations}
 \usage{
-hormBoxplot(data, conc_var, id_var, by_var, plot_height = 5, plot_width = 6,
-  save_plot = T, log_scale = "n", plot_per_page = 1)
+hormBoxplot(data, conc_var, id_var, by_var, log_scale = "n",
+  plot_per_page = 1, plot_height = 5, plot_width = 6, save_plot = T)
 }
 \arguments{
-\item{data}{dataset [required]}
+\item{data}{dataset containing the hormone data. [required]}
 
 \item{conc_var}{name of the concentration variable [required]}
 
 \item{id_var}{name of the individual variable [required]}
 
-\item{by_var}{name of variable to break up plots by  [optional]}
+\item{by_var}{names of the grouping variables.  Column names should be separated by a comma:
+e.g. 'name1' for one column, 'name1, name2' for two columns, 'name1, name2, name3' for three columns,
+etc.  Remember, capitalization matters. [optional]}
 
-\item{plot_height}{the height of individual plot panels (in inches).  Pdf page height is determined by both plot_per_page and plot_height. [default = 2]}
-
-\item{plot_width}{the width of the pdf page. [default = 6]}
-
-\item{log_scale}{determines if y-axis is log10-scale or not. log-scale='y' makes log scale [default='n']}
+\item{log_scale}{determines if y-axis is log10-scale or not. log-scale='y' makes
+log scale [default='n']}
 
 \item{plot_per_page}{the number of plot panels per page, by row. [default = 1]}
+
+\item{plot_height}{the height of individual plot panels (in inches).  Pdf page height is
+determined by both plot_per_page and plot_height. [default = 5]}
+
+\item{plot_width}{the width of the pdf page. [default = 6]}
 }
 \value{
 nothing Produces a pdf file with the graph in current working directory
@@ -30,6 +34,14 @@ nothing Produces a pdf file with the graph in current working directory
 Boxplot of individual concentrations
 }
 \examples{
-hormBoxplot(data=hormLynx, conc_var='Conc',id_var='AnimalID', by_var='Hormone', plot_per_page=1)
+hormBoxplot(data=hormLynx, conc_var='Conc', id_var='AnimalID', by_var='Hormone')
+
+# the following will fail because there are zero concentrations.
+hormBoxplot(data=hormLynx, conc_var='Conc', id_var='AnimalID', by_var='Hormone', log_scale='y')
+
+# One option to deal with zeros
+ds <- hormLynx            # make a new object
+ds$Conc1 <- ds$Conc + 1   # add 1 to all values concenration and save as a new column
+hormBoxplot(data=ds, conc_var='Conc1', id_var='AnimalID', by_var='Hormone', log_scale='y')
 }
 

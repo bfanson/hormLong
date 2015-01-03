@@ -7,15 +7,17 @@ hormBaseline(data, by_var, conc_var, time_var, criteria = 2, event_var,
   save_data = T)
 }
 \arguments{
-\item{data}{dataset. [required]}
+\item{data}{dataset containing the hormone data. [required]}
 
-\item{by_var}{names of the grouping variables (e.g. 'id', 'species, id' ) [optional]}
+\item{by_var}{names of the grouping variables.  Column names should be separated by a comma:
+e.g. 'name1' for one column, 'name1, name2' for two columns, 'name1, name2, name3' for three columns,
+etc.  Remember, capitalization matters. [optional]}
 
 \item{conc_var}{name of the concentration variable (response variable) [required].}
 
 \item{time_var}{name of the time variable (e.g. 'date', 'datetime', 'days') [required].}
 
-\item{criteria}{baseline criteria (mean + criterias * SD) [default=2]}
+\item{criteria}{baseline criteria (mean + criteria * SD) [default=2]}
 
 \item{event_var}{name of event variable  [optional]}
 
@@ -28,6 +30,6 @@ hormLong object.
 Run iterative process to calculate baseline.
 }
 \examples{
-result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', time_var='Date', conc_var='Conc' )
+result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', time_var='datetime', conc_var='Conc' )
 }
 

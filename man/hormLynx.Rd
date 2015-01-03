@@ -2,7 +2,7 @@
 \docType{data}
 \name{hormLynx}
 \alias{hormLynx}
-\title{Canadian Lynx data.}
+\title{Canadian Lynx data}
 \format{A data frame with five variables: \code{AnimalID}, \code{SampleNo},
   \code{Date},\code{Time}, \code{Hormone}, \code{Conc}, \code{Events}, and \code{datetime}}
 \usage{

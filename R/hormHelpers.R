@@ -17,7 +17,7 @@ getCutoff <- function(x, criteria){
 #' Helper function to work with dates.  User needs to specify at least date_var and date_order. 
 #' If time_var is included, then it will output a date_time variable
 #' 
-#' @param data data set with the variables to convert [required]
+#' @param data dataset with the variables to convert [required]
 #' @param date_var variable name for date column.  Form should be a standard date form 
 #' (e.g. '12AUG2014','01/01/2014') [required]
 #' @param time_var variable name for the time column in 24-hour format (e.g. '20:10:01', '01:04:01') [optional]
@@ -27,12 +27,14 @@ getCutoff <- function(x, criteria){
 #' @return dataset with the new date/time variable
 #' @export
 #' @examples
-#' 
+#'
+#'# Combining date and time  
 #' date <- c('2014-01-01','2014-Mar-01')
 #' time <- c('10:10:01', '20:30:23')
 #' ds <- data.frame(date=date,time=time)
-#' hormDate(ds,date_var='date',time_var='time',name='datetime', date_order='ymd' )
-#
+#' hormDate(ds,date_var='date',time_var='time', name='datetime', date_order='ymd' )
+#' 
+#'# Function is robust to date formatting as long as day, month, year order are the same  
 #' date <- c('01-01-2014','01-Mar-2014','01/April/2014')
 #' ds <- data.frame(date=date)
 #' hormDate(ds,date_var='date',name='datetime', date_order='dmy' )
@@ -44,12 +46,12 @@ hormDate <- function(data, date_var, time_var, name='datetime', date_order='dmy'
   if( is.numeric(data[,date_var]) ) data[,date_var] <- as.character(data[,date_var]) 
   if( missing(date_var)   ){stop('please provide date_var. time_var is optional ')}
   if( missing(date_order) ){stop('please provide date_order...e.g. ymd, dmy, mdy')}
-  if( (date_order %in% c('ymd','ydm','mdy','dmy' ))==F ){stop('date_order must be ymd,ydm,mdy, or dmy ')}
+  if( (date_order %in% c('ymd','ydm','mdy','dmy' ))==F ){stop('date_order must be ymd, ydm, mdy or dmy ')}
 
   if( !missing(time_var)){
     if(any( (grepl('pm',tolower(data[,time_var]))==T |  
                                 grepl('am',tolower(data[,time_var]))==T)==T ) ){
-      stop('check format of date_var.  It should be in 24-hour format with hours,minutes and seconds (e.g. 20:10:01)')
+      stop('check format of time_var.  It should be in 24-hour format with hours, minutes and seconds (e.g. 20:10:01)')
     }
   }
   

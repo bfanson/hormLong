@@ -6,7 +6,7 @@
 #' @param add_fill should the area under the curve be filled with color (TRUE or FALSE) [default=TRUE]
 #' @param two_axes if TRUE then second axis will added to right side of plot.  Can only with two hormones
 #' If there are more than two hormones, function will give an error. [default=FALSE]
-#' @param date_format the format of the date variable on x-axis. See Appendix 1 in help manual 
+#' @param date_format the format of the date variable on x-axis. Default is 01-Jan format. See Appendix 1 in help manual 
 #' for examples of other formats [default = '\%d-\%b']
 #' @param xscale  determines if x-axis is free ('free') to change for each panel or remain the same ('fixed') for all panels  [default = 'free']
 #' @param yscale  determines if y-axis is free ('free') to change for each panel or remain the same ('fixed') for all panels [default = 'free']

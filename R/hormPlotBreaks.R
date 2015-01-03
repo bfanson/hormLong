@@ -2,12 +2,11 @@
 #' 
 #' @param x hormLong object (produced from hormBaseline) [required]
 #' @param break_cutoff the maximum number of days between consecutive points. 
-#' Above this cutoff value, a break is created  [default = 40]
+#' Above this cutoff value, a break is created. [default = 40]
 #' @param break_buffer size of the gap (in number of days) between data groups.  Larger values will
 #' create larger spaces between data groups. [default = 60]
-#' @param date_format the format of the date variable on x-axis. See Appendix 1 in help manual 
+#' @param date_format the format of the date variable on x-axis. Default is 01-Jan format. See Appendix 1 in help manual 
 #' for examples of other formats [default = '\%d-\%b']
-#' @param log_scale determines if y-axis is log10-scale or not. log-scale='y' makes log scale [default='n']  
 #' @param plot_per_page the number of plot panels per page, by row. [default = 4]
 #' @param plot_height  the height of individual plot panels (in inches).  Pdf page height is determined
 #' by both plot_per_page and plot_height. [default = 2]
@@ -19,12 +18,15 @@
 #' @examples
 #' 
 #' 
-#' result <- hormBaseline(data=hormElephant, criteria=2, by_var='ID, Hormone', time_var='Date', 
-#'              conc_var='conc_ng_ml' , event_var='Event')
+#' result <- hormBaseline(data=hormElephant, criteria=2, by_var='Ele, Hormone', time_var='Date', 
+#'              conc_var='Conc_ng_ml' , event_var='Event')
 #' hormPlotBreaks( result ) 
+#'# compare to regular hormPlot, especially Ele1; Cortisol
+#' hormPlot( result ) 
 
 
-hormPlotBreaks <- function(x, break_cutoff=40, break_buffer=60, date_format='%d-%b', log_scale='n',
+
+hormPlotBreaks <- function(x, break_cutoff=40, break_buffer=60, date_format='%d-%b',
                            plot_per_page=4, plot_height=2, plot_width=6, save_plot=TRUE){
 
 #--- checks for missing values ---#
@@ -88,12 +90,7 @@ hormPlotBreaks <- function(x, break_cutoff=40, break_buffer=60, date_format='%d-
     baseline <- getCutoff( ds_sub[ds_sub$conc_type=='base',conc_var], criteria=x$criteria )
     #ds_sub <- ds_sub[!is.na(ds_sub[,conc_var]),]
 
-     
-  if(log_scale=='y'){
-   plot(ds_sub[,conc_var]~ds_sub$x_adj, type='n', xaxt='n',ylab=conc_var, xlab=NA, log='y') 
-  }else{
    plot(ds_sub[,conc_var]~ds_sub$x_adj, type='n', xaxt='n',ylab=conc_var, xlab=NA) 
-  }
    mtext(unique(ds_sub$plot_title),side=3,line=0.25)
      abline(h = baseline, lty=2)
 

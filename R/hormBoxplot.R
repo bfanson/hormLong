@@ -19,7 +19,7 @@
 #' 
 #' hormBoxplot(data=hormLynx, conc_var='Conc', id_var='AnimalID', by_var='Hormone')
 #' 
-#'# the following will fail because there are zeros concentration.
+#'# the following will fail because there are zero concentrations.
 #' hormBoxplot(data=hormLynx, conc_var='Conc', id_var='AnimalID', by_var='Hormone', log_scale='y')
 #'
 #'# One option to deal with zeros 
@@ -27,7 +27,6 @@
 #' ds$Conc1 <- ds$Conc + 1   # add 1 to all values concenration and save as a new column
 #' hormBoxplot(data=ds, conc_var='Conc1', id_var='AnimalID', by_var='Hormone', log_scale='y')
 #' 
-
 
 hormBoxplot <- function(data, conc_var, id_var, by_var, log_scale='n', 
                         plot_per_page=1, plot_height=5, plot_width=6, save_plot=T){

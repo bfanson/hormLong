@@ -6,7 +6,7 @@
 #' baseline mean.  Peak is all values above peak cutoff. [default = 'origin']
 #' @param method the AUC method to use.  Currently, only trapezoid method has been implemented. Units
 #' for AUC is (conc units)^2 per day. [default = 'trapezoid']
-#' @param date_format the format of the date variable on x-axis. See Appendix 1 in help manual 
+#' @param date_format the format of the date variable on x-axis. Default is 01-Jan format. See Appendix 1 in help manual 
 #' for examples of other formats [default = '\%d-\%b']
 #' @param xscale  determines if x-axis is free ('free') to change for each panel or
 #' remain the same ('fixed') for all panels  [default = 'free']

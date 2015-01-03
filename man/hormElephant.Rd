@@ -13,7 +13,8 @@ Longitudinal hormone data for multiple female elephants in which LH and Progeste
 measured over years.
 }
 \details{
-Reference: Fanson KV, Keeley T, Fanson BG. Cyclic changes in cortisol across the estrous
+Data were published in:\cr
+Fanson KV, Keeley T, Fanson BG. Cyclic changes in cortisol across the estrous
 cycle in parous and nulliparous Asian elephants. Endocrine Connections 3:57-66
 }
 \keyword{datasets}

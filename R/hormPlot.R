@@ -1,30 +1,32 @@
 #' Plot longitudinal hormone data with baseline information
 #' 
 #' @param x hormLong object (produced from hormBaseline) [required]
-#' @param date_format the format of the date variable on x-axis. See Appendix 1 in help manual 
+#' @param date_format the format of the date variable on x-axis.  Default is 01-Jan format. See Appendix 1 in help manual 
 #' for examples of other formats [default = '\%d-\%b']
 #' @param xscale  determines if x-axis is free ('free') to change for each panel or remain the same ('fixed') for all panels  [default = 'free']
 #' @param yscale  determines if y-axis is free ('free') to change for each panel or remain the same ('fixed') for all panels [default = 'free']
-#' @param log_scale determines if y-axis is log10-scale or not. log-scale='y' makes log scale [default='n']  
 #' @param plot_per_page the number of plot panels per page, by row. [default = 4]
-#' @param plot_height  the height of individual plot panels (in inches).  Pdf page height is determined by both plot_per_page and plot_height. [default = 2]
+#' @param plot_height  the height of individual plot panels (in inches).  
+#' Pdf page height is determined by both plot_per_page and plot_height. [default = 2]
 #' @param plot_width  the width of the pdf page. [default = 6]
 #' @param filename  the filename of the pdf file [default = 'hormPlot']
 #' @param save_plot indicates whether to save plot as a file [default = TRUE]
-#' @param ...   generic plotting options [optional]  
 #' @return nothing  Produces a pdf file saved at current working directory
 #' @export
 #' @examples
 #' 
-#' result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', time_var='Date', conc_var='Conc' )
-#' hormPlot(result )
-#' hormPlot(result, yscale='fixed', xscale='fixed' )
+#' result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', time_var='datetime', 
+#' conc_var='Conc', event_var='Events' )
+#' hormPlot( result )
+#'
+#'# Sometimes you may want to fix y-axis to be same across all plots so heights are comparable
+#' hormPlot( result, yscale='fixed' ) 
 #' 
 
-hormPlot <- function(x, date_format='%d-%b', log_scale='n', 
+hormPlot <- function(x, date_format='%d-%b',
                      xscale='free', yscale='free',
-                     plot_per_page=4,plot_height=2, plot_width=6, 
-                     filename='hormPlot',  save_plot=TRUE,...){
+                     plot_per_page=4, plot_height=2, plot_width=6, 
+                     filename='hormPlot',  save_plot=TRUE){
   
 #--- main check ---#
   graphics.off() # just to make sure no devices are open
@@ -57,7 +59,6 @@ hormPlot <- function(x, date_format='%d-%b', log_scale='n',
   
   data$plot_title <- getPlotTitle(data, by_var=by_var_v)
 
-    
 #--- create plots ---#
   require(lubridate)
   if( save_plot ){
@@ -92,13 +93,9 @@ hormPlot <- function(x, date_format='%d-%b', log_scale='n',
       }    
     #--- main plot
     if( is.null(x$y_lab) ){x$y_lab <- conc_var}
-    if( log_scale=='y' ){
-        plot(ds_sub[,conc_var] ~ ds_sub[,time_var], type='l',xlim=c(xmin,xmax), ylim=c(ymin,ymax), 
-            xlab=NA, ylab=x$y_lab, xaxt='n', log=log_scale)
-    }else{
-        plot(ds_sub[,conc_var] ~ ds_sub[,time_var], type='l',xlim=c(xmin,xmax), ylim=c(ymin,ymax), 
+      plot(ds_sub[,conc_var] ~ ds_sub[,time_var], type='l',xlim=c(xmin,xmax), ylim=c(ymin,ymax), 
             xlab=NA, ylab=x$y_lab, xaxt='n')
-    }
+    
       if(is.numeric(ds_sub[,time_var])){ axis(1)
       }else if( is.Date(ds_sub[,time_var]) ){
           ats <- seq( xmin, xmax, length.out = 5)
