@@ -27,7 +27,8 @@
 #' 
 #' @examples 
 #' 
-#' result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', time_var='datetime', conc_var='Conc' )
+#' result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', 
+#'             time_var='datetime', conc_var='Conc', event_var='Events' )
 #' 
 #'# AUC only for values above cutoff threshold 
 #'#  defined in hormBaseline
@@ -39,8 +40,8 @@
 #'# AUC only for values above 0 
 #' hormArea(result,lower_bound='origin')   
 
-hormArea <- function(x, lower_bound = 'origin' , method='trapezoid', date_format='%d-%b', 
-                     xscale='free',yscale='free',
+hormArea <- function(x, lower_bound = 'origin', method='trapezoid', date_format='%d-%b', 
+                     xscale='free', yscale='free',
                      plot_per_page=4, plot_height=2, plot_width=6, save_plot=T){
 #-- initial checking ---# 
   require(lubridate)
@@ -99,10 +100,15 @@ hormArea <- function(x, lower_bound = 'origin' , method='trapezoid', date_format
   }
 
   par(mfrow=c(plot_per_page,1), mar=c(2,4,2,0.5),oma=c(2,2,2,0))
-  for( i in unique(data$plot_title)){
-    ds_sub <- data[data$plot_title==i, ]
-    pk <- ds_pk[ds_pk$plot_title==i, ]
+  for( pt in unique(data$plot_title)){
+    ds_sub <- data[data$plot_title==pt, ]
+    pk <- ds_pk[ds_pk$plot_title==pt, ]
     baseline <- ds_sub$cutoff[1]
+    
+    if(!is.null(x$event_var)){
+      events <- ds_sub[ !is.na(ds_sub[,x$event_var]) & ds_sub[,x$event_var]!='',c(x$event_var,time_var)]
+     }else{events <- data.frame()}
+    
     ds_sub <- ds_sub[!is.na(ds_sub[,conc_var]),]
     
     #--- set up scales
@@ -120,6 +126,7 @@ hormArea <- function(x, lower_bound = 'origin' , method='trapezoid', date_format
         xmin <- min( data[,time_var],na.rm=T)
         xmax <- max( data[,time_var],na.rm=T)
       }    
+    
     #--- main plot
     plot(ds_sub[,conc_var] ~ ds_sub[,time_var], type='l',xlim=c(xmin,xmax), ylim=c(ymin,ymax), 
           xlab=NA, ylab=conc_var, xaxt='n')
@@ -145,7 +152,13 @@ hormArea <- function(x, lower_bound = 'origin' , method='trapezoid', date_format
           text( mean(pk1$t), max(c_order), labels=p, adj = c(0,-0.5))
         }
       }
-  }
+    if( nrow(events)>0 ){
+        for(l in 1:nrow(events)){
+          arrows(x0=events[l,time_var],x1 =events[l,time_var],y0=ymax*0.95,y1=ymax*0.8, length = 0.1)
+          text(x=events[l,time_var],y=ymax*0.99, events[l,x$event_var])
+        }
+      }
+  } # end p loop
   if( save_plot ){  
       dev.off()
       cat( paste0('\n *********\nNote: plots are saved at: \n', getwd(),'/hormArea.pdf \n***** \n\n')  )
