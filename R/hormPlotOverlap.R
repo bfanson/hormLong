@@ -4,7 +4,7 @@
 #' @param hormone_var name for the hormone variable.  It must be listed in by_var during hormBaseline [required]
 #' @param colors list of colors for the fills. It needs to have as many colors as hormone types  [default='red,blue']
 #' @param add_fill should the area under the curve be filled with color (TRUE or FALSE) [default=TRUE]
-#' @param two_axes if TRUE then second axis will added to right side of plot.  Can only with two hormones
+#' @param two_axes if TRUE then second axis will added to right side of plot.  It can only be used with two hormones.
 #' If there are more than two hormones, function will give an error. [default=FALSE]
 #' @param date_format the format of the date variable on x-axis. Default is 01-Jan format. See Appendix 1 in help manual 
 #' for examples of other formats [default = '\%d-\%b']

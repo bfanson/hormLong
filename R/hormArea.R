@@ -1,11 +1,11 @@
 #' Plot the area under the curve (AUC)  
 #' 
 #' @param x hormLong object (produced from hormBaseline) [required]
-#' @param lower_bound the lower limit to caculate the area under the curve. This can be
+#' @param lower_bound the lower limit to calculate the area under the curve. This can be
 #' 'origin', 'baseline', or 'peak'.  Origin is all values above 0.  Baseline is all values above 
 #' baseline mean.  Peak is all values above peak cutoff. [default = 'origin']
 #' @param method the AUC method to use.  Currently, only trapezoid method has been implemented. Units
-#' for AUC is (conc units)^2 per day. [default = 'trapezoid']
+#' for AUC is conc units * day. [default = 'trapezoid']
 #' @param date_format the format of the date variable on x-axis. Default is 01-Jan format. See Appendix 1 in help manual 
 #' for examples of other formats [default = '\%d-\%b']
 #' @param xscale  determines if x-axis is free ('free') to change for each panel or
@@ -154,7 +154,11 @@ hormArea <- function(x, lower_bound = 'origin' , method='trapezoid', date_format
   #--- produce table ---#
     ds_tbl <- unique( ds_pk[,c('plot_title','peak_num','AUC')])    
     ds_tbl <- merge(ds_tbl, unique(data[,c(by_var_v,'plot_title')]), all.x=T)
-    ds_tbl$AUC <- round(ds_tbl$AUC,3) / (3600 * 24)  # get conc^2 per day
+    if(  is.Date(data[,time_var]) | is.numeric(data[,time_var])  ){
+      ds_tbl$AUC <- round(ds_tbl$AUC,3) # get conc * day
+    }else{
+      ds_tbl$AUC <- round(ds_tbl$AUC,3) / (3600 * 24)  # get conc * day
+    }
     ds_out <- ds_tbl[,c(by_var_v,'peak_num','AUC')]
     names(ds_out)[which(names(ds_out)=='AUC')] <-'peak AUC'    
 

@@ -12,6 +12,7 @@
 #' @param plot_height  the height of individual plot panels (in inches).  Pdf page height is 
 #' determined by both plot_per_page and plot_height. [default = 5]
 #' @param plot_width  the width of the pdf page. [default = 6]
+#' @param save_plot indicates whether to save plot as a file [default = TRUE]
 #' @return nothing Produces a pdf file with the graph in current working directory
 #' 
 #' @export
