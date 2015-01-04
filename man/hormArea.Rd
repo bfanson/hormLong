@@ -10,12 +10,12 @@ hormArea(x, lower_bound = "origin", method = "trapezoid",
 \arguments{
 \item{x}{hormLong object (produced from hormBaseline) [required]}
 
-\item{lower_bound}{the lower limit to caculate the area under the curve. This can be
+\item{lower_bound}{the lower limit to calculate the area under the curve. This can be
 'origin', 'baseline', or 'peak'.  Origin is all values above 0.  Baseline is all values above
 baseline mean.  Peak is all values above peak cutoff. [default = 'origin']}
 
 \item{method}{the AUC method to use.  Currently, only trapezoid method has been implemented. Units
-for AUC is (conc units)^2 per day. [default = 'trapezoid']}
+for AUC is conc units * day. [default = 'trapezoid']}
 
 \item{date_format}{the format of the date variable on x-axis. Default is 01-Jan format. See Appendix 1 in help manual
 for examples of other formats [default = '\%d-\%b']}

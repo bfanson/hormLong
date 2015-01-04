@@ -26,6 +26,8 @@ log scale [default='n']}
 determined by both plot_per_page and plot_height. [default = 5]}
 
 \item{plot_width}{the width of the pdf page. [default = 6]}
+
+\item{save_plot}{indicates whether to save plot as a file [default = TRUE]}
 }
 \value{
 nothing Produces a pdf file with the graph in current working directory

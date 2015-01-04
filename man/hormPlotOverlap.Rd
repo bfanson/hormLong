@@ -20,7 +20,7 @@ for examples of other formats [default = '\%d-\%b']}
 
 \item{add_fill}{should the area under the curve be filled with color (TRUE or FALSE) [default=TRUE]}
 
-\item{two_axes}{if TRUE then second axis will added to right side of plot.  Can only with two hormones
+\item{two_axes}{if TRUE then second axis will added to right side of plot.  It can only be used with two hormones.
 If there are more than two hormones, function will give an error. [default=FALSE]}
 
 \item{xscale}{determines if x-axis is free ('free') to change for each panel or remain the same ('fixed') for all panels  [default = 'free']}
