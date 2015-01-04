@@ -35,7 +35,7 @@
 #' hormPlotOverlap( result, hormone_var='Hormone', colors='red, dark green', two_axes=TRUE )
 #' 
 
-hormPlotOverlap <- function(x, hormone_var='horm_type', colors='red, blue', date_format='%d-%b', 
+hormPlotOverlap <- function(x, hormone_var, colors='red, blue', date_format='%d-%b', 
                      add_fill=TRUE, two_axes=FALSE,
                      xscale='free', yscale='free', 
                      plot_per_page=4, plot_height=2, plot_width=6, save_plot=TRUE,...){
@@ -45,6 +45,9 @@ hormPlotOverlap <- function(x, hormone_var='horm_type', colors='red, blue', date
 
   if( class(x)!='hormLong'){
       stop('Object needs to be hormLong.  Run hormBaseline() first')
+  }
+  if( missing(hormone_var) ){
+      stop(' hormone_var must be specified ')
   }
   if( !is.numeric(plot_per_page) | plot_per_page<1 ){
     stop('plot_per_page needs to be numeric and greater than 0')

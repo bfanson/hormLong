@@ -42,7 +42,8 @@
 hormArea <- function(x, lower_bound = 'origin' , method='trapezoid', date_format='%d-%b', 
                      xscale='free',yscale='free',
                      plot_per_page=4, plot_height=2, plot_width=6, save_plot=T){
-#-- initial checking ---#  
+#-- initial checking ---# 
+  require(lubridate)
   if( method != 'trapezoid'){ 
     stop('no other method currently implemented ')
   }
@@ -106,10 +107,10 @@ hormArea <- function(x, lower_bound = 'origin' , method='trapezoid', date_format
     
     #--- set up scales
       if( yscale=='free'){
-        ymin <- min(ds_sub[,conc_var])
+        ymin <- 0 #min(ds_sub[,conc_var])
         ymax <- max(baseline, max(ds_sub[,conc_var]) )*1.1
       }else{
-        ymin <- min(data[,conc_var],na.rm=T)
+        ymin <- 0 #min(data[,conc_var],na.rm=T)
         ymax <- max(data[,conc_var],na.rm=T)*1.1
       }
       if( xscale=='free'){
