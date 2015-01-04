@@ -47,7 +47,8 @@ Citation for the AUC used in this example:\cr\cr
   Responses of Great Tits (Parus major).  General and Comparative Endocrinology 125:197.
 }
 \examples{
-result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', time_var='datetime', conc_var='Conc' )
+result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone',
+            time_var='datetime', conc_var='Conc', event_var='Events' )
 
 # AUC only for values above cutoff threshold
 #  defined in hormBaseline

@@ -3,7 +3,7 @@
 \alias{hormPlotOverlap}
 \title{Plot overlapping longitudinal hormone data}
 \usage{
-hormPlotOverlap(x, hormone_var = "horm_type", colors = "red, blue",
+hormPlotOverlap(x, hormone_var, colors = "red, blue",
   date_format = "\%d-\%b", add_fill = TRUE, two_axes = FALSE,
   xscale = "free", yscale = "free", plot_per_page = 4, plot_height = 2,
   plot_width = 6, save_plot = TRUE, ...)
