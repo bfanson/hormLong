@@ -4,7 +4,7 @@
 #' @param hormone_var name for the hormone variable.  It must be listed in by_var during hormBaseline [required]
 #' @param colors list of colors for the fills. It needs to have as many colors as hormone types  [default='red,blue']
 #' @param add_fill should the area under the curve be filled with color (TRUE or FALSE) [default=TRUE]
-#' @param two_axes if TRUE then second axis will added to right side of plot.  It can only be used with two hormones.
+#' @param two_axes if TRUE then a second y-axis will be added to the right side of plot.  It can only be used with two hormones.
 #' If there are more than two hormones, function will give an error. [default=FALSE]
 #' @param date_format the format of the date variable on x-axis. Default is 01-Jan format. See Appendix 1 in help manual 
 #' for examples of other formats [default = '\%d-\%b']
@@ -19,24 +19,25 @@
 #' @export
 #' @examples
 #' 
-#' result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', time_var='datetime', conc_var='Conc' )
+#' result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', time_var='datetime', 
+#'            conc_var='Conc', event_var='Events' )
 #' hormPlotOverlap( result, hormone_var='Hormone', colors='red, dark green, blue' )
-
+#' 
 #'# no color fill...
 #' hormPlotOverlap( result, hormone_var='Hormone', colors='red, dark green, blue', add_fill=FALSE )
 #'
 #'# Two-axes option is only vaalid if there are only two hormones 
-#' hormPlotOverlap( result, hormone_var='Hormone', two_axes=T ) # this will produce an error
+#' hormPlotOverlap( result, hormone_var='Hormone', two_axes=T) # this will produce an error
 #'
 #'# Let's try again wtih hormElphant that only has two hormones
 #' result <- hormBaseline(data=hormElephant, criteria=2, by_var='Ele, Hormone', time_var='Date', 
-#'              conc_var='Conc_ng_ml' )
+#'              conc_var='Conc_ng_ml', event_var='Event'  )
 #' hormPlotOverlap( result, hormone_var='Hormone', colors='red, dark green', two_axes=TRUE )
 #' 
 
 hormPlotOverlap <- function(x, hormone_var='horm_type', colors='red, blue', date_format='%d-%b', 
                      add_fill=TRUE, two_axes=FALSE,
-                     xscale='free',yscale='free', 
+                     xscale='free', yscale='free', 
                      plot_per_page=4, plot_height=2, plot_width=6, save_plot=TRUE,...){
   
 #--- main check ---#
@@ -89,7 +90,7 @@ hormPlotOverlap <- function(x, hormone_var='horm_type', colors='red, blue', date
   for( i in unique(data$plot_title) ){
     ds_sub <- data[data$plot_title==i, ]
     if(!is.null(x$event_var)){
-      events <- unique( ds_sub[ !is.na(ds_sub[,x$event_var]) & ds_sub[,x$event_var]!='',c(x$event_var,time_var)])
+      events <- unique( ds_sub[ !is.na(ds_sub[,x$event_var]) & ds_sub[,x$event_var]!='', c(x$event_var,time_var,hormone_var)])
       }else{events <- data.frame()}
     ds_sub <- ds_sub[!is.na(ds_sub[,conc_var]),]
 
@@ -110,13 +111,13 @@ hormPlotOverlap <- function(x, hormone_var='horm_type', colors='red, blue', date
       }    
       if( two_axes & yscale=='free' ){
         ymin <- 0
-        ymax  <-  max(ds_sub[ ds_sub[hormone_var]==sort(unique(ds_sub[,hormone_var]))[1],conc_var],na.rm=T)*1.1
-        ymax2 <-  max(ds_sub[ ds_sub[hormone_var]==sort(unique(ds_sub[,hormone_var]))[2],conc_var],na.rm=T)*1.1
+        ymax  <-  max(ds_sub[ ds_sub[hormone_var]==sort(unique(ds_sub[,hormone_var]))[1],conc_var],na.rm=T)*1.2
+        ymax2 <-  max(ds_sub[ ds_sub[hormone_var]==sort(unique(ds_sub[,hormone_var]))[2],conc_var],na.rm=T)*1.2
       }  
       if( two_axes & yscale=='fixed' ){
         ymin <- 0
-        ymax  <-  max(data[ data[hormone_var]==sort(unique(data[,hormone_var]))[1],conc_var],na.rm=T)*1.1
-        ymax2 <-  max(data[ data[hormone_var]==sort(unique(data[,hormone_var]))[2],conc_var],na.rm=T)*1.1
+        ymax  <-  max(data[ data[hormone_var]==sort(unique(data[,hormone_var]))[1],conc_var],na.rm=T)*1.2
+        ymax2 <-  max(data[ data[hormone_var]==sort(unique(data[,hormone_var]))[2],conc_var],na.rm=T)*1.2
       }  
     
     #--- main plot
@@ -142,7 +143,22 @@ hormPlotOverlap <- function(x, hormone_var='horm_type', colors='red, blue', date
         t_order <- c(ds_sub1[,time_var], rev(ds_sub1[,time_var]) )
         c_order <- c(rep(0,length(ds_sub1[,conc_var])),rev(ds_sub1[,conc_var])) 
         if( add_fill) polygon(t_order,c_order,col=adjustcolor(colors[loop], alpha=0.25),border=colors[loop]) 
-      }
+        
+        if( nrow(events) > 0 ){ 
+          events1 <- events[events[,hormone_var]==h,  ] 
+          if( nrow(events1)>0 ){
+            for(l in 1:nrow(events1)){
+              if(loop>1 & two_axes){
+               arrows(x0=events1[l,time_var],x1 =events1[l,time_var],y0=ymax2*0.95,y1=ymax2*0.8, length = 0.1)
+               text(x=events1[l,time_var],y=ymax2*0.99, events1[l,x$event_var])
+              }else{
+               arrows(x0=events1[l,time_var],x1 =events1[l,time_var],y0=ymax*0.95,y1=ymax*0.8, length = 0.1)
+               text(x=events1[l,time_var],y=ymax*0.99, events1[l,x$event_var])
+               }
+            } #end for l in 1:nrow
+          } #end nrow(events1)
+        } 
+
       legend('topleft',legend=sort(unique(ds_sub[,hormone_var])),fill=adjustcolor(colors, alpha=0.25),
               bty='n',cex=0.9,bg=NA, pt.cex=0.6)
       if(is.numeric(ds_sub[,time_var])){ axis(1)
@@ -153,16 +169,11 @@ hormPlotOverlap <- function(x, hormone_var='horm_type', colors='red, blue', date
           ats <- seq( xmin, xmax, length.out = 5)
           axis.POSIXct(1,at=ats,format=date_format)
       } 
-    
-      mtext(unique(ds_sub$plot_title),side=3,line=0.25)
-       if( nrow(events)>0 ){
-        for(l in 1:nrow(events)){
-          arrows(x0=events[l,time_var],x1 =events[l,time_var],y0=ymax*0.95,y1=ymax*0.8, length = 0.1)
-          text(x=events[l,time_var],y=ymax*0.99, events[l,x$event_var])
-        }
-      }
-  }
+    } # end sort(unique())
+    mtext(unique(ds_sub$plot_title),side=3,line=0.25)
+ 
+  } # end unique(data$plot_title)
   if( save_plot ){  dev.off()
       cat( paste0('\n *********\nNote: plots are saved at: \n', getwd(),'/hormPlotOverlap.pdf \n***** \n\n')  )
   }
-}
+} # end of function

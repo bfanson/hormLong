@@ -20,7 +20,7 @@ for examples of other formats [default = '\%d-\%b']}
 
 \item{add_fill}{should the area under the curve be filled with color (TRUE or FALSE) [default=TRUE]}
 
-\item{two_axes}{if TRUE then second axis will added to right side of plot.  It can only be used with two hormones.
+\item{two_axes}{if TRUE then a second y-axis will be added to the right side of plot.  It can only be used with two hormones.
 If there are more than two hormones, function will give an error. [default=FALSE]}
 
 \item{xscale}{determines if x-axis is free ('free') to change for each panel or remain the same ('fixed') for all panels  [default = 'free']}
@@ -44,17 +44,19 @@ nothing  Produces a pdf file saved at current working directory
 Plot overlapping longitudinal hormone data
 }
 \examples{
-result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', time_var='datetime', conc_var='Conc' )
+result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', time_var='datetime',
+           conc_var='Conc', event_var='Events' )
 hormPlotOverlap( result, hormone_var='Hormone', colors='red, dark green, blue' )
+
 # no color fill...
 hormPlotOverlap( result, hormone_var='Hormone', colors='red, dark green, blue', add_fill=FALSE )
 
 # Two-axes option is only vaalid if there are only two hormones
-hormPlotOverlap( result, hormone_var='Hormone', two_axes=T ) # this will produce an error
+hormPlotOverlap( result, hormone_var='Hormone', two_axes=T) # this will produce an error
 
 # Let's try again wtih hormElphant that only has two hormones
 result <- hormBaseline(data=hormElephant, criteria=2, by_var='Ele, Hormone', time_var='Date',
-             conc_var='Conc_ng_ml' )
+             conc_var='Conc_ng_ml', event_var='Event'  )
 hormPlotOverlap( result, hormone_var='Hormone', colors='red, dark green', two_axes=TRUE )
 }
 
