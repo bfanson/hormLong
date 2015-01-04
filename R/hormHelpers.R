@@ -14,6 +14,8 @@ getCutoff <- function(x, criteria){
 }
 
 
+#' Helper function to work with dates.  
+#'  
 #' Helper function to work with dates.  User needs to specify at least date_var and date_order. 
 #' If time_var is included, then it will output a date_time variable
 #' 
