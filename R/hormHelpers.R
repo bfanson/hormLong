@@ -245,3 +245,30 @@ ridFactor <- function(data){
   data[i] <- lapply(data[i], as.character)
   return(data)
 }
+
+
+#' Helper function that plots Event info
+#'
+#' @param data dataframe
+#' @return dataframe with all factors converted to strings 
+#' @export
+#' @examples
+#'
+#' sapply(iris,class)
+#' ds <- ridFactor(iris)
+#' sapply(ds,class)
+#'
+#'
+
+
+plotEventInfo <- function( d_e=events, t=x$time_var,  e=x$event_var )
+  if( nrow(d_e)>0 ){
+    ymax_e <- par('usr')[4]
+    for(l in 1:nrow(d_e)){
+      arrows(x0=d_e[l,t],x1 =d_e[l,t],y0=ymax_e*0.92,y1=ymax_e*0.76, length = 0.1)
+      text(x=d_e[l,t],y=ymax_e*0.96, d_e[l,e])
+    }
+}
+
+
+

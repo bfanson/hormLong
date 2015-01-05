@@ -88,7 +88,6 @@ hormPlotBreaks <- function(x, break_cutoff=40, break_buffer=60, date_format='%d-
   for( i in unique(data$plot_title) ){
     ds_sub <- ds1[data$plot_title==i, ]
     baseline <- getCutoff( ds_sub[ds_sub$conc_type=='base',conc_var], criteria=x$criteria )
-    #ds_sub <- ds_sub[!is.na(ds_sub[,conc_var]),]
 
    plot(ds_sub[,conc_var]~ds_sub$x_adj, type='n', xaxt='n',ylab=conc_var, xlab=NA) 
    mtext(unique(ds_sub$plot_title),side=3,line=0.25)
@@ -110,13 +109,8 @@ hormPlotBreaks <- function(x, break_cutoff=40, break_buffer=60, date_format='%d-
        events <- ds_sub1[ !is.na(ds_sub1[,x$event_var]) & ds_sub1[,x$event_var]!='',c(x$event_var,'x_adj')]
        }else{events <- data.frame()}
     
-      if( nrow(events)>0 ){
-        for(l in 1:nrow(events)){
-          ymax_e <- par('usr')[4]
-          arrows(x0=events[l,'x_adj'],x1 =events[l,'x_adj'], y0=ymax_e*0.92,y1=ymax_e*0.76, length = 0.1)
-          text(x=events[l,'x_adj'],y=ymax_e*0.96, events[l,x$event_var])
-        }
-      }
+    plotEventInfo(events, t='x_adj', e=x$event_var) 
+
     } # then brk loop
   } # end plot_title  
 

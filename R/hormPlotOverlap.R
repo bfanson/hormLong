@@ -149,18 +149,21 @@ hormPlotOverlap <- function(x, hormone_var, colors='red, blue', date_format='%d-
         
         if( nrow(events) > 0 ){ 
           events1 <- events[events[,hormone_var]==h,  ] 
-          if( nrow(events1)>0 ){
-            for(l in 1:nrow(events1)){
-              if(loop>1 & two_axes){
-               arrows(x0=events1[l,time_var],x1 =events1[l,time_var],y0=ymax2*0.95,y1=ymax2*0.8, length = 0.1)
-               text(x=events1[l,time_var],y=ymax2*0.99, events1[l,x$event_var])
-              }else{
-               arrows(x0=events1[l,time_var],x1 =events1[l,time_var],y0=ymax*0.95,y1=ymax*0.8, length = 0.1)
-               text(x=events1[l,time_var],y=ymax*0.99, events1[l,x$event_var])
-               }
-            } #end for l in 1:nrow
-          } #end nrow(events1)
-        } 
+          plotEventInfo(events1,t=time_var, e=x$event_var) 
+        }
+#           if( nrow(events1)>0 ){
+#             for(l in 1:nrow(events1)){
+#               if(loop>1 & two_axes){
+#                arrows(x0=events1[l,time_var],x1 =events1[l,time_var],y0=ymax2*0.95,y1=ymax2*0.8, length = 0.1)
+#                text(x=events1[l,time_var],y=ymax2*0.99, events1[l,x$event_var])
+#               }else{
+#                arrows(x0=events1[l,time_var],x1 =events1[l,time_var],y0=ymax*0.95,y1=ymax*0.8, length = 0.1)
+#                text(x=events1[l,time_var],y=ymax*0.99, events1[l,x$event_var])
+#                }
+#             } #end for l in 1:nrow
+#          } #end nrow(events1)
+
+#      } # end h loop
 
       legend('topleft',legend=sort(unique(ds_sub[,hormone_var])),fill=adjustcolor(colors, alpha=0.25),
               bty='n',cex=0.9,bg=NA, pt.cex=0.6)
@@ -175,7 +178,7 @@ hormPlotOverlap <- function(x, hormone_var, colors='red, blue', date_format='%d-
     } # end sort(unique())
     mtext(unique(ds_sub$plot_title),side=3,line=0.25)
  
-  } # end unique(data$plot_title)
+  } # end i unique(data$plot_title)
   if( save_plot ){  dev.off()
       cat( paste0('\n *********\nNote: plots are saved at: \n', getwd(),'/hormPlotOverlap.pdf \n***** \n\n')  )
   }

@@ -108,12 +108,13 @@ hormPlot <- function(x, date_format='%d-%b',
       points(ds_sub[,time_var], ds_sub[,conc_var],pch=19)
       mtext(unique(ds_sub$plot_title),side=3,line=0.25)
       abline(h = baseline, lty=2)
-      if( nrow(events)>0 ){
-        for(l in 1:nrow(events)){
-          arrows(x0=events[l,time_var],x1 =events[l,time_var],y0=ymax*0.95,y1=ymax*0.8, length = 0.1)
-          text(x=events[l,time_var],y=ymax*0.99, events[l,x$event_var])
-        }
-      }
+#       if( nrow(events)>0 ){
+#         for(l in 1:nrow(events)){
+#           arrows(x0=events[l,time_var],x1 =events[l,time_var],y0=ymax*0.95,y1=ymax*0.8, length = 0.1)
+#           text(x=events[l,time_var],y=ymax*0.99, events[l,x$event_var])
+#         }
+#       }
+      plotEventInfo(events, t=time_var, e=x$event_var) 
   }
   if( save_plot ){  dev.off()
       cat( paste0('\n *********\nNote: plots are saved at: \n', getwd(),'/',filename,'.pdf \n***** \n\n')  )
