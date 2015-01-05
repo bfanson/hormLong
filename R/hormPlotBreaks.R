@@ -37,13 +37,13 @@ hormPlotBreaks <- function(x, break_cutoff=40, break_buffer=60, date_format='%d-
   if( !is.numeric(break_buffer) | break_buffer < 0 ){
     stop('Break_buffer must be numeric and nonnegative')
   }
+  
 #--- set-up data ---#
   require(lubridate)
   by_var_v <- cleanByvar(x$by_var) 
   time_var <- x$time_var
   conc_var <- x$conc_var
   data <- x$data
-  #data <- data[!is.na(data[,conc_var]),]
   data <-ridFactor(data)
   data$plot_title <- getPlotTitle(data,by_var=by_var_v)
   data <- getSumStat(data=data,name='cutoff', func= function(y) getCutoff(y, criteria=x$criteria ), add_ds=data, by_var=by_var_v, c_var=conc_var )
