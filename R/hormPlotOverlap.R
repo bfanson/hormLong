@@ -151,19 +151,6 @@ hormPlotOverlap <- function(x, hormone_var, colors='red, blue', date_format='%d-
           events1 <- events[events[,hormone_var]==h,  ] 
           plotEventInfo(events1,t=time_var, e=x$event_var) 
         }
-#           if( nrow(events1)>0 ){
-#             for(l in 1:nrow(events1)){
-#               if(loop>1 & two_axes){
-#                arrows(x0=events1[l,time_var],x1 =events1[l,time_var],y0=ymax2*0.95,y1=ymax2*0.8, length = 0.1)
-#                text(x=events1[l,time_var],y=ymax2*0.99, events1[l,x$event_var])
-#               }else{
-#                arrows(x0=events1[l,time_var],x1 =events1[l,time_var],y0=ymax*0.95,y1=ymax*0.8, length = 0.1)
-#                text(x=events1[l,time_var],y=ymax*0.99, events1[l,x$event_var])
-#                }
-#             } #end for l in 1:nrow
-#          } #end nrow(events1)
-
-#      } # end h loop
 
       legend('topleft',legend=sort(unique(ds_sub[,hormone_var])),fill=adjustcolor(colors, alpha=0.25),
               bty='n',cex=0.9,bg=NA, pt.cex=0.6)

@@ -77,6 +77,8 @@ hormPlot <- function(x, date_format='%d-%b',
     ds_sub <- ds_sub[!is.na(ds_sub[,conc_var]),]
 
     #--- set up scales
+      #y_lim <- getPlotlim(d_s=ds_sub, d_f=data, var=conc_var, base=baseline)
+      #x_lim <- getPlotlim(d_s=ds_sub, d_f=data, var=time_var)
       if( yscale=='free'){
         ymin <- min(ds_sub[,conc_var])
         ymax <- max(baseline, max(ds_sub[,conc_var]) )*1.1
