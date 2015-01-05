@@ -66,8 +66,9 @@ hormBaseline <- function(data, by_var, conc_var, time_var, criteria=2, event_var
   }
   
   by_var_v <- cleanByvar(by_var) # make by_var a vector
-  if( sum(!( c(by_var_v,conc_var,time_var)  %in% names(data) ))>0 ){
-      stop('not all variables are present in data.set.  check your column names')
+  if( sum(!( c(by_var_v,conc_var,time_var,event_var)  %in% names(data) ))>0 ){
+      stop('not all variables are present in dataset.  check your column names for by_var, conc_var, time_var and event_var.
+            Remember R is case sensitive (iow capitalization matters)')
     }
 
 
