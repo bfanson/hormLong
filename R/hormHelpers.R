@@ -291,4 +291,27 @@ getPlotlim <- function(d_s, d_f, var, scale, base=NA){
   return( lim )
 }
 
+#' Helper function for get axes limits
+#'
+#' @param d_s ds_sub dataframe
+#' @param d_f data dataframe
+#' @param var response variable
+#' @param scale xscale or yscale
+#' @param base baseline measure which is needed if higher than max(data[,conc_var])
+#' @return limits a vector of min and max   
+#' @export
+#'
 
+plotAxes <- function(d_s, t, x_s  ){
+  require(lubridate)
+      if( is.numeric(d_s[,t]) ){ 
+        axis(1)
+      }else if( is.Date(d_s[,t]) ){
+          ats <- seq( x_s[1], x_s[2], length.out = 5)
+          axis.Date(1,at=ats, format=date_format)
+      }else if( is.POSIXct(d_s[,t]) ){
+          ats <- seq( x_s[1], x_s[2], length.out = 5)
+          axis.POSIXct(1,at=ats,format=date_format)
+      } 
+}  
+  

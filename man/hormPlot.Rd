@@ -36,7 +36,7 @@ Plot longitudinal hormone data with baseline information
 }
 \examples{
 result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', time_var='datetime',
-conc_var='Conc', event_var='Events' )
+                       conc_var='Conc', event_var='Events' )
 hormPlot( result )
 
 # Sometimes you may want to fix y-axis to be same across all plots so heights are comparable

@@ -84,16 +84,9 @@ hormPlot <- function(x, date_format='%d-%b',
     if( is.null(x$y_lab) ){x$y_lab <- conc_var}
       plot(ds_sub[,conc_var] ~ ds_sub[,time_var], type='l',xlim=x_lim, ylim=y_lim, 
             xlab=NA, ylab=x$y_lab, xaxt='n')
-    
-      if(is.numeric(ds_sub[,time_var])){ axis(1)
-      }else if( is.Date(ds_sub[,time_var]) ){
-          ats <- seq( x_lim[1], x_lim[2], length.out = 5)
-          axis.Date(1,at=ats, format=date_format)
-      }else if( is.POSIXct(ds_sub[,time_var]) ){
-          ats <- seq( x_lim[1], x_lim[2], length.out = 5)
-          axis.POSIXct(1,at=ats,format=date_format)
-      } 
-    
+  
+      plotAxes(ds_sub, time_var, x_lim)
+
       points(ds_sub[,time_var], ds_sub[,conc_var],pch=19)
       mtext(unique(ds_sub$plot_title),side=3,line=0.25)
       abline(h = baseline, lty=2)

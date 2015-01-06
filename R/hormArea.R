@@ -123,15 +123,7 @@ hormArea <- function(x, lower_bound = 'origin', method='trapezoid', date_format=
       mtext(unique(ds_sub$plot_title),side=3,line=0.25)
       abline(h = baseline, lty=2)
     
-      if(is.numeric(ds_sub[,time_var])){ 
-          axis(1)
-       }else if( is.Date(ds_sub[,time_var]) ){
-          ats <- seq( x_lim[1], x_lim[2], length.out = 5)
-          axis.Date(1,at=ats, format=date_format)
-       }else if( is.POSIXct(ds_sub[,time_var]) ){
-          ats <- seq( x_lim[1], x_lim[2], length.out = 5)
-          axis.POSIXct(1,at=ats,format=date_format)
-      } 
+      plotAxes(ds_sub, time_var, x_lim)
     
       if( length(pk$peak_num)>0 ){
         for(p in 1:max(pk$peak_num) ){

@@ -143,15 +143,9 @@ hormPlotOverlap <- function(x, hormone_var, colors='red, blue', date_format='%d-
 
       legend('topleft',legend=sort(unique(ds_sub[,hormone_var])),fill=adjustcolor(colors, alpha=0.25),
               bty='n',cex=0.9,bg=NA, pt.cex=0.6)
-      if(is.numeric(ds_sub[,time_var])){ 
-        axis(1)
-      }else if( is.Date(ds_sub[,time_var]) ){
-          ats <- seq( x_lim[1], x_lim[2], length.out = 5)
-          axis.Date(1,at=ats, format=date_format)
-      }else if( is.POSIXct(ds_sub[,time_var]) ){
-          ats <- seq( x_lim[1], x_lim[2], length.out = 5)
-          axis.POSIXct(1,at=ats,format=date_format)
-      } 
+
+      plotAxes(ds_sub, time_var, x_lim)
+
     } # end sort(unique())
     mtext(unique(ds_sub$plot_title),side=3,line=0.25)
  
