@@ -43,30 +43,14 @@ hormPlotOverlap <- function(x, hormone_var, colors='red, blue', date_format='%d-
 #--- main check ---#
   graphics.off() # just to make sure no devices are open
 
-  if( class(x)!='hormLong'){
-      stop('Object needs to be hormLong.  Run hormBaseline() first')
-  }
-  if( missing(hormone_var) ){
-      stop(' hormone_var must be specified ')
-  }
-  if( !is.numeric(plot_per_page) | plot_per_page<1 ){
-    stop('plot_per_page needs to be numeric and greater than 0')
-  }
-  plot_per_page <- as.integer(plot_per_page ) # make sure whole number
-    
-  if( !is.logical(save_plot)  ){
-    stop( paste('save_plot needs to be either TRUE or FALSE, not:',save_plot) )
-  }
-
-  if( !(yscale %in% c('free','fixed') ) ){
-    stop( paste('yscale must be either "free" or "fixed", not:',yscale) )
-  }
-  if( !(xscale %in% c('free','fixed') ) ){
-    stop( paste('xscale must be either "free" or "fixed", not:',xscale) )
-  }
-  colors <- cleanByvar(colors) # make a vector   
+  checkClass(x, 'hormLong')
   
+  checkPlotOpts(plot_per_page, plot_width, plot_height, save_plot, xscale, yscale, date_format)
+  
+  checkPlotOverlap(hormone_var, x$by_var)
+
 #-- set-up ---#
+  colors <- cleanByvar(colors) # make a vector   
   by_var_v <- cleanByvar(x$by_var) 
   by_var_v <- by_var_v[by_var_v!=hormone_var]
   time_var <- x$time_var
@@ -144,7 +128,7 @@ hormPlotOverlap <- function(x, hormone_var, colors='red, blue', date_format='%d-
       legend('topleft',legend=sort(unique(ds_sub[,hormone_var])),fill=adjustcolor(colors, alpha=0.25),
               bty='n',cex=0.9,bg=NA, pt.cex=0.6)
 
-      plotAxes(ds_sub, time_var, x_lim)
+      plotAxes(ds_sub, time_var, x_lim, d_f=date_format)
 
     } # end sort(unique())
     mtext(unique(ds_sub$plot_title),side=3,line=0.25)

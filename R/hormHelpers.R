@@ -302,16 +302,16 @@ getPlotlim <- function(d_s, d_f, var, scale, base=NA){
 #' @export
 #'
 
-plotAxes <- function(d_s, t, x_s  ){
+plotAxes <- function(d_s, t, x_s, d_f  ){
   require(lubridate)
       if( is.numeric(d_s[,t]) ){ 
         axis(1)
       }else if( is.Date(d_s[,t]) ){
           ats <- seq( x_s[1], x_s[2], length.out = 5)
-          axis.Date(1,at=ats, format=date_format)
+          axis.Date(1,at=ats, format=d_f)
       }else if( is.POSIXct(d_s[,t]) ){
           ats <- seq( x_s[1], x_s[2], length.out = 5)
-          axis.POSIXct(1,at=ats,format=date_format)
+          axis.POSIXct(1,at=ats,format=d_f)
       } 
 }  
   
@@ -351,7 +351,7 @@ checkClass <- function( var, v_class) {
 #'
 
 checkPlotOpts <- function(p_p_p, w, h, s, x=NA, y=NA,d ){
-  if( !is.numeric(p_p_p) | plot_per_page<1 ){
+  if( !is.numeric(p_p_p) | p_p_p<1 ){
     stop( paste0('plot_per_page needs to be an numeric and greater than 0.  Currently it is ',p_p_p) )
   }
   if( !is.numeric(w) | w<0 ){
@@ -413,6 +413,66 @@ checkPlotBreaks <- function(b_c, b_b){
   if( !is.numeric(break_buffer) | break_buffer < 0 ){
     stop( paste0('break_buffer must be numeric and nonnegative.  It is currently ',b_b) )
   }
+}
+
+#' Helper function for checking plot options for hormPlotOverlap
+#'
+#' @param h_v  hormone_var
+#' @param b_v  by_var
+#' @return none
+#' @export
+#'
+
+checkPlotOverlap <- function(h_v, b_v){
+  b_v_v <- cleanByvar(b_v) 
+  if( missing(h_v) ){
+      stop(' hormone_var must be specified ')
+  }
+  if( !is.character(h_v) ){
+      stop(' hormone_var must be character ')
+  }
+  if( !(h_v %in% b_v_v) ){
+      stop(' hormone_var must be specified in the by_var ')
+  }
+}
+
+
+#' Helper function for checking plot options for hormPlotOverlap
+#'
+#' @param h_v  hormone_var
+#' @param b_v  by_var
+#' @return none
+#' @export
+#'
+
+checkPlotRatio <- function(h_v, h_n, h_d, b_v){
+
+  b_v_v <- cleanByvar(b_v) 
+  
+  if( missing(h_v) ){
+      stop(' hormone_var must be specified ')
+  }
+  if( !is.character(h_v) ){
+      stop(' hormone_var must be character ')
+  }
+  if( !(h_v %in% b_v_v) ){
+      stop(' hormone_var must be specified in the by_var ')
+  }
+  
+  if(  missing(h_n) | missing(h_d)){
+      stop('hormone_num and hormone_denom must be specified')
+  }
+  
+  if( !(h_v %in% b_v_v) ){
+    stop('hormone_var must have been specified in by_var when running hormBaseline')
+  }
+  if( !(h_n %in% unique(x$data[,h_v])) ){
+    stop('hormone_num must be a level in hormone_var.  check spelling and capitalization')
+  }  
+  if( !h_d %in% unique(x$data[,h_v]) ){
+    stop('hormone_denom must be a level in hormone_var.  check spelling and capitalization')
+  }  
+  
 }
 
 

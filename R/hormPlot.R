@@ -32,7 +32,6 @@ hormPlot <- function(x, date_format='%d-%b',
   graphics.off() # just to make sure no devices are open
   
   checkClass(x, 'hormLong')
-  
   checkPlotOpts(plot_per_page, plot_width, plot_height, save_plot, xscale, yscale, date_format)
 
   
@@ -70,7 +69,7 @@ hormPlot <- function(x, date_format='%d-%b',
       plot(ds_sub[,conc_var] ~ ds_sub[,time_var], type='l',xlim=x_lim, ylim=y_lim, 
             xlab=NA, ylab=x$y_lab, xaxt='n')
   
-      plotAxes(ds_sub, time_var, x_lim)
+      plotAxes(ds_sub, time_var, x_lim, date_format)
 
       points(ds_sub[,time_var], ds_sub[,conc_var],pch=19)
       mtext(unique(ds_sub$plot_title),side=3,line=0.25)

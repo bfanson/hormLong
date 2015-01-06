@@ -46,6 +46,8 @@ hormArea <- function(x, lower_bound = 'origin', method='trapezoid', date_format=
 #-- initial checking ---# 
   graphics.off() # just to make sure not devices are open
   
+  checkClass(x, 'hormLong')
+
   checkPlotOpts(plot_per_page, plot_width, plot_height, save_plot, xscale, yscale, date_format)
   checkPlotArea(method, lower_bound)
 
@@ -120,7 +122,7 @@ hormArea <- function(x, lower_bound = 'origin', method='trapezoid', date_format=
       mtext(unique(ds_sub$plot_title),side=3,line=0.25)
       abline(h = baseline, lty=2)
     
-      plotAxes(ds_sub, time_var, x_lim)
+      plotAxes(ds_sub, time_var, x_lim,d_f=date_format)
     
       if( length(pk$peak_num)>0 ){
         for(p in 1:max(pk$peak_num) ){

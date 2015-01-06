@@ -11,34 +11,25 @@
 #' @examples
 #' 
 #' result <- hormBaseline(data=hormElephant, criteria=2, by_var='Ele, Hormone', time_var='Date', 
-#' conc_var='Conc_ng_ml', event_var='Event' )
+#'                        conc_var='Conc_ng_ml', event_var='Event' )
 #' hormPlotRatio( x=result, hormone_var='Hormone', hormone_num='Cortisol', hormone_denom='Progesterone' )
 #' 
 
-hormPlotRatio <- function(x, hormone_var, hormone_num, hormone_denom, ...){
+hormPlotRatio <- function(x, hormone_var, hormone_num, hormone_denom,...){
+#                       date_format='%d-%b',xscale='free', yscale='free',
+#                      plot_per_page=4, plot_height=2, plot_width=6, 
+#                      filename='hormPlot',  save_plot=TRUE){
   
 #--- main check ---#
-  graphics.off() # just to make sure no devices are open
-
-  if( class(x)!='hormLong'){
-      stop('Object needs to be hormLong.  Run hormBaseline() first')
-  }
-  if( missing(hormone_var) | missing(hormone_num) | missing(hormone_denom)){
-      stop('hormone_var and hormone_num and hormone_denom must be specified')
-  }
+  graphics.off() # just to make sure not devices are open
   
-  by_var_v <- cleanByvar(x$by_var) 
-  if( !(hormone_var %in% by_var_v) ){
-    stop('hormone_var must have been specified in by_var when running hormBaseline')
-  }
-  if( !hormone_num %in% unique(x$data[,hormone_var])){
-    stop('hormone_num must be a level in hormone_var.  check spelling and capitalization')
-  }  
-  if( !hormone_denom %in% unique(x$data[,hormone_var]) ){
-    stop('hormone_denom must be a level in hormone_var.  check spelling and capitalization')
-  }  
+  checkClass(x, 'hormLong')
 
+  checkPlotRatio(hormone_var, hormone_num, hormone_denom, x$by_var)
+  
+  
 #-- set-up a new hormLong object ---#
+  by_var_v <- cleanByvar(x$by_var) 
   new_by_var <- by_var_v[ by_var_v!=hormone_var ]
   ds_new <- x$data
   ds_new <- ds_new[ ds_new[,hormone_var] %in% c(hormone_num,hormone_denom), c(by_var_v,x$time_var,x$conc_var) ]
@@ -80,6 +71,6 @@ hormPlotRatio <- function(x, hormone_var, hormone_num, hormone_denom, ...){
 
 
 #--- call hormPlot with new hormLong object ---#
-  hormPlot(x=new_x, filename='hormRatio', ...)
+  hormPlot(x=new_x, filename='hormRatio',...)
 
 }
