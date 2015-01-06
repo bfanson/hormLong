@@ -265,23 +265,30 @@ plotEventInfo <- function( d_e=events, t=x$time_var,  e=x$event_var )
     }
 }
 
-#' Helper function that plots Event info
+#' Helper function for get axes limits
 #'
-#' @param d_e events dataframe
-#' @param t time_var name
-#' @param e event_var name
-#' @return nothing plots event text on graphs using par('user)[4] coordinate 
+#' @param d_s ds_sub dataframe
+#' @param d_f data dataframe
+#' @param var response variable
+#' @param scale xscale or yscale
+#' @param base baseline measure which is needed if higher than max(data[,conc_var])
+#' @return limits a vector of min and max   
 #' @export
 #'
 
-getPlotlim <- function(d_s, d_f, var, scale, base=0){
-    if( scale=='free'){
-        ymin <- min(d_s[,var])
-        ymax <- max(base, max(d_s[,var]) )*1.1
+getPlotlim <- function(d_s, d_f, var, scale, base=NA){
+    if( scale=='free' ){
+        a_min <- min( d_s[,var] )
+        if( is.na(base) ){ a_max <- max( d_s[,var] ) 
+        }else{ a_max <- max(base, max(d_s[,var]) ) }
+        
     }else if(scale=='fixed') {
-        ymin <- min(d_f[,var],na.rm=T)
-        ymax <- max(d_f[,var],na.rm=T)*1.1
+        a_min <- min(d_f[,var],na.rm=T)
+        a_max <- max(d_f[,var],na.rm=T)
       }
-  lim <- c(ymin, ymax)
+  
+  lim <- c(a_min, a_max)
   return( lim )
 }
+
+

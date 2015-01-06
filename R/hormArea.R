@@ -112,34 +112,24 @@ hormArea <- function(x, lower_bound = 'origin', method='trapezoid', date_format=
     ds_sub <- ds_sub[!is.na(ds_sub[,conc_var]),]
     
     #--- set up scales
-      if( yscale=='free'){
-        ymin <- 0 #min(ds_sub[,conc_var])
-        ymax <- max(baseline, max(ds_sub[,conc_var]) )*1.1
-      }else{
-        ymin <- 0 #min(data[,conc_var],na.rm=T)
-        ymax <- max(data[,conc_var],na.rm=T)*1.1
-      }
-      if( xscale=='free'){
-        xmin <- min( ds_sub[,time_var],na.rm=T )
-        xmax <- max( ds_sub[,time_var],na.rm=T )
-      }else{
-        xmin <- min( data[,time_var],na.rm=T)
-        xmax <- max( data[,time_var],na.rm=T)
-      }    
-    
+      y_lim <- getPlotlim(d_s=ds_sub, d_f=data, var=conc_var, scale=yscale, base=baseline)
+      x_lim <- getPlotlim(d_s=ds_sub, d_f=data, var=time_var, scale=xscale)
+      if( lower_bound=='origin' ) y_lim[1] <- 0
+
     #--- main plot
-    plot(ds_sub[,conc_var] ~ ds_sub[,time_var], type='l',xlim=c(xmin,xmax), ylim=c(ymin,ymax), 
+    plot(ds_sub[,conc_var] ~ ds_sub[,time_var], type='l',xlim=x_lim, ylim=y_lim, 
           xlab=NA, ylab=conc_var, xaxt='n')
       points(ds_sub[,time_var], ds_sub[,conc_var],pch=19)
       mtext(unique(ds_sub$plot_title),side=3,line=0.25)
       abline(h = baseline, lty=2)
     
-      if(is.numeric(ds_sub[,time_var])){ axis(1)
+      if(is.numeric(ds_sub[,time_var])){ 
+          axis(1)
        }else if( is.Date(ds_sub[,time_var]) ){
-          ats <- seq( xmin, xmax, length.out = 5)
+          ats <- seq( x_lim[1], x_lim[2], length.out = 5)
           axis.Date(1,at=ats, format=date_format)
        }else if( is.POSIXct(ds_sub[,time_var]) ){
-          ats <- seq( xmin, xmax, length.out = 5)
+          ats <- seq( x_lim[1], x_lim[2], length.out = 5)
           axis.POSIXct(1,at=ats,format=date_format)
       } 
     
@@ -152,12 +142,7 @@ hormArea <- function(x, lower_bound = 'origin', method='trapezoid', date_format=
           text( mean(pk1$t), max(c_order), labels=p, adj = c(0,-0.5))
         }
       }
-    if( nrow(events)>0 ){
-        for(l in 1:nrow(events)){
-          arrows(x0=events[l,time_var],x1 =events[l,time_var],y0=ymax*0.95,y1=ymax*0.8, length = 0.1)
-          text(x=events[l,time_var],y=ymax*0.99, events[l,x$event_var])
-        }
-      }
+      plotEventInfo(events, t=time_var, e=x$event_var) 
   } # end p loop
   if( save_plot ){  
       dev.off()

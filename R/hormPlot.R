@@ -16,7 +16,7 @@
 #' @examples
 #' 
 #' result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', time_var='datetime', 
-#' conc_var='Conc', event_var='Events' )
+#'                        conc_var='Conc', event_var='Events' )
 #' hormPlot( result )
 #'
 #'# Sometimes you may want to fix y-axis to be same across all plots so heights are comparable
@@ -66,7 +66,7 @@ hormPlot <- function(x, date_format='%d-%b',
   }
 
   par(mfrow=c(plot_per_page,1), mar=c(2,4,2,0.5),oma=c(2,2,2,1))
-  for( i in unique(data$plot_title)){
+  for( i in unique(data$plot_title) ){
     ds_sub <- data[data$plot_title==i, ]
     if(!is.null(x$criteria)){
        baseline <- getCutoff( ds_sub[ds_sub$conc_type=='base',conc_var], criteria=x$criteria )
@@ -76,46 +76,28 @@ hormPlot <- function(x, date_format='%d-%b',
       }else{events <- data.frame()}
     ds_sub <- ds_sub[!is.na(ds_sub[,conc_var]),]
 
-    #--- set up scales
-      #y_lim <- getPlotlim(d_s=ds_sub, d_f=data, var=conc_var, base=baseline)
-      #x_lim <- getPlotlim(d_s=ds_sub, d_f=data, var=time_var)
-      if( yscale=='free'){
-        ymin <- min(ds_sub[,conc_var])
-        ymax <- max(baseline, max(ds_sub[,conc_var]) )*1.1
-      }else{
-        ymin <- min(data[,conc_var],na.rm=T)
-        ymax <- max(data[,conc_var],na.rm=T)*1.1
-      }
-      if( xscale=='free'){
-        xmin <- min( ds_sub[,time_var],na.rm=T )
-        xmax <- max( ds_sub[,time_var],na.rm=T )
-      }else{
-        xmin <- min( data[,time_var],na.rm=T)
-        xmax <- max( data[,time_var],na.rm=T)
-      }    
+    #--- set up scales ---#
+      y_lim <- getPlotlim(d_s=ds_sub, d_f=data, var=conc_var, scale=yscale, base=baseline)
+      x_lim <- getPlotlim(d_s=ds_sub, d_f=data, var=time_var, scale=xscale)
+    
     #--- main plot
     if( is.null(x$y_lab) ){x$y_lab <- conc_var}
-      plot(ds_sub[,conc_var] ~ ds_sub[,time_var], type='l',xlim=c(xmin,xmax), ylim=c(ymin,ymax), 
+      plot(ds_sub[,conc_var] ~ ds_sub[,time_var], type='l',xlim=x_lim, ylim=y_lim, 
             xlab=NA, ylab=x$y_lab, xaxt='n')
     
       if(is.numeric(ds_sub[,time_var])){ axis(1)
       }else if( is.Date(ds_sub[,time_var]) ){
-          ats <- seq( xmin, xmax, length.out = 5)
+          ats <- seq( x_lim[1], x_lim[2], length.out = 5)
           axis.Date(1,at=ats, format=date_format)
       }else if( is.POSIXct(ds_sub[,time_var]) ){
-          ats <- seq( xmin, xmax, length.out = 5)
+          ats <- seq( x_lim[1], x_lim[2], length.out = 5)
           axis.POSIXct(1,at=ats,format=date_format)
       } 
     
       points(ds_sub[,time_var], ds_sub[,conc_var],pch=19)
       mtext(unique(ds_sub$plot_title),side=3,line=0.25)
       abline(h = baseline, lty=2)
-#       if( nrow(events)>0 ){
-#         for(l in 1:nrow(events)){
-#           arrows(x0=events[l,time_var],x1 =events[l,time_var],y0=ymax*0.95,y1=ymax*0.8, length = 0.1)
-#           text(x=events[l,time_var],y=ymax*0.99, events[l,x$event_var])
-#         }
-#       }
+
       plotEventInfo(events, t=time_var, e=x$event_var) 
   }
   if( save_plot ){  dev.off()
