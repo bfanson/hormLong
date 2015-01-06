@@ -103,9 +103,7 @@ hormPlotBreaks <- function(x, break_cutoff=40, break_buffer=60, date_format='%d-
         axis(1,at=p_at, labels = 
                format( as.POSIXct( p_at+ds_sub1$x_diff[1] ,origin='1970-01-01'), date_format) )
 
-     if(!is.null(x$event_var)){
-       events <- ds_sub1[ !is.na(ds_sub1[,x$event_var]) & ds_sub1[,x$event_var]!='',c(x$event_var,'x_adj')]
-       }else{events <- data.frame()}
+    events <- getEventInfo(ds_sub1, x$event_var, 'x_adj')
     
     plotEventInfo(events, t='x_adj', e=x$event_var) 
 

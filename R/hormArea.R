@@ -104,9 +104,7 @@ hormArea <- function(x, lower_bound = 'origin', method='trapezoid', date_format=
     pk <- ds_pk[ds_pk$plot_title==pt, ]
     baseline <- ds_sub$cutoff[1]
     
-    if(!is.null(x$event_var)){
-      events <- ds_sub[ !is.na(ds_sub[,x$event_var]) & ds_sub[,x$event_var]!='',c(x$event_var,time_var)]
-     }else{events <- data.frame()}
+    events <- getEventInfo(ds_sub, x$event_var, time_var)
     
     ds_sub <- ds_sub[!is.na(ds_sub[,conc_var]),]
     

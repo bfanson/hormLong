@@ -54,10 +54,9 @@ hormPlot <- function(x, date_format='%d-%b',
   for( i in unique(data$plot_title) ){
     ds_sub   <- data[data$plot_title==i, ]
     baseline <- getBaseline(ds_sub, x$criteria, conc_var)
-    
-    if(!is.null(x$event_var)){
-      events <- ds_sub[ !is.na(ds_sub[,x$event_var]) & ds_sub[,x$event_var]!='',c(x$event_var,time_var)]
-      }else{events <- data.frame()}
+
+    events <- getEventInfo(ds_sub, x$event_var, time_var)
+
     ds_sub <- ds_sub[!is.na(ds_sub[,conc_var]),]
 
     #--- set up scales ---#

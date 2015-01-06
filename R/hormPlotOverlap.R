@@ -76,9 +76,9 @@ hormPlotOverlap <- function(x, hormone_var, colors='red, blue', date_format='%d-
     }else{ par(mfrow=c(plot_per_page,1), mar=c(2,4,2,0.5),oma=c(2,2,2,0.5))}
   for( i in unique(data$plot_title) ){
     ds_sub <- data[data$plot_title==i, ]
-    if(!is.null(x$event_var)){
-      events <- unique( ds_sub[ !is.na(ds_sub[,x$event_var]) & ds_sub[,x$event_var]!='', c(x$event_var,time_var,hormone_var)])
-      }else{events <- data.frame()}
+
+    events <- getEventInfo(ds_sub, x$event_var, time_var)
+    
     ds_sub <- ds_sub[!is.na(ds_sub[,conc_var]),]
 
     #--- set up scales ---#

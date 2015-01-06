@@ -476,6 +476,24 @@ checkPlotRatio <- function(h_v, h_n, h_d, b_v){
 }
 
 
+#' Helper function for getting event info
+#'
+#' @param d_s  ds_sub
+#' @param e    x$event_var
+#' @param t    time_var
+#' @return events 
+#' @export
+#' 
+
+getEventInfo <- function(d_s, e, t){
+  if(!is.null(e)){
+      events <- d_s[ !is.na(d_s[,e]) & d_s[,e]!='',c(e, t)]
+   }else{events <- data.frame()}
+  
+  return(events)
+}  
+
+
 #' Helper function for getting Baseline for plotting
 #'
 #' @param d_s  ds_sub
