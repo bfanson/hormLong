@@ -315,3 +315,118 @@ plotAxes <- function(d_s, t, x_s  ){
       } 
 }  
   
+
+#' Helper function for checking class
+#'
+#' @param var ds_sub dataframe
+#' @param class baseline measure which is needed if higher than max(data[,conc_var])
+#' @return none
+#' @export
+#'
+
+checkClass <- function( var, v_class) {
+  if( class(var) != v_class ){
+    if( v_class == 'hormLong' ){
+      stop( 'Object needs to be hormLong.  Run hormBaseline() first' )
+    }else{
+      stop( paste0( 'Wrong class for ', var, '. It needs to be class ',v_class )   )
+    }
+  }
+}
+
+
+
+#' Helper function for checking plot options
+#'
+#' @param p_p plot_per_page
+#' @param w   plot_width
+#' @param h   plot_height
+#' @param s   save_plot
+#' @param x   xscale
+#' @param y   yscale
+#' @param d   date_format
+#' @param l_b lower_bound
+#' @return none
+#' @export
+#'
+
+checkPlotOpts <- function(p_p_p, w, h, s, x=NA, y=NA,d ){
+  if( !is.numeric(p_p_p) | plot_per_page<1 ){
+    stop( paste0('plot_per_page needs to be an numeric and greater than 0.  Currently it is ',p_p_p) )
+  }
+  if( !is.numeric(w) | w<0 ){
+    stop( paste0('plot_width needs to be numeric and greater than 0.  Currently it is ',w) )
+  }
+  if( !is.numeric(h) | w<0 ){
+    stop( paste0('plot_height needs to be numeric and greater than 0.  Currently it is ',h) )
+  }
+  if( !is.logical(s) ){
+    stop( paste0('save_plot needs to be logical (T or F).  Currently it is ',save_plot) )
+  }
+  if(!is.na(y)){
+    if( !(y %in% c('free','fixed') ) ){
+      stop( paste0('yscale must be either "free" or "fixed", not "',y,'"') )
+    }
+  }
+  if(!is.na(y)){
+    if( !(x %in% c('free','fixed') ) ){
+      stop( paste0('xscale must be either "free" or "fixed", not "',x,'"') )
+    }
+  }
+  if( !is.character(d)  ){
+    stop( paste0('date_format must be a character field (e.g. "%d/%m"), not "',d,'"') )
+  }
+  if( !grepl('\\%',d)  ){
+    stop( paste0('check your date_format. No % sign detected. It should be like "%d/%m". It is currently "',d,'"') )
+  }
+}
+
+
+#' Helper function for checking plot options for hormArea
+#'
+#' @param d   date_format
+#' @param l_b lower_bound
+#' @return none
+#' @export
+#'
+
+checkPlotArea(m,l_b){
+  if( m != 'trapezoid'){ 
+      stop('no other method currently implemented. Please write method="trapezoid" ')
+  }
+  if( !(l_b %in% c('origin','baseline','peak') ) ){ 
+      stop(paste0("lower_bound is incorrect.  It must be 'origin', 'baseline', 'peak': you wrote '", l_b,"'") )
+    }
+}
+
+#' Helper function for checking plot options for hormPlotBreaks
+#'
+#' @param b_c  break_cutoff
+#' @param b_b  break_buffer
+#' @return none
+#' @export
+#'
+checkPlotBreaks <- function(b_c, b_b){
+  if( !is.numeric(b_c) | b_c < 0 ){
+    stop( paste0('break_cutoff must be numeric and nonnegative.  It is currently ',b_c) )
+  }
+  if( !is.numeric(break_buffer) | break_buffer < 0 ){
+    stop( paste0('break_buffer must be numeric and nonnegative.  It is currently ',b_b) )
+  }
+}
+
+
+#' Helper function for getting Baseline for plotting
+#'
+#' @param d_s  ds_sub
+#' @param crit x$criteria
+#' @param conc conc_var
+#' @return baseline 
+#' @export
+#' 
+getBaseline <- function(d_s, crit, conc){
+      if(!is.null(crit)){
+         baseline <- getCutoff( d_s[d_s$conc_type=='base',conc], criteria=crit )
+      }else{ baseline <- 1 }
+      return(baseline)
+    }

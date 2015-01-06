@@ -30,25 +30,11 @@ hormPlot <- function(x, date_format='%d-%b',
   
 #--- main check ---#
   graphics.off() # just to make sure no devices are open
-  if( class(x)!='hormLong'){
-      stop('Object needs to be hormLong.  Run hormBaseline() first')
-  }
-  if( !is.numeric(plot_per_page) | plot_per_page<1 ){
-    stop('plot_per_page needs to be numeric and greater than 0')
-  }
-  plot_per_page <- as.integer(plot_per_page ) # make sure whole number
-    
-  if( !is.logical(save_plot)  ){
-    stop( paste('save_plot needs to be either TRUE or FALSE, not:',save_plot) )
-  }
-
-  if( !(yscale %in% c('free','fixed') ) ){
-    stop( paste('yscale must be either "free" or "fixed", not:',yscale) )
-  }
-  if( !(xscale %in% c('free','fixed') ) ){
-    stop( paste('xscale must be either "free" or "fixed", not:',xscale) )
-  }
   
+  checkClass(x, 'hormLong')
+  
+  checkPlotOpts(plot_per_page, plot_width, plot_height, save_plot, xscale, yscale, date_format)
+
   
 #-- set-up ---#
   by_var_v <- cleanByvar(x$by_var) 
@@ -67,10 +53,9 @@ hormPlot <- function(x, date_format='%d-%b',
 
   par(mfrow=c(plot_per_page,1), mar=c(2,4,2,0.5),oma=c(2,2,2,1))
   for( i in unique(data$plot_title) ){
-    ds_sub <- data[data$plot_title==i, ]
-    if(!is.null(x$criteria)){
-       baseline <- getCutoff( ds_sub[ds_sub$conc_type=='base',conc_var], criteria=x$criteria )
-      }else{ baseline <- 1 }
+    ds_sub   <- data[data$plot_title==i, ]
+    baseline <- getBaseline(ds_sub, x$criteria, conc_var)
+    
     if(!is.null(x$event_var)){
       events <- ds_sub[ !is.na(ds_sub[,x$event_var]) & ds_sub[,x$event_var]!='',c(x$event_var,time_var)]
       }else{events <- data.frame()}

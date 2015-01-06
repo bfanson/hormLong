@@ -44,14 +44,11 @@ hormArea <- function(x, lower_bound = 'origin', method='trapezoid', date_format=
                      xscale='free', yscale='free',
                      plot_per_page=4, plot_height=2, plot_width=6, save_plot=T){
 #-- initial checking ---# 
-  require(lubridate)
-  if( method != 'trapezoid'){ 
-    stop('no other method currently implemented ')
-  }
-  if( !(lower_bound %in% c('origin','baseline','peak') ) ){ 
-    stop(paste0("lower_bound is incorrect.  It must be 'origin', 'baseline', 'peak': you wrote '", lower_bound,"'") )
-  }
   graphics.off() # just to make sure not devices are open
+  
+  checkPlotOpts(plot_per_page, plot_width, plot_height, save_plot, xscale, yscale, date_format)
+  checkPlotArea(method, lower_bound)
+
 
 #--- get hormLong object and break up ---#  
   by_var_v <- cleanByvar(x$by_var) 
@@ -143,6 +140,7 @@ hormArea <- function(x, lower_bound = 'origin', method='trapezoid', date_format=
 
 
   #--- produce table ---#
+    require(lubridate)
     ds_tbl <- unique( ds_pk[,c('plot_title','peak_num','AUC')])    
     ds_tbl <- merge(ds_tbl, unique(data[,c(by_var_v,'plot_title')]), all.x=T)
     if(  is.Date(data[,time_var]) | is.numeric(data[,time_var])  ){
