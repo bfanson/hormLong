@@ -390,8 +390,8 @@ checkPlotOpts <- function(p_p_p, w, h, s, x=NA, y=NA,d ){
 #' @export
 #'
 
-checkPlotArea(m,l_b){
-  if( m != 'trapezoid'){ 
+checkPlotArea <- function(m, l_b){
+  if( m != 'trapezoid' ){ 
       stop('no other method currently implemented. Please write method="trapezoid" ')
   }
   if( !(l_b %in% c('origin','baseline','peak') ) ){ 
@@ -410,7 +410,7 @@ checkPlotBreaks <- function(b_c, b_b){
   if( !is.numeric(b_c) | b_c < 0 ){
     stop( paste0('break_cutoff must be numeric and nonnegative.  It is currently ',b_c) )
   }
-  if( !is.numeric(break_buffer) | break_buffer < 0 ){
+  if( !is.numeric(b_b) | b_b < 0 ){
     stop( paste0('break_buffer must be numeric and nonnegative.  It is currently ',b_b) )
   }
 }
