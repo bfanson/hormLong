@@ -1,4 +1,4 @@
-#' Create longitudinal plot with smoothers
+#' Create longitudinal plot with smoothers (under development)
 #' 
 #' @param data dataset.
 #' @param by_var by variable.
