@@ -7,16 +7,13 @@ __Overview:__  This package is for ....
 ## To install package from Github
 *In your R editor, type the following R code:*
 
-1. install.packages('devtools')
+> install.packages('devtools')
+> install.packages('Rcurl')
+> library(devtools)
+> install_github('bfanson/hormLong')
+> library(hormLong)
 
-2. install.packages('Rcurl')
-
-3. library(devtools)
-
-4. install_github('bfanson/hormLong')
-
-5. library(hormLong)
-
+Instruction manual is located at _https://github.com/bfanson/hormLong/tree/master/instructions_
 
 
 
