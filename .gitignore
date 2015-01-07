@@ -2,7 +2,10 @@
 .Rhistory
 .RData
 inst/doc
-*.pdf
+hormPlot*.pdf
+hormBox*.pdf
+hormArea*.pdf
+hormRatio*.pdf
 *.csv
 *.rtf
 *.xls
