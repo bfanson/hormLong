@@ -18,7 +18,8 @@ __Overview:__  This package is for ....
 > library(hormLong)
 
 Instruction manual is located at _https://github.com/bfanson/hormLong/tree/master/instructions_
-( click on filename and then click on 'view the full file' to download)
+
+*( click on filename and then click on 'view the full file' to download)*
 
 
 
