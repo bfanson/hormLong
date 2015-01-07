@@ -63,6 +63,8 @@ hormBaseline <- function(data, by_var, conc_var, time_var, criteria=2, event_var
     stop(paste0('time_var must be numeric or Date (your time_var is "',time_class,'" variable') )
     }
 
+  by_var_v <- cleanByvar(by_var)
+  
 #--- checks of data.frame ---#
   data <- data[ do.call('order', data[c(by_var_v,time_var)]), ] 
   data$row_id <- 1:nrow(data) 
