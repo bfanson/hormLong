@@ -8,9 +8,13 @@ __Overview:__  This package is for ....
 *In your R editor, type the following R code:*
 
 > install.packages('devtools')
+
 > install.packages('Rcurl')
+
 > library(devtools)
+
 > install_github('bfanson/hormLong')
+
 > library(hormLong)
 
 Instruction manual is located at _https://github.com/bfanson/hormLong/tree/master/instructions_
