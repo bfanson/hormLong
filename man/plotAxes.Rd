@@ -3,7 +3,7 @@
 \alias{plotAxes}
 \title{Helper function for get axes limits}
 \usage{
-plotAxes(d_s, t, x_s)
+plotAxes(d_s, t, x_s, d_f)
 }
 \arguments{
 \item{d_s}{ds_sub dataframe}

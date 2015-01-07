@@ -20,7 +20,7 @@ getCutoff <- function(x, criteria){
 #' If time_var is included, then it will output a date_time variable
 #' 
 #' @param data dataset with the variables to convert [required]
-#' @param date_var variable name for date column.  Form should be a standard date form 
+#' @param date_var variable name for date column. Form should be a standard date form 
 #' (e.g. '12AUG2014','01/01/2014') [required]
 #' @param time_var variable name for the time column in 24-hour format (e.g. '20:10:01', '01:04:01') [optional]
 #' @param name name of the new date variable created by the function [default = 'datetime']
@@ -508,3 +508,26 @@ getBaseline <- function(d_s, crit, conc){
       }else{ baseline <- 1 }
       return(baseline)
     }
+
+#' Helper function for checking Capitalization
+#'
+#' @param ds  dataset to check
+#' @param var_list vector of variables to check
+#' @return nothing 
+#' @export
+#' 
+
+checkCapitalization <- function(ds, var_list){
+  var_list <- cleanByvar(var_list)
+  ds_list <- names(ds)
+  for( i in var_list ){
+    if( i %in% tolower(ds_list) & !(i %in% ds_list) ){
+      stop( paste0('Variable not found.  Check your capitalization for "',i,'" ') )
+    }
+    if( !(i %in% tolower(ds_list)) & !(i %in% ds_list) ){
+      stop( paste0('Variable not found.  Check spelling for "',i,'" ') )
+    }
+
+  }
+  
+}

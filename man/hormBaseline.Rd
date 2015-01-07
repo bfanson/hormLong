@@ -3,8 +3,8 @@
 \alias{hormBaseline}
 \title{Run iterative process to calculate baseline.}
 \usage{
-hormBaseline(data, by_var, conc_var, time_var, criteria = 2, event_var,
-  save_data = T)
+hormBaseline(data, by_var, conc_var, time_var, criteria = 2,
+  event_var = NULL, save_data = T)
 }
 \arguments{
 \item{data}{dataset containing the hormone data. [required]}

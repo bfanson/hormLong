@@ -8,7 +8,7 @@ hormDate(data, date_var, time_var, name = "datetime", date_order = "dmy")
 \arguments{
 \item{data}{dataset with the variables to convert [required]}
 
-\item{date_var}{variable name for date column.  Form should be a standard date form
+\item{date_var}{variable name for date column. Form should be a standard date form
 (e.g. '12AUG2014','01/01/2014') [required]}
 
 \item{time_var}{variable name for the time column in 24-hour format (e.g. '20:10:01', '01:04:01') [optional]}

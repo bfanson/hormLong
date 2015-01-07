@@ -16,8 +16,10 @@
 #' result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', time_var='datetime', conc_var='Conc' )
  
 
-hormBaseline <- function(data, by_var, conc_var, time_var, criteria=2, event_var, save_data=T ) {
+hormBaseline <- function(data, by_var, conc_var, time_var, criteria=2, event_var=NULL, save_data=T ) {
 #--- initial checks of arguments ---#
+  checkCapitalization(data, var_list = c(by_var,conc_var,time_var,event_var) )
+
   if(missing(data)){
       stop('data must be specified')
     }
@@ -60,17 +62,6 @@ hormBaseline <- function(data, by_var, conc_var, time_var, criteria=2, event_var
     time_class <- class(class(data[,time_var]))
     stop(paste0('time_var must be numeric or Date (your time_var is "',time_class,'" variable') )
     }
-  
-  if(missing(event_var)){
-    event_var <- NULL    
-  }
-  
-  by_var_v <- cleanByvar(by_var) # make by_var a vector
-  if( sum(!( c(by_var_v,conc_var,time_var,event_var)  %in% names(data) ))>0 ){
-      stop('not all variables are present in dataset.  check your column names for by_var, conc_var, time_var and event_var.
-            Remember that R is case sensitive (i.e. capitalization matters)')
-    }
-
 
 #--- checks of data.frame ---#
   data <- data[ do.call('order', data[c(by_var_v,time_var)]), ] 
