@@ -4,7 +4,7 @@
 #' @param lower_bound the lower limit to calculate the area under the curve. This can be
 #' 'origin', 'baseline', or 'peak'.  Origin is all values above 0.  Baseline is all values above 
 #' baseline mean.  Peak is all values above peak cutoff. [default = 'origin']
-#' @param method the AUC method to use.  Currently, only trapezoid method has been implemented. Units
+#' @param method the AUC method to use. Only Trapezoid and spline method has been implemented. Units
 #' for AUC is conc units * day. [default = 'trapezoid']
 #' @param date_format the format of the date variable on x-axis. Default is 01-Jan format. See Appendix 1 in help manual 
 #' for examples of other formats [default = '\%d-\%b']
@@ -88,7 +88,7 @@ hormArea <- function(x, lower_bound = 'origin', method='trapezoid', date_format=
   #-- shift curve by cutoff ---#
     # k <- data[data$plot_title==unique(data$plot_title)[1],]
     ds_pk <- do.call("rbind", as.list(by(data, data[,by_var_v], 
-                            function(k, date=time_var,conc=conc_var) data.frame(getPeakInfo(k,date,conc),
+                          function(k, date=time_var,conc=conc_var,m=method) data.frame(getPeakInfo(k,date,conc,m),
                                         plot_title=unique(k$plot_title ) ) ) ) ) 
     ds_pk <- ds_pk[ds_pk$peak_num>0,]  # get rid individuals with no peaks       
 
@@ -99,7 +99,7 @@ hormArea <- function(x, lower_bound = 'origin', method='trapezoid', date_format=
   }
 
   par(mfrow=c(plot_per_page,1), mar=c(2,4,2,0.5),oma=c(2,2,2,0))
-  for( pt in unique(data$plot_title)){
+  for( pt in unique(data$plot_title) ){
     ds_sub <- data[data$plot_title==pt, ]
     pk <- ds_pk[ds_pk$plot_title==pt, ]
     baseline <- ds_sub$cutoff[1]
@@ -109,7 +109,9 @@ hormArea <- function(x, lower_bound = 'origin', method='trapezoid', date_format=
     ds_sub <- ds_sub[!is.na(ds_sub[,conc_var]),]
     
     #--- set up scales
-      y_lim <- getPlotlim(d_s=ds_sub, d_f=data, var=conc_var, scale=yscale, base=baseline)
+      ylim_expand=1.1
+      if( method=='spline'){ ylim_expand = 1.3}
+      y_lim <- getPlotlim(d_s=ds_sub, d_f=data, var=conc_var, scale=yscale, max_expand=ylim_expand, base=baseline)
       x_lim <- getPlotlim(d_s=ds_sub, d_f=data, var=time_var, scale=xscale)
       if( lower_bound=='origin' ) y_lim[1] <- 0
 
@@ -122,12 +124,23 @@ hormArea <- function(x, lower_bound = 'origin', method='trapezoid', date_format=
     
       plotAxes(ds_sub, time_var, x_lim,d_f=date_format)
     
-      if( length(pk$peak_num)>0 ){
+      if( length( unique(pk$peak_num) ) > 0 ){
         for(p in 1:max(pk$peak_num) ){
           pk1 <- pk[ pk$peak_num==p, ]
-          t_order <- c(pk1$t,rev(pk1$t))
-          c_order <- c(rep(0,length(pk1$t)),rev(pk1$c)) + pk1$cutoff
-          with(pk1, polygon(t_order,c_order,col='grey') )
+          if( method=='trapezoid'){
+            t_order <- c(pk1$t,rev(pk1$t))
+            c_order <- c(rep(0,length(pk1$t)),rev(pk1$c)) + pk1$cutoff
+          }
+          if( method=='spline'){
+            hold <- data.frame( x = pk1$t, y = pk1$c) # get rid of double points at the same date-time
+            hold1 <-  do.call(rbind, list(by(hold,hold[1],function(x) max(x['y']))) )
+            hold <- data.frame( x=as.numeric(colnames(hold1)),y=hold1[1,] )
+            new_val <- spline(hold$x, hold$y, method='natural' )
+            t_order <- c( new_val$x, rev(new_val$x) )
+            c_order <- c( rep(0,length(new_val$x)), rev(new_val$y))  + unique(pk1$cutoff)
+          }
+
+          with(pk1, polygon(t_order,c_order,col=adjustcolor('grey', alpha=0.7), border='dark grey') )
           text( mean(pk1$t), max(c_order), labels=p, adj = c(0,-0.5))
         }
       }

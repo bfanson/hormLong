@@ -68,8 +68,6 @@ hormDate <- function(data, date_var, time_var, name='datetime', date_order='dmy'
    names(data)[ncol(data)] <- name
    return(data)
 }
-  
-
 
 #' Read hormone data from a csv file
 #' 
@@ -128,6 +126,7 @@ paste1 <- function(...) paste(...,sep='; ')
 #'
 #' @param t time vector
 #' @param c response vector (e.g. hormone concentration) 
+#' @param m method for calculating AUC (trapezoid, spline)
 #' @return calculates the area under the curve for the curve
 #' @export
 #' @examples
@@ -135,18 +134,58 @@ paste1 <- function(...) paste(...,sep='; ')
 #' time <- 1:10
 #' conc <- c( rep(0,4),2,2,rep(0,4))
 #' plot(conc~time,type='l')
-#' getAUC(time,conc)
+#' getAUC(time,conc,'trapezoid')
+#' getAUC(time,conc,'spline')
 
-getAUC <- function(t,c){
+getAUC <- function(t,c,m){
     require(zoo)
-    (AUC <- sum(diff(t)*rollmean(c,2)))
-  }  
+    if(m == 'trapezoid'){
+      AUC <- sum(diff(t)*rollmean(c,2)) }
+    if(m == 'spline'){
+      hold <- data.frame( x = t, y = c) # get rid of double points at the same date-time
+      hold1 <-  do.call(rbind, list(by(hold,hold[1],function(x) max(x['y']))) )
+      hold <- data.frame( x=as.numeric(colnames(hold1)),y=hold1[1,] )
+
+      AUC <- integrate(splinefun(hold$x, hold$y, method = "natural"), lower = min(hold$x), upper = max(hold$x))$value 
+     }
+    return(AUC)
+}
+
+
+#
+# function (x, y, method = c("trapezoid", "step", "spline"), na.rm = FALSE) 
+# {
+#     if (na.rm) {
+#         idx <- na.omit(cbind(x, y))
+#         x <- x[idx]
+#         y <- y[idx]
+#     }
+#     if (length(x) != length(y)) 
+#         stop("length x must equal length y")
+#     idx <- order(x)
+#     x <- x[idx]
+#     y <- y[idx]
+#     switch(match.arg(arg = method, choices = c("trapezoid", "step", 
+#         "spline")), trapezoid = {
+#         a <- sum((apply(cbind(y[-length(y)], y[-1]), 1, mean)) * 
+#             (x[-1] - x[-length(x)]))
+#     }, step = {
+#         a <- sum(y[-length(y)] * (x[-1] - x[-length(x)]))
+#     }, spline = {
+#         a <- integrate(splinefun(x, y, method = "natural"), lower = min(x), 
+#             upper = max(x))$value
+#     })
+#     return(a)
+# }
+
+
 
 #' Assigns peak number and get area under curve for each peak
 #'
 #' @param k dataframe (broken first by by_var)
 #' @param date time variable
 #' @param conc response variable (e.g. concentration)
+#' @param m_pk method used to calculate peak
 #' @return return dataset with peaks identified and AUC calculated
 #' @export
 #' @examples
@@ -154,7 +193,7 @@ getAUC <- function(t,c){
 #' head(hormone) 
 
 
-getPeakInfo <- function(k, date=time_var,conc=conc_var){
+getPeakInfo <- function(k, date=time_var,conc=conc_var,m_pk){
   if( !any(k$conc_type=='peak')){
     return(data.frame(peak_num=0,t=0, c=0, cutoff=k$cutoff[1], AUC=0))
   }else{
@@ -197,7 +236,7 @@ getPeakInfo <- function(k, date=time_var,conc=conc_var){
         c_new[c(1,length(c_new))] <- 0
         c_new[c(2,(length(c_new)-1))] <- pmax(c_new[c(2,(length(c_new)-1))],0)
         
-        AUC <- getAUC(t_new,c_new)
+        AUC <- getAUC(t_new, c_new, m_pk)
         peaks[p] <- list( data.frame(peak_num=p,t=t_new, c=c_new, cutoff=cutoff, AUC=AUC) )
         #plot(c_new~t_new)
       }
@@ -276,7 +315,7 @@ plotEventInfo <- function( d_e=events, t=x$time_var,  e=x$event_var )
 #' @export
 #'
 
-getPlotlim <- function(d_s, d_f, var, scale, base=NA){
+getPlotlim <- function(d_s, d_f, var, scale, max_expand=1, base=NA){
     if( scale=='free' ){
         a_min <- min( d_s[,var] )
         if( is.na(base) ){ a_max <- max( d_s[,var] ) 
@@ -286,7 +325,9 @@ getPlotlim <- function(d_s, d_f, var, scale, base=NA){
         a_min <- min(d_f[,var],na.rm=T)
         a_max <- max(d_f[,var],na.rm=T)
       }
-  
+    
+  if(a_max > 0 & max_expand!=1) {a_max <- a_max * max_expand }
+  if(a_max < 0 & max_expand!=1) {a_max <- a_max * 1/max_expand }
   lim <- c(a_min, a_max)
   return( lim )
 }
@@ -391,8 +432,8 @@ checkPlotOpts <- function(p_p_p, w, h, s, x=NA, y=NA,d ){
 #'
 
 checkPlotArea <- function(m, l_b){
-  if( m != 'trapezoid' ){ 
-      stop('no other method currently implemented. Please write method="trapezoid" ')
+  if( !(m %in% c('trapezoid','spline') ) ){ 
+      stop('Only "trapezoid" and "spline" methods have been implemented ')
   }
   if( !(l_b %in% c('origin','baseline','peak') ) ){ 
       stop(paste0("lower_bound is incorrect.  It must be 'origin', 'baseline', 'peak': you wrote '", l_b,"'") )

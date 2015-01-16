@@ -14,7 +14,7 @@ hormArea(x, lower_bound = "origin", method = "trapezoid",
 'origin', 'baseline', or 'peak'.  Origin is all values above 0.  Baseline is all values above
 baseline mean.  Peak is all values above peak cutoff. [default = 'origin']}
 
-\item{method}{the AUC method to use.  Currently, only trapezoid method has been implemented. Units
+\item{method}{the AUC method to use. Only Trapezoid and spline method has been implemented. Units
 for AUC is conc units * day. [default = 'trapezoid']}
 
 \item{date_format}{the format of the date variable on x-axis. Default is 01-Jan format. See Appendix 1 in help manual

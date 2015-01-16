@@ -3,7 +3,7 @@
 \alias{getPlotlim}
 \title{Helper function for get axes limits}
 \usage{
-getPlotlim(d_s, d_f, var, scale, base = NA)
+getPlotlim(d_s, d_f, var, scale, max_expand = 1, base = NA)
 }
 \arguments{
 \item{d_s}{ds_sub dataframe}

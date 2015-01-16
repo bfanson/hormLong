@@ -3,7 +3,7 @@
 \alias{getPeakInfo}
 \title{Assigns peak number and get area under curve for each peak}
 \usage{
-getPeakInfo(k, date = time_var, conc = conc_var)
+getPeakInfo(k, date = time_var, conc = conc_var, m_pk)
 }
 \arguments{
 \item{k}{dataframe (broken first by by_var)}
@@ -11,6 +11,8 @@ getPeakInfo(k, date = time_var, conc = conc_var)
 \item{date}{time variable}
 
 \item{conc}{response variable (e.g. concentration)}
+
+\item{m_pk}{method used to calculate peak}
 }
 \value{
 return dataset with peaks identified and AUC calculated

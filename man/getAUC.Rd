@@ -3,12 +3,14 @@
 \alias{getAUC}
 \title{Get the area under a curve using trapezoid method}
 \usage{
-getAUC(t, c)
+getAUC(t, c, m)
 }
 \arguments{
 \item{t}{time vector}
 
 \item{c}{response vector (e.g. hormone concentration)}
+
+\item{m}{method for calculating AUC (trapezoid, spline)}
 }
 \value{
 calculates the area under the curve for the curve
@@ -20,6 +22,7 @@ Get the area under a curve using trapezoid method
 time <- 1:10
 conc <- c( rep(0,4),2,2,rep(0,4))
 plot(conc~time,type='l')
-getAUC(time,conc)
+getAUC(time,conc,'trapezoid')
+getAUC(time,conc,'spline')
 }
 
