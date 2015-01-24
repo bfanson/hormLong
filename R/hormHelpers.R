@@ -528,7 +528,7 @@ checkPlotRatio <- function(h_v, h_n, h_d, b_v){
 
 getEventInfo <- function(d_s, e, t){
   if(!is.null(e)){
-      events <- d_s[ !is.na(d_s[,e]) & d_s[,e]!='',c(e, t)]
+      events <- d_s[ !is.na(d_s[,e]) & d_s[,e]!='',]
    }else{events <- data.frame()}
   
   return(events)
