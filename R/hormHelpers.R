@@ -572,3 +572,24 @@ checkCapitalization <- function(ds, var_list){
   }
   
 }
+
+
+
+#' Helper function for checking for missing values in data before plotting
+#'
+#' @param data  dataset to check
+#' @param var_list vector of variables to check
+#' @return dataframe 
+#' @export
+#' 
+
+checkPlotMissing <- function(ds, var_list ){
+  hold <- apply( ds[,var_list],1, function(x) any( is.na(x) ) )
+  if( length( which(hold==T) ) > 0 ){
+    cat("Warning: the following rows have missing by_var or hormone_var data and will be removed from plotting function:\n")
+    print( ds[hold, ])
+  }
+  ds <- ds[hold==F,]
+
+  return(ds)
+}

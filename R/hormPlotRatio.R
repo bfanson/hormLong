@@ -31,7 +31,11 @@ hormPlotRatio <- function(x, hormone_var, hormone_num, hormone_denom,...){
 #-- set-up a new hormLong object ---#
   by_var_v <- cleanByvar(x$by_var) 
   new_by_var <- by_var_v[ by_var_v!=hormone_var ]
+
   ds_new <- x$data
+
+  ds_new <- checkPlotMissing(ds_new, var_list=c(by_var_v,time_var) ) #get rid of missing data
+
   ds_new <- ds_new[ ds_new[,hormone_var] %in% c(hormone_num,hormone_denom), c(by_var_v,x$time_var,x$conc_var) ]
   ds_new_n <- ds_new[ ds_new[,hormone_var]==hormone_num,   ]
     ds_new_n[,hormone_var] <- NULL

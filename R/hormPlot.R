@@ -44,6 +44,10 @@ hormPlot <- function(x, date_format='%d-%b',
   
   data$plot_title <- getPlotTitle(data, by_var=by_var_v)
 
+#-- check for missing data in by_var_v, time_var, hormone_var --#
+   data <- checkPlotMissing(data, var_list=c(by_var_v,time_var) )
+
+
 #--- create plots ---#
   require(lubridate)
   if( save_plot ){

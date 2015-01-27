@@ -29,7 +29,7 @@
 #'# Two-axes option is only vaalid if there are only two hormones 
 #' hormPlotOverlap( result, hormone_var='Hormone', two_axes=T) # this will produce an error
 #'
-#'# Let's try again wtih hormElphant that only has two hormones
+#'# Let's try again with hormElephant that only has two hormones
 #' result <- hormBaseline(data=hormElephant, criteria=2, by_var='Ele, Hormone', time_var='Date', 
 #'              conc_var='Conc_ng_ml', event_var='Event'  )
 #' hormPlotOverlap( result, hormone_var='Hormone', colors='red, dark green', two_axes=TRUE )
@@ -59,6 +59,9 @@ hormPlotOverlap <- function(x, hormone_var, colors='red, blue', date_format='%d-
   data <- data[ do.call(order, data[c(by_var_v,time_var,hormone_var)]), ]
   
   data$plot_title <- getPlotTitle(data, by_var=by_var_v)
+
+  #-- check for missing data in by_var_v, time_var, hormone_var --#
+   data <- checkPlotMissing(data, var_list=c(by_var_v,time_var,hormone_var) )
 
   #--- check the two hormone scenario ---#
   if( two_axes ){ 

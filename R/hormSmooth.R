@@ -67,6 +67,9 @@ stop('function under development')
   conc_var <- conc_var
   data <- data[ do.call(order, data[c(by_var_v,group_var,time_var)]), ]
   
+  data <- checkPlotMissing(data, var_list=c(by_var_v,time_var) )
+
+
   #-- create titles--#
     paste1 <- function(...) paste(...,sep='; ')
     if( length(by_var_v)>1){

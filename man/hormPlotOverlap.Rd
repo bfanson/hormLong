@@ -54,7 +54,7 @@ hormPlotOverlap( result, hormone_var='Hormone', colors='red, dark green, blue', 
 # Two-axes option is only vaalid if there are only two hormones
 hormPlotOverlap( result, hormone_var='Hormone', two_axes=T) # this will produce an error
 
-# Let's try again wtih hormElphant that only has two hormones
+# Let's try again with hormElephant that only has two hormones
 result <- hormBaseline(data=hormElephant, criteria=2, by_var='Ele, Hormone', time_var='Date',
              conc_var='Conc_ng_ml', event_var='Event'  )
 hormPlotOverlap( result, hormone_var='Hormone', colors='red, dark green', two_axes=TRUE )

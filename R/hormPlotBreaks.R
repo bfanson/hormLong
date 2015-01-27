@@ -44,9 +44,15 @@ hormPlotBreaks <- function(x, break_cutoff=40, break_buffer=60, date_format='%d-
   data <- x$data
   data <-ridFactor(data)
   data$plot_title <- getPlotTitle(data,by_var=by_var_v)
+
+#-- check for missing data in by_var_v, time_var, hormone_var --#
+   data <- checkPlotMissing(data, var_list=c(by_var_v,time_var) )
+
+#-- prepare data by geting cutoff and making date seconds 
   data <- getSumStat(data=data,name='cutoff', func= function(y) getCutoff(y, criteria=x$criteria ), add_ds=data, by_var=by_var_v, c_var=conc_var )
   if( is.Date(data[,time_var]) ){ data[,time_var] <- as.numeric( data[,time_var] ) * 3600*24 
     }else{  data[,time_var] <- as.numeric( data[,time_var] ) } 
+
 
 #--- prep data ---#
   #--- calculate breaks using break_cutoff ---#
