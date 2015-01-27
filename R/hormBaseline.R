@@ -68,7 +68,14 @@ hormBaseline <- function(data, by_var, conc_var, time_var, criteria=2, event_var
 #--- checks of data.frame ---#
   data <- data[ do.call('order', data[c(by_var_v,time_var)]), ] 
   data$row_id <- 1:nrow(data) 
-  data1 <- data[,c('row_id',by_var_v,conc_var,time_var)] # keep only columns needed
+  data1 <- data[,c('row_id',by_var_v,conc_var)] # keep only columns needed
+
+  if( any( is.na(data1[,by_var_v]) ) ){
+    cat("ERROR: The following rows have missing by_var or hormone_var data and will be removed from plotting function:\n")
+    print( data1[ apply(data1[,by_var_v], 1, function(x){ any( is.na(x) ) }  ), ])
+    stop("Remove/fix the above rows that have missing by_var information")
+  }
+
 
   #--- remove na --#
     data1 <- na.omit(data1)

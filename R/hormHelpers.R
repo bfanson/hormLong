@@ -586,7 +586,7 @@ checkCapitalization <- function(ds, var_list){
 checkPlotMissing <- function(ds, var_list ){
   hold <- apply( ds[,var_list],1, function(x) any( is.na(x) ) )
   if( length( which(hold==T) ) > 0 ){
-    cat("Warning: the following rows have missing by_var or hormone_var data and will be removed from plotting function:\n")
+    cat("Warning: the following rows have missing date/time and will be removed from plotting function:\n\n")
     print( ds[hold, ])
   }
   ds <- ds[hold==F,]
