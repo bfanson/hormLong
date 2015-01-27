@@ -7,6 +7,8 @@
 #' create larger spaces between data groups. [default = 60]
 #' @param date_format the format of the date variable on x-axis. Default is 01-Jan format. See Appendix 1 in help manual 
 #' for examples of other formats [default = '\%d-\%b']
+#' @param color colour of the line and points [default='black']
+#' @param symbol number to indicate point symbol. e.g. 1=open circle, 2=open triangle, 15=closed square, 19=closed circle  [default=19]
 #' @param plot_per_page the number of plot panels per page, by row. [default = 4]
 #' @param plot_height  the height of individual plot panels (in inches).  Pdf page height is determined
 #' by both plot_per_page and plot_height. [default = 2]
@@ -21,12 +23,14 @@
 #' result <- hormBaseline(data=ds, criteria=2, by_var='Ele, Hormone', time_var='Date', 
 #'              conc_var='Conc_ng_ml' , event_var='Event')
 #' hormPlotBreaks( result )
+#' hormPlotBreaks( result, color='red', symbol=1 )
 #'  
 #'# compare to regular hormPlot, especially Ele1; Cortisol
 #' hormPlot( result ) 
 
 
 hormPlotBreaks <- function(x, break_cutoff=40, break_buffer=60, date_format='%d-%b',
+                           color='black', symbol=19,
                            plot_per_page=4, plot_height=2, plot_width=6, save_plot=TRUE){
 
 #--- checks for missing values ---#
@@ -102,8 +106,8 @@ hormPlotBreaks <- function(x, break_cutoff=40, break_buffer=60, date_format='%d-
    for(b in 1:max(ds_sub$brk)){
       ds_event1 <- ds_sub[ds_sub$brk==b,]
       ds_sub1 <- ds_sub[ds_sub$brk==b & !is.na(ds_sub[,conc_var]) ,] 
-      points(ds_sub1$x_adj,ds_sub1[,conc_var], pch=19)
-      lines(ds_sub1$x_adj,ds_sub1[,conc_var])
+      points(ds_sub1$x_adj,ds_sub1[,conc_var], pch=symbol, col=color)
+      lines(ds_sub1$x_adj,ds_sub1[,conc_var],  col=color)
     #  text(ds_sub1$x_adj,-2+rnorm(length(ds_sub1$x_adj)),labels=ds_sub1$x,cex=0.6)
         p_at <-pretty( c(min(ds_sub1$x_adj), max(ds_sub1$x_adj), n=ceiling(12*nrow(ds_sub1)/nrow(ds_sub)) ) )
         p_at <- p_at[ p_at >= min(ds_sub1$x_adj)]

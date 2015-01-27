@@ -13,6 +13,10 @@
 #' result <- hormBaseline(data=hormElephant, criteria=2, by_var='Ele, Hormone', time_var='Date', 
 #'                        conc_var='Conc_ng_ml', event_var='Event' )
 #' hormPlotRatio( x=result, hormone_var='Hormone', hormone_num='Cortisol', hormone_denom='Progesterone' )
+#' 
+#'# Change color and symbol
+#' hormPlotRatio( x=result, hormone_var='Hormone', hormone_num='Cortisol', hormone_denom='Progesterone', 
+#'                color='blue', symbol=2 )
 #'
 #'# If you want to prevent points with large temporal gaps  joining, set the break_buffer (see hormPlot() ) 
 #' hormPlotRatio( x=result, hormone_var='Hormone', 

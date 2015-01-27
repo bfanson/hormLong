@@ -5,6 +5,8 @@
 #' for examples of other formats [default = '\%d-\%b']
 #' @param break_cutoff the maximum number of days between consecutive points. 
 #' Above this cutoff value, a break is created.  Default is  [default = Inf]
+#' @param color colour of the line and points [default='black']
+#' @param symbol number to indicate point symbol. e.g. 1=open circle, 2=open triangle, 15=closed square, 19=closed circle  [default=19]
 #' @param xscale  determines if x-axis is free ('free') to change for each panel or remain the same ('fixed') for all panels  [default = 'free']
 #' @param yscale  determines if y-axis is free ('free') to change for each panel or remain the same ('fixed') for all panels [default = 'free']
 #' @param plot_per_page the number of plot panels per page, by row. [default = 4]
@@ -22,7 +24,7 @@
 #' hormPlot( result )
 #'
 #'# Sometimes you may want to fix y-axis to be same across all plots so heights are comparable
-#' hormPlot( result, yscale='fixed' ) 
+#' hormPlot( result, yscale='fixed', line_color='red', symbol=1 ) 
 #'
 #'# You may want to just include both date and time on the x-axis instead of date
 #' hormPlot( result, date_format='%d/%m/%y %H:%m' )   # does not makes sense here but the code shows how 
@@ -37,6 +39,7 @@
 
 hormPlot <- function(x, date_format='%d-%b', break_cutoff=Inf,
                      xscale='free', yscale='free',
+                     color='black', symbol=19,
                      plot_per_page=4, plot_height=2, plot_width=6, 
                      filename='hormPlot', save_plot=TRUE){
   
@@ -100,11 +103,11 @@ hormPlot <- function(x, date_format='%d-%b', break_cutoff=Inf,
       plot(ds_sub[,conc_var] ~ ds_sub[,time_var], type='n',xlim=x_lim, ylim=y_lim, 
             xlab=NA, ylab=x$y_lab, xaxt='n')
   
-      plotLines(ds_sub, conc_var, time_var)
+      plotLines(ds_sub, conc_var, time_var, color)
 
       plotAxes(ds_sub, time_var, x_lim, date_format)
 
-      points(ds_sub[,time_var], ds_sub[,conc_var],pch=19)
+      points(ds_sub[,time_var], ds_sub[,conc_var], pch=symbol, col=color)
       mtext(unique(ds_sub$plot_title),side=3,line=0.25)
       abline(h = baseline, lty=2)
 
