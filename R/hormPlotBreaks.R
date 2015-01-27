@@ -37,7 +37,6 @@ hormPlotBreaks <- function(x, break_cutoff=40, break_buffer=60, date_format='%d-
   checkPlotBreaks(break_cutoff, break_buffer)
   
 #--- set-up data ---#
-  require(lubridate)
   by_var_v <- cleanByvar(x$by_var) 
   time_var <- x$time_var
   conc_var <- x$conc_var
@@ -49,6 +48,7 @@ hormPlotBreaks <- function(x, break_cutoff=40, break_buffer=60, date_format='%d-
   data <- checkPlotMissing(data, var_list=c(by_var_v,time_var) )
 
 #-- prepare data by getting cutoff and making date seconds 
+  require(lubridate)
   data <- getSumStat(data=data,name='cutoff', func= function(y) getCutoff(y, criteria=x$criteria ), add_ds=data, by_var=by_var_v, c_var=conc_var )
   if( is.Date(data[,time_var]) ){ data[,time_var] <- as.numeric( data[,time_var] ) * 3600*24 
     }else{  data[,time_var] <- as.numeric( data[,time_var] ) } 

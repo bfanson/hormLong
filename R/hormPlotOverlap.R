@@ -71,6 +71,7 @@ hormPlotOverlap <- function(x, hormone_var, colors='red, blue', date_format='%d-
    data <- checkPlotMissing(data, var_list=c(by_var_v,time_var,hormone_var) )
 
  #--- get break information ---#
+  require(lubridate)
   if( is.Date(data[,time_var]) ){ data[,time_var] <- as.numeric( data[,time_var] ) * 3600*24 
     }else{  data[,time_var] <- as.numeric( data[,time_var] ) } 
 
@@ -123,7 +124,6 @@ hormPlotOverlap <- function(x, hormone_var, colors='red, blue', date_format='%d-
       }  
     
     #--- main plot
-      require(lubridate)
       loop <- 0
       for(h in sort(unique(ds_sub[,hormone_var]))){
         loop <- loop + 1
@@ -135,7 +135,9 @@ hormPlotOverlap <- function(x, hormone_var, colors='red, blue', date_format='%d-
                         xlab=NA, ylab=y_lab, xaxt='n')
            plotLines(ds_sub1, conc_var, time_var, color=colors[loop])
         }
-        if(loop>1 & two_axes==FALSE){lines(ds_sub1[,time_var],ds_sub1[,conc_var],col=colors[loop] )}
+        if(loop>1 & two_axes==FALSE){
+           plotLines(ds_sub1, conc_var, time_var, color=colors[loop])
+        }
         if(loop>1 & two_axes){
           par( new=T )
           plot(ds_sub1[,conc_var] ~ ds_sub1[,time_var], type='n',xlim=x_lim, ylim=c(y_lim[1],ymax2), 

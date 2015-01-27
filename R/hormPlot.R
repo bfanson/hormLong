@@ -49,7 +49,6 @@ hormPlot <- function(x, date_format='%d-%b', break_cutoff=Inf,
   checkPlotBreaks(break_cutoff, 10) 
 
 #-- set-up ---#
-  require(lubridate)
   by_var_v <- cleanByvar(x$by_var) 
   time_var <- x$time_var
   conc_var <- x$conc_var
@@ -62,6 +61,7 @@ hormPlot <- function(x, date_format='%d-%b', break_cutoff=Inf,
    data <- checkPlotMissing(data, var_list=c(by_var_v,time_var) )
 
 #--- get break information ---#
+  require(lubridate)
   if( is.Date(data[,time_var]) ){ data[,time_var] <- as.numeric( data[,time_var] ) * 3600*24 
     }else{  data[,time_var] <- as.numeric( data[,time_var] ) } 
   data$row_id <- 1:nrow(data)
