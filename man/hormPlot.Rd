@@ -3,8 +3,8 @@
 \alias{hormPlot}
 \title{Plot longitudinal hormone data with baseline information}
 \usage{
-hormPlot(x, date_format = "\%d-\%b", xscale = "free", yscale = "free",
-  plot_per_page = 4, plot_height = 2, plot_width = 6,
+hormPlot(x, date_format = "\%d-\%b", break_cutoff = Inf, xscale = "free",
+  yscale = "free", plot_per_page = 4, plot_height = 2, plot_width = 6,
   filename = "hormPlot", save_plot = TRUE)
 }
 \arguments{
@@ -12,6 +12,9 @@ hormPlot(x, date_format = "\%d-\%b", xscale = "free", yscale = "free",
 
 \item{date_format}{the format of the date variable on x-axis.  Default is 01-Jan format. See Appendix 1 in help manual
 for examples of other formats [default = '\%d-\%b']}
+
+\item{break_cutoff}{the maximum number of days between consecutive points.
+Above this cutoff value, a break is created.  Default is  [default = Inf]}
 
 \item{xscale}{determines if x-axis is free ('free') to change for each panel or remain the same ('fixed') for all panels  [default = 'free']}
 
@@ -41,5 +44,15 @@ hormPlot( result )
 
 # Sometimes you may want to fix y-axis to be same across all plots so heights are comparable
 hormPlot( result, yscale='fixed' )
+
+# You may want to just include both date and time on the x-axis instead of date
+hormPlot( result, date_format='\%d/\%m/\%y \%H:\%m' )   # does not makes sense here but the code shows how
+
+
+# You may want to not join points that are temporally separated by large gaps
+result <- hormBaseline(data=hormElephant, criteria=2, by_var='Ele, Hormone', time_var='Date',
+             conc_var='Conc_ng_ml' , event_var='Event')
+hormPlot( result )  # everything connected
+hormPlot( result, yscale='fixed', break_cutoff=30 ) # do not join any points more than 20 days
 }
 

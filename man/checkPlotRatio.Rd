@@ -3,7 +3,7 @@
 \alias{checkPlotRatio}
 \title{Helper function for checking plot options for hormPlotOverlap}
 \usage{
-checkPlotRatio(h_v, h_n, h_d, b_v)
+checkPlotRatio(x, h_v, h_n, h_d, b_v)
 }
 \arguments{
 \item{h_v}{hormone_var}

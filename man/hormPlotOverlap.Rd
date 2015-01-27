@@ -4,9 +4,9 @@
 \title{Plot overlapping longitudinal hormone data}
 \usage{
 hormPlotOverlap(x, hormone_var, colors = "red, blue",
-  date_format = "\%d-\%b", add_fill = TRUE, two_axes = FALSE,
-  xscale = "free", yscale = "free", plot_per_page = 4, plot_height = 2,
-  plot_width = 6, save_plot = TRUE, ...)
+  date_format = "\%d-\%b", break_cutoff = Inf, add_fill = TRUE,
+  two_axes = FALSE, xscale = "free", yscale = "free", plot_per_page = 4,
+  plot_height = 2, plot_width = 6, save_plot = TRUE)
 }
 \arguments{
 \item{x}{hormLong object (produced from hormBaseline) [required]}
@@ -17,6 +17,9 @@ hormPlotOverlap(x, hormone_var, colors = "red, blue",
 
 \item{date_format}{the format of the date variable on x-axis. Default is 01-Jan format. See Appendix 1 in help manual
 for examples of other formats [default = '\%d-\%b']}
+
+\item{break_cutoff}{the maximum number of days between consecutive points.
+Above this cutoff value, a break is created.  Default is  [default = Inf]}
 
 \item{add_fill}{should the area under the curve be filled with color (TRUE or FALSE) [default=TRUE]}
 
@@ -34,8 +37,6 @@ If there are more than two hormones, function will give an error. [default=FALSE
 \item{plot_width}{the width of the pdf page. [default = 6]}
 
 \item{save_plot}{indicates whether to save plot as a file [default = TRUE]}
-
-\item{...}{generic plotting options [optional]}
 }
 \value{
 nothing  Produces a pdf file saved at current working directory
@@ -55,8 +56,12 @@ hormPlotOverlap( result, hormone_var='Hormone', colors='red, dark green, blue', 
 hormPlotOverlap( result, hormone_var='Hormone', two_axes=T) # this will produce an error
 
 # Let's try again with hormElephant that only has two hormones
-result <- hormBaseline(data=hormElephant, criteria=2, by_var='Ele, Hormone', time_var='Date',
+ds<- hormElephant[-c(245,246),] # dropping two rows to make plot uglier
+result <- hormBaseline(data=ds, criteria=2, by_var='Ele, Hormone', time_var='Date',
              conc_var='Conc_ng_ml', event_var='Event'  )
 hormPlotOverlap( result, hormone_var='Hormone', colors='red, dark green', two_axes=TRUE )
+
+# Let's remove the joining between points with large gap
+hormPlotOverlap( result, break_cutoff=150, hormone_var='Hormone', two_axes=TRUE )
 }
 

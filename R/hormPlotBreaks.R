@@ -17,13 +17,13 @@
 #' 
 #' @examples
 #' 
-#' 
-#' result <- hormBaseline(data=hormElephant, criteria=2, by_var='Ele, Hormone', time_var='Date', 
+#' ds <- hormElephant
+#' result <- hormBaseline(data=ds, criteria=2, by_var='Ele, Hormone', time_var='Date', 
 #'              conc_var='Conc_ng_ml' , event_var='Event')
-#' hormPlotBreaks( result ) 
+#' hormPlotBreaks( result )
+#'  
 #'# compare to regular hormPlot, especially Ele1; Cortisol
 #' hormPlot( result ) 
-
 
 
 hormPlotBreaks <- function(x, break_cutoff=40, break_buffer=60, date_format='%d-%b',
@@ -46,9 +46,9 @@ hormPlotBreaks <- function(x, break_cutoff=40, break_buffer=60, date_format='%d-
   data$plot_title <- getPlotTitle(data,by_var=by_var_v)
 
 #-- check for missing data in by_var_v, time_var, hormone_var --#
-   data <- checkPlotMissing(data, var_list=c(by_var_v,time_var) )
+  data <- checkPlotMissing(data, var_list=c(by_var_v,time_var) )
 
-#-- prepare data by geting cutoff and making date seconds 
+#-- prepare data by getting cutoff and making date seconds 
   data <- getSumStat(data=data,name='cutoff', func= function(y) getCutoff(y, criteria=x$criteria ), add_ds=data, by_var=by_var_v, c_var=conc_var )
   if( is.Date(data[,time_var]) ){ data[,time_var] <- as.numeric( data[,time_var] ) * 3600*24 
     }else{  data[,time_var] <- as.numeric( data[,time_var] ) } 
@@ -60,6 +60,8 @@ hormPlotBreaks <- function(x, break_cutoff=40, break_buffer=60, date_format='%d-
     tmp <- do.call(rbind,by(data,data$plot_title,FUN=function(x, time=time_var) cbind(row_id=x$row_id,diff=c(-99, diff(x[,time]))  ) ))
     data <- merge(data,tmp,all.x=T)
     data$brk <- 0
+    data <- data[ do.call('order', data[c('plot_title',time_var)]), ] #need to resort the data
+
     for(i in 1:nrow(data)){
       if(data$diff[i] == -99){brk_num=1}
       if(data$diff[i]/(3600*24) > break_cutoff){brk_num=brk_num+1}
@@ -90,7 +92,7 @@ hormPlotBreaks <- function(x, break_cutoff=40, break_buffer=60, date_format='%d-
 
   par(mfrow=c(plot_per_page,1), mar=c(2,4,2,0.5),oma=c(2,2,2,0))
   for( i in unique(data$plot_title) ){
-    ds_sub <- ds1[data$plot_title==i, ]
+    ds_sub   <- ds1[data$plot_title==i, ]
     baseline <- getCutoff( ds_sub[ds_sub$conc_type=='base',conc_var], criteria=x$criteria )
 
    plot(ds_sub[,conc_var]~ds_sub$x_adj, type='n', xaxt='n',ylab=conc_var, xlab=NA) 
@@ -98,7 +100,8 @@ hormPlotBreaks <- function(x, break_cutoff=40, break_buffer=60, date_format='%d-
      abline(h = baseline, lty=2)
 
    for(b in 1:max(ds_sub$brk)){
-      ds_sub1 <- ds_sub[ds_sub$brk==b,] 
+      ds_event1 <- ds_sub[ds_sub$brk==b,]
+      ds_sub1 <- ds_sub[ds_sub$brk==b & !is.na(ds_sub[,conc_var]) ,] 
       points(ds_sub1$x_adj,ds_sub1[,conc_var], pch=19)
       lines(ds_sub1$x_adj,ds_sub1[,conc_var])
     #  text(ds_sub1$x_adj,-2+rnorm(length(ds_sub1$x_adj)),labels=ds_sub1$x,cex=0.6)
@@ -109,7 +112,7 @@ hormPlotBreaks <- function(x, break_cutoff=40, break_buffer=60, date_format='%d-
         axis(1,at=p_at, labels = 
                format( as.POSIXct( p_at+ds_sub1$x_diff[1] ,origin='1970-01-01'), date_format) )
 
-    events <- getEventInfo(ds_sub1, x$event_var, 'x_adj')
+    events <- getEventInfo(ds_event1, x$event_var, 'x_adj')
     
     plotEventInfo(events, t='x_adj', e=x$event_var) 
 

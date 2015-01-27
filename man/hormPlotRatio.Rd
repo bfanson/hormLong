@@ -27,5 +27,11 @@ Plot longitudinal hormone ratios
 result <- hormBaseline(data=hormElephant, criteria=2, by_var='Ele, Hormone', time_var='Date',
                        conc_var='Conc_ng_ml', event_var='Event' )
 hormPlotRatio( x=result, hormone_var='Hormone', hormone_num='Cortisol', hormone_denom='Progesterone' )
+
+# If you want to prevent points with large temporal gaps  joining, set the break_buffer (see hormPlot() )
+hormPlotRatio( x=result, hormone_var='Hormone',
+                         hormone_num='Cortisol',
+                         hormone_denom='Progesterone',
+                         break_cutoff=40, save_plot=F )
 }
 

@@ -13,10 +13,15 @@
 #' result <- hormBaseline(data=hormElephant, criteria=2, by_var='Ele, Hormone', time_var='Date', 
 #'                        conc_var='Conc_ng_ml', event_var='Event' )
 #' hormPlotRatio( x=result, hormone_var='Hormone', hormone_num='Cortisol', hormone_denom='Progesterone' )
-#' 
+#'
+#'# If you want to prevent points with large temporal gaps  joining, set the break_buffer (see hormPlot() ) 
+#' hormPlotRatio( x=result, hormone_var='Hormone', 
+#'                          hormone_num='Cortisol', 
+#'                          hormone_denom='Progesterone', 
+#'                          break_cutoff=40, save_plot=F )
 
 hormPlotRatio <- function(x, hormone_var, hormone_num, hormone_denom,...){
-#                       date_format='%d-%b',xscale='free', yscale='free',
+#                      date_format='%d-%b',xscale='free', yscale='free',
 #                      plot_per_page=4, plot_height=2, plot_width=6, 
 #                      filename='hormPlot',  save_plot=TRUE){
   
@@ -25,7 +30,7 @@ hormPlotRatio <- function(x, hormone_var, hormone_num, hormone_denom,...){
   
   checkClass(x, 'hormLong')
 
-  checkPlotRatio(hormone_var, hormone_num, hormone_denom, x$by_var)
+  checkPlotRatio(x,hormone_var, hormone_num, hormone_denom, x$by_var)
   
   
 #-- set-up a new hormLong object ---#

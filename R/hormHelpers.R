@@ -61,7 +61,8 @@ hormDate <- function(data, date_var, time_var, name='datetime', date_order='dmy'
    if(!missing(date_var) & missing(time_var)){
       datetime <- do.call( date_order, list(data[,date_var]))
     }else if(!missing(date_var) & !missing(time_var) ){
-      datetime <- as.POSIXct(paste( do.call( date_order, list(data[,date_var])),data[,time_var]), format="%Y-%m-%d %H:%M:%S", tz='UTC' )
+      datetime <- as.POSIXct(paste( do.call( date_order, list(data[,date_var])),data[,time_var]), 
+                             format="%Y-%m-%d %H:%M:%S", tz='UTC' )
     }
   
    data$rename_this <- datetime  
@@ -355,7 +356,24 @@ plotAxes <- function(d_s, t, x_s, d_f  ){
           axis.POSIXct(1,at=ats,format=d_f)
       } 
 }  
-  
+
+
+#' Helper function for plotting lines using break_cutoff so lines are not joined if large temporal gap
+#'
+#' @param d  dataset to plot (usually ds_sub)
+#' @param c  conc_var (y-axis)
+#' @param t  time_var (x-axis)
+#' @param color  line colour [default='black']
+#' @return nothing 
+#' @export
+
+plotLines <- function(d=ds_sub, c=conc_var, t=time_var, color='black'){
+  for(b in 1:max(d$brk) ){
+   lines(x=d[d$brk==b,t],y=d[d$brk==b,c], col=color)
+  }
+}
+ 
+
 
 #' Helper function for checking class
 #'
@@ -486,7 +504,7 @@ checkPlotOverlap <- function(h_v, b_v){
 #' @export
 #'
 
-checkPlotRatio <- function(h_v, h_n, h_d, b_v){
+checkPlotRatio <- function(x,h_v, h_n, h_d, b_v){
 
   b_v_v <- cleanByvar(b_v) 
   
@@ -579,6 +597,7 @@ checkCapitalization <- function(ds, var_list){
 #'
 #' @param data  dataset to check
 #' @param var_list vector of variables to check
+#' @param conc conc_var (string)
 #' @return dataframe 
 #' @export
 #' 
@@ -590,6 +609,8 @@ checkPlotMissing <- function(ds, var_list ){
     print( ds[hold, ])
   }
   ds <- ds[hold==F,]
-
+ 
   return(ds)
 }
+
+   

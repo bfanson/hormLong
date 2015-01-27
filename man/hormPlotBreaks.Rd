@@ -35,9 +35,11 @@ nothing  Produces a pdf file saved at current working directory
 Longitudinal graph with breaks
 }
 \examples{
-result <- hormBaseline(data=hormElephant, criteria=2, by_var='Ele, Hormone', time_var='Date',
+ds <- hormElephant
+result <- hormBaseline(data=ds, criteria=2, by_var='Ele, Hormone', time_var='Date',
              conc_var='Conc_ng_ml' , event_var='Event')
 hormPlotBreaks( result )
+
 # compare to regular hormPlot, especially Ele1; Cortisol
 hormPlot( result )
 }

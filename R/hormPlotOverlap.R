@@ -3,6 +3,8 @@
 #' @param x hormLong object (produced from hormBaseline) [required]
 #' @param hormone_var name for the hormone variable.  It must be listed in by_var during hormBaseline [required]
 #' @param colors list of colors for the fills. It needs to have as many colors as hormone types  [default='red,blue']
+#' @param break_cutoff the maximum number of days between consecutive points. 
+#' Above this cutoff value, a break is created.  Default is  [default = Inf]
 #' @param add_fill should the area under the curve be filled with color (TRUE or FALSE) [default=TRUE]
 #' @param two_axes if TRUE then a second y-axis will be added to the right side of plot.  It can only be used with two hormones.
 #' If there are more than two hormones, function will give an error. [default=FALSE]
@@ -14,7 +16,6 @@
 #' @param plot_height  the height of individual plot panels (in inches).  Pdf page height is determined by both plot_per_page and plot_height. [default = 2]
 #' @param plot_width  the width of the pdf page. [default = 6]
 #' @param save_plot indicates whether to save plot as a file [default = TRUE]
-#' @param ...   generic plotting options [optional]  
 #' @return nothing  Produces a pdf file saved at current working directory
 #' @export
 #' @examples
@@ -30,15 +31,19 @@
 #' hormPlotOverlap( result, hormone_var='Hormone', two_axes=T) # this will produce an error
 #'
 #'# Let's try again with hormElephant that only has two hormones
-#' result <- hormBaseline(data=hormElephant, criteria=2, by_var='Ele, Hormone', time_var='Date', 
+#' ds<- hormElephant[-c(245,246),] # dropping two rows to make plot uglier
+#' result <- hormBaseline(data=ds, criteria=2, by_var='Ele, Hormone', time_var='Date', 
 #'              conc_var='Conc_ng_ml', event_var='Event'  )
 #' hormPlotOverlap( result, hormone_var='Hormone', colors='red, dark green', two_axes=TRUE )
-#' 
+#'
+#'# Let's remove the joining between points with large gap 
+#' hormPlotOverlap( result, break_cutoff=150, hormone_var='Hormone', two_axes=TRUE )
 
 hormPlotOverlap <- function(x, hormone_var, colors='red, blue', date_format='%d-%b', 
+                     break_cutoff=Inf,
                      add_fill=TRUE, two_axes=FALSE,
                      xscale='free', yscale='free', 
-                     plot_per_page=4, plot_height=2, plot_width=6, save_plot=TRUE,...){
+                     plot_per_page=4, plot_height=2, plot_width=6, save_plot=TRUE){
   
 #--- main check ---#
   graphics.off() # just to make sure no devices are open
@@ -59,9 +64,27 @@ hormPlotOverlap <- function(x, hormone_var, colors='red, blue', date_format='%d-
   data <- data[ do.call(order, data[c(by_var_v,time_var,hormone_var)]), ]
   
   data$plot_title <- getPlotTitle(data, by_var=by_var_v)
+  data$plot_title_brk <- getPlotTitle(data, by_var=c(by_var_v,hormone_var) ) # need for calculating brks for each hormone
 
   #-- check for missing data in by_var_v, time_var, hormone_var --#
+   ds_events <- data
    data <- checkPlotMissing(data, var_list=c(by_var_v,time_var,hormone_var) )
+
+ #--- get break information ---#
+  if( is.Date(data[,time_var]) ){ data[,time_var] <- as.numeric( data[,time_var] ) * 3600*24 
+    }else{  data[,time_var] <- as.numeric( data[,time_var] ) } 
+
+  data$row_id <- 1:nrow(data)
+    tmp <- do.call(rbind,by(data,data$plot_title_brk,FUN=function(x, time=time_var) cbind(row_id=x$row_id,diff=c(-99, diff(x[,time]))  ) ))
+    data <- merge(data,tmp,all.x=T)
+    data$brk <- 0
+    data <- data[ do.call('order', data[c('plot_title_brk',time_var)]), ] #need to resort the data
+    for(i in 1:nrow(data)){
+      if(data$diff[i] == -99){brk_num=1}
+      if(data$diff[i]/(3600*24) > break_cutoff){brk_num=brk_num+1}
+      data$brk[i] <- brk_num
+    }
+   data[,time_var] <- as.POSIXct( data[,time_var], origin='1970-01-01 00:00:00', tz='UTC' )
 
   #--- check the two hormone scenario ---#
   if( two_axes ){ 
@@ -80,7 +103,7 @@ hormPlotOverlap <- function(x, hormone_var, colors='red, blue', date_format='%d-
   for( i in unique(data$plot_title) ){
     ds_sub <- data[data$plot_title==i, ]
 
-    events <- getEventInfo(ds_sub, x$event_var, time_var)
+    events <- getEventInfo(ds_events[ds_events$plot_title==i, ], x$event_var, time_var)
     
     ds_sub <- ds_sub[!is.na(ds_sub[,conc_var]),]
 
@@ -108,21 +131,25 @@ hormPlotOverlap <- function(x, hormone_var, colors='red, blue', date_format='%d-
         if( loop==1 ){
           y_lab = conc_var
           if( two_axes ){ y_lab <- h }
-           plot(ds_sub1[,conc_var] ~ ds_sub1[,time_var], type='l',xlim=x_lim, ylim=y_lim, 
-                        xlab=NA, ylab=y_lab, xaxt='n', col=colors[loop] )
+           plot(ds_sub1[,conc_var] ~ ds_sub1[,time_var], type='n',xlim=x_lim, ylim=y_lim, 
+                        xlab=NA, ylab=y_lab, xaxt='n')
+           plotLines(ds_sub1, conc_var, time_var, color=colors[loop])
         }
         if(loop>1 & two_axes==FALSE){lines(ds_sub1[,time_var],ds_sub1[,conc_var],col=colors[loop] )}
         if(loop>1 & two_axes){
           par( new=T )
-          plot(ds_sub1[,conc_var] ~ ds_sub1[,time_var], type='l',xlim=x_lim, ylim=c(y_lim[1],ymax2), 
-                    xlab=NA, ylab=NA, xaxt='n', yaxt='n', col=colors[loop] )
+          plot(ds_sub1[,conc_var] ~ ds_sub1[,time_var], type='n',xlim=x_lim, ylim=c(y_lim[1],ymax2), 
+                    xlab=NA, ylab=NA, xaxt='n', yaxt='n' )
+            plotLines(ds_sub1, conc_var, time_var, color=colors[loop])
+
             axis(4)
             mtext(h,4,line=2.5)
         }
-        t_order <- c(ds_sub1[,time_var], rev(ds_sub1[,time_var]) )
-        c_order <- c(rep(0,length(ds_sub1[,conc_var])),rev(ds_sub1[,conc_var])) 
-        if( add_fill ) polygon(t_order,c_order,col=adjustcolor(colors[loop], alpha=0.25),border=colors[loop]) 
-        
+        for(b in 1:max(ds_sub1$brk)){
+         t_order <- c(ds_sub1[ds_sub1$brk==b,time_var], rev(ds_sub1[ds_sub1$brk==b,time_var]) )
+         c_order <- c(rep(0,length(ds_sub1[ds_sub1$brk==b,conc_var])),rev(ds_sub1[ds_sub1$brk==b,conc_var])) 
+         if( add_fill ) polygon(t_order,c_order,col=adjustcolor(colors[loop], alpha=0.25),border=colors[loop]) 
+        }      
         if( nrow(events) > 0 ){ 
           events1 <- events[events[,hormone_var]==h,  ] 
           plotEventInfo(events1,t=time_var, e=x$event_var) 
