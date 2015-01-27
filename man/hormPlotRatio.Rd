@@ -15,7 +15,7 @@ as part of by_var in hormBaseline  [required]}
 
 \item{hormone_denom}{name of the hormone that is the denominator in the ratio. [required]}
 
-\item{...}{arguments for hormPlot [optional]}
+\item{...}{arguments for hormPlot (e.g. break_cutoff, save_plot) [optional]}
 }
 \value{
 nothing  Produces a pdf file saved at current working directory

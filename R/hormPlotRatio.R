@@ -20,10 +20,8 @@
 #'                          hormone_denom='Progesterone', 
 #'                          break_cutoff=40, save_plot=F )
 
+
 hormPlotRatio <- function(x, hormone_var, hormone_num, hormone_denom,...){
-#                      date_format='%d-%b',xscale='free', yscale='free',
-#                      plot_per_page=4, plot_height=2, plot_width=6, 
-#                      filename='hormPlot',  save_plot=TRUE){
   
 #--- main check ---#
   graphics.off() # just to make sure not devices are open

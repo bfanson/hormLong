@@ -52,7 +52,7 @@ hormPlotOverlap( result, hormone_var='Hormone', colors='red, dark green, blue' )
 # no color fill...
 hormPlotOverlap( result, hormone_var='Hormone', colors='red, dark green, blue', add_fill=FALSE )
 
-# Two-axes option is only vaalid if there are only two hormones
+# Two-axes option is only valid if there are only two hormones
 hormPlotOverlap( result, hormone_var='Hormone', two_axes=T) # this will produce an error
 
 # Let's try again with hormElephant that only has two hormones
@@ -61,7 +61,7 @@ result <- hormBaseline(data=ds, criteria=2, by_var='Ele, Hormone', time_var='Dat
              conc_var='Conc_ng_ml', event_var='Event'  )
 hormPlotOverlap( result, hormone_var='Hormone', colors='red, dark green', two_axes=TRUE )
 
-# Let's remove the joining between points with large gap
+# Let's remove the line connecting the large gap in cortisol
 hormPlotOverlap( result, break_cutoff=150, hormone_var='Hormone', two_axes=TRUE )
 }
 

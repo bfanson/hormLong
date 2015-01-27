@@ -59,7 +59,6 @@ hormPlot <- function(x, date_format='%d-%b', break_cutoff=Inf,
   data$plot_title <- getPlotTitle(data, by_var=by_var_v)
 
 #-- check for missing data in by_var_v, time_var, hormone_var --#
-   ds_events <- data
    data <- checkPlotMissing(data, var_list=c(by_var_v,time_var) )
 
 #--- get break information ---#
@@ -88,7 +87,7 @@ hormPlot <- function(x, date_format='%d-%b', break_cutoff=Inf,
     ds_sub   <- data[data$plot_title==i, ]
     baseline <- getBaseline(ds_sub, x$criteria, conc_var)
 
-    events <- getEventInfo(ds_events[ds_events$plot_title==i,] , x$event_var, time_var)
+    events <- getEventInfo(ds_sub , x$event_var, time_var)
 
     ds_sub <- ds_sub[!is.na(ds_sub[,conc_var]),]
 

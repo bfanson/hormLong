@@ -3,14 +3,14 @@
 \alias{checkPlotMissing}
 \title{Helper function for checking for missing values in data before plotting}
 \usage{
-checkPlotMissing(ds, var_list, conc)
+checkPlotMissing(ds, var_list)
 }
 \arguments{
 \item{var_list}{vector of variables to check}
 
-\item{conc}{conc_var (string)}
-
 \item{data}{dataset to check}
+
+\item{conc}{conc_var (string)}
 }
 \value{
 dataframe
