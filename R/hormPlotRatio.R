@@ -5,7 +5,7 @@
 #' as part of by_var in hormBaseline  [required]
 #' @param hormone_num name of the hormone that is the numerator in the ratio. [required]
 #' @param hormone_denom name of the hormone that is the denominator in the ratio. [required]
-#' @param ... arguments for hormPlot [optional]  
+#' @param ... arguments for hormPlot (e.g. break_cutoff, save_plot) [optional]  
 #' @return nothing  Produces a pdf file saved at current working directory
 #' @export
 #' @examples
