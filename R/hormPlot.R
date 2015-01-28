@@ -3,8 +3,8 @@
 #' @param x hormLong object (produced from hormBaseline) [required]
 #' @param date_format the format of the date variable on x-axis.  Default is 01-Jan format. See Appendix 1 in help manual 
 #' for examples of other formats [default = '\%d-\%b']
-#' @param break_cutoff the maximum number of days between consecutive points. 
-#' Above this cutoff value, a break is created.  Default is  [default = Inf]
+#' @param break_cutoff the maximum number of days between consecutive points that are 
+#' still joined by a line. Default is to connect all points with a line. [default = Inf]
 #' @param color colour of the line and points [default='black']
 #' @param symbol number to indicate point symbol. e.g. 1=open circle, 2=open triangle, 15=closed square, 19=closed circle  [default=19]
 #' @param xscale  determines if x-axis is free ('free') to change for each panel or remain the same ('fixed') for all panels  [default = 'free']
