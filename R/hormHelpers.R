@@ -80,7 +80,7 @@ hormDate <- function(data, date_var, time_var, name='datetime', date_order='dmy'
 #' ds <- hormRead()
 
 hormRead <- function( ){
-  ds<- read.csv(choose.files(caption='Select hormone data file') ) 
+  ds<- read.csv(file.choose() ) 
   cat('Below shows the first 6 lines of the imported dataset.  check that it imported correctly.
       If not, check help file.\n\n')
   print( head(ds) )
