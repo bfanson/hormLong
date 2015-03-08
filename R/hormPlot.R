@@ -3,7 +3,7 @@
 #' @param x hormLong object (produced from hormBaseline) [required]
 #' @param add_line adds a horizontal line to all plots representing baseline mean, 
 #' baseline cutoff (mean + critera*SD), or mean (all values). Options are 'baseline_mean', 'baseline_cutoff',
-#' and 'mean' [default = 'baseline_cutoff']
+#' 'mean' or 'none' [default = 'baseline_cutoff']
 #' @param date_format the format of the date variable on x-axis.  Default is 01-Jan format. See Appendix 1 in help manual 
 #' for examples of other formats [default = '\%d-\%b']
 #' @param break_cutoff the maximum number of days between consecutive points that are 
@@ -116,7 +116,7 @@ hormPlot <- function(x, add_line = 'baseline_cutoff', date_format='%d-%b', break
       points(ds_sub[,time_var], ds_sub[,conc_var], pch=symbol, col=color)
       mtext(unique(ds_sub$plot_title),side=3,line=0.25)
 
-      abline(h = newline, lty=2)
+      if( !is.na(newline) ){ abline(h = newline, lty=2) }
 
       plotEventInfo(events, t=time_var, e=x$event_var) 
   }

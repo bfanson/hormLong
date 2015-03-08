@@ -438,7 +438,7 @@ checkPlotOpts <- function(p_p_p, w, h, s, x=NA, y=NA,d, a_l ){
   if( !grepl('\\%',d)  ){
     stop( paste0('check your date_format. No % sign detected. It should be like "%d/%m". It is currently "',d,'"') )
   }
-  if( !( a_l %in% c('baseline_cutoff','baseline_mean','mean'))  ){
+  if( !( a_l %in% c('baseline_cutoff','baseline_mean','mean', 'none'))  ){
     stop( paste0('check your add_line option (capitalization matters). Option is not "baseline_line", 
                    "baseline_cutoff", or "mean".  You entered "',a_l,'"') )
   }
@@ -567,6 +567,7 @@ getEventInfo <- function(d_s, e, t){
 #' @export
 #' 
 getAddLine <- function(d_s, crit, conc, a_l){
+      newline <- NA
       if( a_l == 'mean' ){ 
         newline <- mean( d_s[,conc], na.rm=T ) }
       if( a_l == 'baseline_mean' ){ 
