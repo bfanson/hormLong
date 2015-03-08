@@ -4,13 +4,17 @@
 \alias{hormPlot}
 \title{Plot longitudinal hormone data with baseline information}
 \usage{
-hormPlot(x, date_format = "\%d-\%b", break_cutoff = Inf, xscale = "free",
-  yscale = "free", color = "black", symbol = 19, plot_per_page = 4,
-  plot_height = 2, plot_width = 6, filename = "hormPlot",
-  save_plot = TRUE)
+hormPlot(x, add_line = "baseline_cutoff", date_format = "\%d-\%b",
+  break_cutoff = Inf, xscale = "free", yscale = "free", color = "black",
+  symbol = 19, plot_per_page = 4, plot_height = 2, plot_width = 6,
+  filename = "hormPlot", save_plot = TRUE)
 }
 \arguments{
 \item{x}{hormLong object (produced from hormBaseline) [required]}
+
+\item{add_line}{adds a horizontal line to all plots representing baseline mean,
+baseline cutoff (mean + critera*SD), or mean (all values). Options are 'baseline_mean', 'baseline_cutoff',
+and 'mean' [default = 'baseline_cutoff']}
 
 \item{date_format}{the format of the date variable on x-axis.  Default is 01-Jan format. See Appendix 1 in help manual
 for examples of other formats [default = '\%d-\%b']}
@@ -22,7 +26,7 @@ still joined by a line. Default is to connect all points with a line. [default =
 
 \item{yscale}{determines if y-axis is free ('free') to change for each panel or remain the same ('fixed') for all panels [default = 'free']}
 
-\item{color}{colour of the line and points [default='black']}
+\item{color}{color of the line and points [default='black']}
 
 \item{symbol}{number to indicate point symbol. e.g. 1=open circle, 2=open triangle, 15=closed square, 19=closed circle  [default=19]}
 
@@ -46,10 +50,14 @@ Plot longitudinal hormone data with baseline information
 \examples{
 result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', time_var='datetime',
                        conc_var='Conc', event_var='Events' )
-hormPlot( result )
+hormPlot( result ) # default settings...adds a line for baseline_cutoff
+
+# if you want to add lines for baseline_mean or overall mean
+hormPlot( result, add_line='mean' ) # adds a line for individual mean
+hormPlot( result, add_line='baseline_mean' ) # adds a line for mean of just baseline values
 
 # Sometimes you may want to fix y-axis to be same across all plots so heights are comparable
-hormPlot( result, yscale='fixed', line_color='red', symbol=1 )
+hormPlot( result, yscale='fixed', color='red', symbol=1 )
 
 # You may want to just include both date and time on the x-axis instead of date
 hormPlot( result, date_format='\%d/\%m/\%y \%H:\%m' )   # does not makes sense here but the code shows how
