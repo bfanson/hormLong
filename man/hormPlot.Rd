@@ -52,7 +52,8 @@ result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', ti
                        conc_var='Conc', event_var='Events' )
 hormPlot( result ) # default settings...adds a line for baseline_cutoff
 
-# if you want to add lines for baseline_mean or overall mean
+# if you want to add lines for none, baseline_mean or overall mean
+hormPlot( result, add_line='none' ) # no line
 hormPlot( result, add_line='mean' ) # adds a line for individual mean
 hormPlot( result, add_line='baseline_mean' ) # adds a line for mean of just baseline values
 
