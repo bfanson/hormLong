@@ -574,6 +574,7 @@ getAddLine <- function(d_s, crit, conc, a_l){
         newline <- mean( d_s[d_s$conc_type=='base',conc], na.rm=T ) }
       if( a_l == 'baseline_cutoff'){
         newline <- getCutoff( d_s[d_s$conc_type=='base',conc], criteria=crit )  }
+      if( is.null(crit) ){ newline <- 1} # this is for hormRatio
       return(newline)
 }
 
