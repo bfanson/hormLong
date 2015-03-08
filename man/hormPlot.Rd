@@ -14,7 +14,7 @@ hormPlot(x, add_line = "baseline_cutoff", date_format = "\%d-\%b",
 
 \item{add_line}{adds a horizontal line to all plots representing baseline mean,
 baseline cutoff (mean + critera*SD), or mean (all values). Options are 'baseline_mean', 'baseline_cutoff',
-and 'mean' [default = 'baseline_cutoff']}
+'mean' or 'none' [default = 'baseline_cutoff']}
 
 \item{date_format}{the format of the date variable on x-axis.  Default is 01-Jan format. See Appendix 1 in help manual
 for examples of other formats [default = '\%d-\%b']}
