@@ -1,11 +1,14 @@
 #' Plot longitudinal hormone data with baseline information
 #' 
 #' @param x hormLong object (produced from hormBaseline) [required]
+#' @param add_line adds a horizontal line to all plots representing baseline mean, 
+#' baseline cutoff (mean + critera*SD), or mean (all values). Options are 'baseline_mean', 'baseline_cutoff',
+#' and 'mean' [default = 'baseline_cutoff']
 #' @param date_format the format of the date variable on x-axis.  Default is 01-Jan format. See Appendix 1 in help manual 
 #' for examples of other formats [default = '\%d-\%b']
 #' @param break_cutoff the maximum number of days between consecutive points that are 
 #' still joined by a line. Default is to connect all points with a line. [default = Inf]
-#' @param color colour of the line and points [default='black']
+#' @param color color of the line and points [default='black']
 #' @param symbol number to indicate point symbol. e.g. 1=open circle, 2=open triangle, 15=closed square, 19=closed circle  [default=19]
 #' @param xscale  determines if x-axis is free ('free') to change for each panel or remain the same ('fixed') for all panels  [default = 'free']
 #' @param yscale  determines if y-axis is free ('free') to change for each panel or remain the same ('fixed') for all panels [default = 'free']
@@ -21,10 +24,14 @@
 #' 
 #' result <- hormBaseline(data=hormLynx, criteria=2, by_var='AnimalID, Hormone', time_var='datetime', 
 #'                        conc_var='Conc', event_var='Events' )
-#' hormPlot( result )
+#' hormPlot( result ) # default settings...adds a line for baseline_cutoff
+#' 
+#'# if you want to add lines for baseline_mean or overall mean 
+#' hormPlot( result, add_line='mean' ) # adds a line for individual mean
+#' hormPlot( result, add_line='baseline_mean' ) # adds a line for mean of just baseline values
 #'
 #'# Sometimes you may want to fix y-axis to be same across all plots so heights are comparable
-#' hormPlot( result, yscale='fixed', line_color='red', symbol=1 ) 
+#' hormPlot( result, yscale='fixed', color='red', symbol=1 ) 
 #'
 #'# You may want to just include both date and time on the x-axis instead of date
 #' hormPlot( result, date_format='%d/%m/%y %H:%m' )   # does not makes sense here but the code shows how 
@@ -37,7 +44,7 @@
 #' hormPlot( result, yscale='fixed', break_cutoff=30 ) # do not join any points more than 20 days
 #' 
 
-hormPlot <- function(x, date_format='%d-%b', break_cutoff=Inf,
+hormPlot <- function(x, add_line = 'baseline_cutoff', date_format='%d-%b', break_cutoff=Inf,
                      xscale='free', yscale='free',
                      color='black', symbol=19,
                      plot_per_page=4, plot_height=2, plot_width=6, 
@@ -47,7 +54,7 @@ hormPlot <- function(x, date_format='%d-%b', break_cutoff=Inf,
   graphics.off() # just to make sure no devices are open
   
   checkClass(x, 'hormLong')
-  checkPlotOpts(plot_per_page, plot_width, plot_height, save_plot, xscale, yscale, date_format)
+  checkPlotOpts(plot_per_page, plot_width, plot_height, save_plot, xscale, yscale, date_format, add_line)
 
   checkPlotBreaks(break_cutoff, 10) 
 
@@ -80,7 +87,6 @@ hormPlot <- function(x, date_format='%d-%b', break_cutoff=Inf,
    data[,time_var] <- as.POSIXct( data[,time_var], origin='1970-01-01 00:00:00', tz='UTC' )
 
 #--- create plots ---#
-  require(lubridate)
   if( save_plot ){
     pdf(paste0(filename,'.pdf'), height=plot_per_page * plot_height, width = plot_width )
   }
@@ -88,14 +94,14 @@ hormPlot <- function(x, date_format='%d-%b', break_cutoff=Inf,
   par(mfrow=c(plot_per_page,1), mar=c(2,4,2,0.5),oma=c(2,2,2,1))
   for( i in unique(data$plot_title) ){
     ds_sub   <- data[data$plot_title==i, ]
-    baseline <- getBaseline(ds_sub, x$criteria, conc_var)
+    newline <- getAddLine(ds_sub, x$criteria, conc_var, add_line)
 
     events <- getEventInfo(ds_sub , x$event_var, time_var)
 
     ds_sub <- ds_sub[!is.na(ds_sub[,conc_var]),]
 
     #--- set up scales ---#
-      y_lim <- getPlotlim(d_s=ds_sub, d_f=data, var=conc_var, scale=yscale, base=baseline)
+      y_lim <- getPlotlim(d_s=ds_sub, d_f=data, var=conc_var, scale=yscale, base=newline)
       x_lim <- getPlotlim(d_s=ds_sub, d_f=data, var=time_var, scale=xscale)
     
     #--- main plot
@@ -109,7 +115,8 @@ hormPlot <- function(x, date_format='%d-%b', break_cutoff=Inf,
 
       points(ds_sub[,time_var], ds_sub[,conc_var], pch=symbol, col=color)
       mtext(unique(ds_sub$plot_title),side=3,line=0.25)
-      abline(h = baseline, lty=2)
+
+      abline(h = newline, lty=2)
 
       plotEventInfo(events, t=time_var, e=x$event_var) 
   }

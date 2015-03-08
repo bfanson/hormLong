@@ -409,7 +409,7 @@ checkClass <- function( var, v_class) {
 #' @export
 #'
 
-checkPlotOpts <- function(p_p_p, w, h, s, x=NA, y=NA,d ){
+checkPlotOpts <- function(p_p_p, w, h, s, x=NA, y=NA,d, a_l ){
   if( !is.numeric(p_p_p) | p_p_p<1 ){
     stop( paste0('plot_per_page needs to be an numeric and greater than 0.  Currently it is ',p_p_p) )
   }
@@ -437,6 +437,10 @@ checkPlotOpts <- function(p_p_p, w, h, s, x=NA, y=NA,d ){
   }
   if( !grepl('\\%',d)  ){
     stop( paste0('check your date_format. No % sign detected. It should be like "%d/%m". It is currently "',d,'"') )
+  }
+  if( !( a_l %in% c('baseline_cutoff','baseline_mean','mean'))  ){
+    stop( paste0('check your add_line option (capitalization matters). Option is not "baseline_line", 
+                   "baseline_cutoff", or "mean".  You entered "',a_l,'"') )
   }
 }
 
@@ -558,15 +562,19 @@ getEventInfo <- function(d_s, e, t){
 #' @param d_s  ds_sub
 #' @param crit x$criteria
 #' @param conc conc_var
+#' @param a_l add_line (which line type to return)
 #' @return baseline 
 #' @export
 #' 
-getBaseline <- function(d_s, crit, conc){
-      if(!is.null(crit)){
-         baseline <- getCutoff( d_s[d_s$conc_type=='base',conc], criteria=crit )
-      }else{ baseline <- 1 }
-      return(baseline)
-    }
+getAddLine <- function(d_s, crit, conc, a_l){
+      if( a_l == 'mean' ){ 
+        newline <- mean( d_s[,conc], na.rm=T ) }
+      if( a_l == 'baseline_mean' ){ 
+        newline <- mean( d_s[d_s$conc_type=='base',conc], na.rm=T ) }
+      if( a_l == 'baseline_cutoff'){
+        newline <- getCutoff( d_s[d_s$conc_type=='base',conc], criteria=crit )  }
+      return(newline)
+}
 
 #' Helper function for checking Capitalization
 #'

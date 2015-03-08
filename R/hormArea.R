@@ -64,10 +64,10 @@ hormArea <- function(x, lower_bound = 'origin', method='trapezoid', date_format=
     data$cutoff <- 0
     data$conc_type[ data[,conc_var] >=0 ] <- 'peak'
   }else if(lower_bound=='baseline'){
-    getBaseline <- function(c){
+    getBaseLine <- function(c){
       return( mean( c, na.rm=T ) )
     }
-    data <- getSumStat(data=data[data$conc_type=='base',], name='cutoff', func= function(y) getBaseline(y), 
+    data <- getSumStat(data=data[data$conc_type=='base',], name='cutoff', func= function(y) getBaseLine(y), 
                                                 by_var=by_var_v, c_var=conc_var,add_ds=data  )
     data$conc_type[ data[,conc_var] >= data$cutoff ] <- 'peak'
  
