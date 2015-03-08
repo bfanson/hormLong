@@ -5,8 +5,9 @@
 \title{Plot the area under the curve (AUC)}
 \usage{
 hormArea(x, lower_bound = "origin", method = "trapezoid",
-  date_format = "\%d-\%b", xscale = "free", yscale = "free",
-  plot_per_page = 4, plot_height = 2, plot_width = 6, save_plot = T)
+  date_format = "\%d-\%b", y_label = NA, xscale = "free",
+  yscale = "free", plot_per_page = 4, plot_height = 2, plot_width = 6,
+  save_plot = T)
 }
 \arguments{
 \item{x}{hormLong object (produced from hormBaseline) [required]}
@@ -20,6 +21,8 @@ for AUC is conc units * day. [default = 'trapezoid']}
 
 \item{date_format}{the format of the date variable on x-axis. Default is 01-Jan format. See Appendix 1 in help manual
 for examples of other formats [default = '\%d-\%b']}
+
+\item{y_label}{sets the y-axis label.  The default setting is the column name of the response variable. [default = NA]}
 
 \item{xscale}{determines if x-axis is free ('free') to change for each panel or
 remain the same ('fixed') for all panels  [default = 'free']}

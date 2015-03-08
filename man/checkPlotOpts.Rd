@@ -4,7 +4,7 @@
 \alias{checkPlotOpts}
 \title{Helper function for checking plot options}
 \usage{
-checkPlotOpts(p_p_p, w, h, s, x = NA, y = NA, d, a_l)
+checkPlotOpts(p_p_p, w, h, s, x = NA, y = NA, d, a_l = NA)
 }
 \arguments{
 \item{w}{plot_width}

@@ -4,7 +4,7 @@
 \alias{hormBoxplot}
 \title{Boxplot of individual concentrations}
 \usage{
-hormBoxplot(data, conc_var, id_var, by_var, log_scale = "n",
+hormBoxplot(data, conc_var, id_var, by_var, y_label = NA, log_scale = "n",
   plot_per_page = 1, plot_height = 5, plot_width = 6, save_plot = T)
 }
 \arguments{
@@ -17,6 +17,8 @@ hormBoxplot(data, conc_var, id_var, by_var, log_scale = "n",
 \item{by_var}{names of the grouping variables.  Column names should be separated by a comma:
 e.g. 'name1' for one column, 'name1, name2' for two columns, 'name1, name2, name3' for three columns,
 etc.  Remember, capitalization matters. [optional]}
+
+\item{y_label}{sets the y-axis label.  The default setting is the column name of the response variable. [default = NA]}
 
 \item{log_scale}{determines if y-axis is log10-scale or not. log-scale='y' makes
 log scale [default='n']}
@@ -37,7 +39,7 @@ nothing Produces a pdf file with the graph in current working directory
 Boxplot of individual concentrations
 }
 \examples{
-hormBoxplot(data=hormLynx, conc_var='Conc', id_var='AnimalID', by_var='Hormone')
+hormBoxplot(data=hormLynx, conc_var='Conc', id_var='AnimalID', by_var='Hormone', y_label='Conc (ng/ml)')
 
 # the following will fail because there are zero concentrations.
 hormBoxplot(data=hormLynx, conc_var='Conc', id_var='AnimalID', by_var='Hormone', log_scale='y')

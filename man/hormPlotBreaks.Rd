@@ -5,7 +5,7 @@
 \title{Longitudinal graph with breaks}
 \usage{
 hormPlotBreaks(x, break_cutoff = 40, break_buffer = 60,
-  date_format = "\%d-\%b", color = "black", symbol = 19,
+  date_format = "\%d-\%b", color = "black", symbol = 19, y_label = NA,
   plot_per_page = 4, plot_height = 2, plot_width = 6, save_plot = TRUE)
 }
 \arguments{
@@ -43,7 +43,7 @@ Longitudinal graph with breaks
 ds <- hormElephant
 result <- hormBaseline(data=ds, criteria=2, by_var='Ele, Hormone', time_var='Date',
              conc_var='Conc_ng_ml' , event_var='Event')
-hormPlotBreaks( result )
+hormPlotBreaks( result, y_label = 'Conc (ng/ml)' )
 hormPlotBreaks( result, color='red', symbol=1 )
 
 # compare to regular hormPlot, especially Ele1; Cortisol
