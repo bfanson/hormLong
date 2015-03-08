@@ -22,7 +22,7 @@
 #' ds <- hormElephant
 #' result <- hormBaseline(data=ds, criteria=2, by_var='Ele, Hormone', time_var='Date', 
 #'              conc_var='Conc_ng_ml' , event_var='Event')
-#' hormPlotBreaks( result )
+#' hormPlotBreaks( result, y_label = 'Conc (ng/ml)' )
 #' hormPlotBreaks( result, color='red', symbol=1 )
 #'  
 #'# compare to regular hormPlot, especially Ele1; Cortisol
@@ -30,7 +30,7 @@
 
 
 hormPlotBreaks <- function(x, break_cutoff=40, break_buffer=60, date_format='%d-%b',
-                           color='black', symbol=19,
+                           color='black', symbol=19, y_label=NA,
                            plot_per_page=4, plot_height=2, plot_width=6, save_plot=TRUE){
 
 #--- checks for missing values ---#
@@ -99,7 +99,9 @@ hormPlotBreaks <- function(x, break_cutoff=40, break_buffer=60, date_format='%d-
     ds_sub   <- ds1[data$plot_title==i, ]
     baseline <- getCutoff( ds_sub[ds_sub$conc_type=='base',conc_var], criteria=x$criteria )
 
-   plot(ds_sub[,conc_var]~ds_sub$x_adj, type='n', xaxt='n',ylab=conc_var, xlab=NA) 
+   if( is.na(y_label) ){ y_label = conc_var }  
+    
+   plot(ds_sub[,conc_var]~ds_sub$x_adj, type='n', xaxt='n',ylab=y_label, xlab=NA) 
    mtext(unique(ds_sub$plot_title),side=3,line=0.25)
      abline(h = baseline, lty=2)
 

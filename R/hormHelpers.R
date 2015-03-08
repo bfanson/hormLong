@@ -409,7 +409,7 @@ checkClass <- function( var, v_class) {
 #' @export
 #'
 
-checkPlotOpts <- function(p_p_p, w, h, s, x=NA, y=NA,d, a_l ){
+checkPlotOpts <- function(p_p_p, w, h, s, x=NA, y=NA,d, a_l=NA ){
   if( !is.numeric(p_p_p) | p_p_p<1 ){
     stop( paste0('plot_per_page needs to be an numeric and greater than 0.  Currently it is ',p_p_p) )
   }
@@ -438,7 +438,7 @@ checkPlotOpts <- function(p_p_p, w, h, s, x=NA, y=NA,d, a_l ){
   if( !grepl('\\%',d)  ){
     stop( paste0('check your date_format. No % sign detected. It should be like "%d/%m". It is currently "',d,'"') )
   }
-  if( !( a_l %in% c('baseline_cutoff','baseline_mean','mean', 'none'))  ){
+  if( !( a_l %in% c('baseline_cutoff','baseline_mean','mean', 'none')) & !is.na(a_l)  ){
     stop( paste0('check your add_line option (capitalization matters). Option is not "baseline_line", 
                    "baseline_cutoff", or "mean".  You entered "',a_l,'"') )
   }

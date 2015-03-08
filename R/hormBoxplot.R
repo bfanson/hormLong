@@ -8,6 +8,7 @@
 #'  etc.  Remember, capitalization matters. [optional]
 #' @param log_scale determines if y-axis is log10-scale or not. log-scale='y' makes 
 #' log scale [default='n']  
+#' @param y_label sets the y-axis label.  The default setting is the column name of the response variable. [default = NA]
 #' @param plot_per_page the number of plot panels per page, by row. [default = 1]
 #' @param plot_height  the height of individual plot panels (in inches).  Pdf page height is 
 #' determined by both plot_per_page and plot_height. [default = 5]
@@ -18,7 +19,7 @@
 #' @export
 #' @examples
 #' 
-#' hormBoxplot(data=hormLynx, conc_var='Conc', id_var='AnimalID', by_var='Hormone')
+#' hormBoxplot(data=hormLynx, conc_var='Conc', id_var='AnimalID', by_var='Hormone', y_label='Conc (ng/ml)')
 #' 
 #'# the following will fail because there are zero concentrations.
 #' hormBoxplot(data=hormLynx, conc_var='Conc', id_var='AnimalID', by_var='Hormone', log_scale='y')
@@ -29,7 +30,7 @@
 #' hormBoxplot(data=ds, conc_var='Conc1', id_var='AnimalID', by_var='Hormone', log_scale='y')
 #' 
 
-hormBoxplot <- function(data, conc_var, id_var, by_var, log_scale='n', 
+hormBoxplot <- function(data, conc_var, id_var, by_var, y_label=NA, log_scale='n', 
                         plot_per_page=1, plot_height=5, plot_width=6, save_plot=T){
   
   graphics.off() # just to make sure no devices are open
@@ -74,10 +75,11 @@ hormBoxplot <- function(data, conc_var, id_var, by_var, log_scale='n',
   for(p in unique( data$plot_title ) ){
     data1 <- subset(data, plot_title == p )
     data1 <- data1[ order(data1[,id_var]),]
+    if( is.na(y_label) ){ y_label <- conc_var}
     if(log_scale=='y'){
-      h<-boxplot( data1[,conc_var] ~ data1[,id_var],ylab=conc_var, xaxt='n',log = 'y'  )
+      h<-boxplot( data1[,conc_var] ~ data1[,id_var],ylab=y_label, xaxt='n',log = 'y'  )
     }else{
-      h<-boxplot( data1[,conc_var] ~ data1[,id_var],ylab=conc_var, xaxt='n'  )
+      h<-boxplot( data1[,conc_var] ~ data1[,id_var],ylab=y_label, xaxt='n'  )
     }
       mtext(p, side = 3, cex=1.1)
       points(as.numeric(as.factor(data1[,id_var])), data1[,conc_var] )

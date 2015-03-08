@@ -40,7 +40,7 @@
 #' hormPlotOverlap( result, break_cutoff=150, hormone_var='Hormone', two_axes=TRUE )
 
 hormPlotOverlap <- function(x, hormone_var, colors='red, blue', date_format='%d-%b', 
-                     break_cutoff=Inf,
+                     break_cutoff=Inf, 
                      add_fill=TRUE, two_axes=FALSE,
                      xscale='free', yscale='free', 
                      plot_per_page=4, plot_height=2, plot_width=6, save_plot=TRUE){

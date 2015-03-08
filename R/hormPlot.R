@@ -10,6 +10,7 @@
 #' still joined by a line. Default is to connect all points with a line. [default = Inf]
 #' @param color color of the line and points [default='black']
 #' @param symbol number to indicate point symbol. e.g. 1=open circle, 2=open triangle, 15=closed square, 19=closed circle  [default=19]
+#' @param y_label sets the y-axis label.  The default setting is the column name of the response variable. [default = NA]
 #' @param xscale  determines if x-axis is free ('free') to change for each panel or remain the same ('fixed') for all panels  [default = 'free']
 #' @param yscale  determines if y-axis is free ('free') to change for each panel or remain the same ('fixed') for all panels [default = 'free']
 #' @param plot_per_page the number of plot panels per page, by row. [default = 4]
@@ -17,6 +18,7 @@
 #' Pdf page height is determined by both plot_per_page and plot_height. [default = 2]
 #' @param plot_width  the width of the pdf page. [default = 6]
 #' @param filename  the filename of the pdf file [default = 'hormPlot']
+#' @param file_type determines the file type for outputted plots [default = TRUE]
 #' @param save_plot indicates whether to save plot as a file [default = TRUE]
 #' @return nothing  Produces a pdf file saved at current working directory
 #' @export
@@ -41,13 +43,14 @@
 #'# You may want to not join points that are temporally separated by large gaps
 #'result <- hormBaseline(data=hormElephant, criteria=2, by_var='Ele, Hormone', time_var='Date', 
 #'              conc_var='Conc_ng_ml' , event_var='Event')
-#' hormPlot( result )  # everything connected
+#' hormPlot( result, y_label='Conc (ng/ml)' )  # everything connected
 #' hormPlot( result, yscale='fixed', break_cutoff=30 ) # do not join any points more than 20 days
 #' 
 
-hormPlot <- function(x, add_line = 'baseline_cutoff', date_format='%d-%b', break_cutoff=Inf,
+hormPlot <- function(x, add_line = 'baseline_cutoff',
+                     date_format='%d-%b', break_cutoff=Inf,
+                     color='black', symbol=19, y_label=NA,
                      xscale='free', yscale='free',
-                     color='black', symbol=19,
                      plot_per_page=4, plot_height=2, plot_width=6, 
                      filename='hormPlot', save_plot=TRUE){
   
@@ -106,7 +109,9 @@ hormPlot <- function(x, add_line = 'baseline_cutoff', date_format='%d-%b', break
       x_lim <- getPlotlim(d_s=ds_sub, d_f=data, var=time_var, scale=xscale)
     
     #--- main plot
-    if( is.null(x$y_lab) ){x$y_lab <- conc_var}
+    if( is.null(x$y_lab) & is.na(y_label) ){x$y_lab <- conc_var}
+        else if( !is.na(y_label) ){x$y_lab <- y_label}
+
       plot(ds_sub[,conc_var] ~ ds_sub[,time_var], type='n',xlim=x_lim, ylim=y_lim, 
             xlab=NA, ylab=x$y_lab, xaxt='n')
   

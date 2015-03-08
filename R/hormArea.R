@@ -8,6 +8,7 @@
 #' for AUC is conc units * day. [default = 'trapezoid']
 #' @param date_format the format of the date variable on x-axis. Default is 01-Jan format. See Appendix 1 in help manual 
 #' for examples of other formats [default = '\%d-\%b']
+#' @param y_label sets the y-axis label.  The default setting is the column name of the response variable. [default = NA]
 #' @param xscale  determines if x-axis is free ('free') to change for each panel or
 #' remain the same ('fixed') for all panels  [default = 'free']
 #' @param yscale  determines if y-axis is free ('free') to change for each panel or
@@ -40,7 +41,8 @@
 #'# AUC only for values above 0 
 #' hormArea(result,lower_bound='origin')   
 
-hormArea <- function(x, lower_bound = 'origin', method='trapezoid', date_format='%d-%b', 
+hormArea <- function(x, lower_bound = 'origin', method='trapezoid', date_format='%d-%b',
+                     y_label = NA,
                      xscale='free', yscale='free',
                      plot_per_page=4, plot_height=2, plot_width=6, save_plot=T){
 #-- initial checking ---# 
@@ -116,8 +118,9 @@ hormArea <- function(x, lower_bound = 'origin', method='trapezoid', date_format=
       if( lower_bound=='origin' ) y_lim[1] <- 0
 
     #--- main plot
+    if( is.na(y_label) ){ y_label = conc_var }
     plot(ds_sub[,conc_var] ~ ds_sub[,time_var], type='l',xlim=x_lim, ylim=y_lim, 
-          xlab=NA, ylab=conc_var, xaxt='n')
+          xlab=NA, ylab=y_label, xaxt='n')
       points(ds_sub[,time_var], ds_sub[,conc_var],pch=19)
       mtext(unique(ds_sub$plot_title),side=3,line=0.25)
       abline(h = baseline, lty=2)
