@@ -439,7 +439,7 @@ checkPlotOpts <- function(p_p_p, w, h, s, x=NA, y=NA,d, a_l=NA ){
     stop( paste0('check your date_format. No % sign detected. It should be like "%d/%m". It is currently "',d,'"') )
   }
   if( !( a_l %in% c('baseline_cutoff','baseline_mean','mean', 'none')) & !is.na(a_l)  ){
-    stop( paste0('check your add_line option (capitalization matters). Option is not "baseline_line", 
+    stop( paste0('check your add_line option (capitalization matters). add_line needs to be "baseline_mean", 
                    "baseline_cutoff", or "mean".  You entered "',a_l,'"') )
   }
 }
