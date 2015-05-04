@@ -84,9 +84,10 @@ hormBaseline <- function(data, by_var, conc_var, time_var, criteria=2, event_var
     hold <- aggregate(data1[,conc_var], by = data1[c(by_var_v)], FUN = function(y) length(y) )
     if( any( hold$x==1 ) ){
       row_id <- which( hold$x==1 )
-      message('Error: only one sample per byvar: sd does not exist')
-      print(data1[row_id,])
-      stop('program stopped. Remove these groups')
+      message('Warning: only one sample per byvar: sd does not exist. The following group \n have been skipped:')
+      out <- merge(data1, hold[row_id, by_var_v])
+      print( out )
+      data1 <- data1[!(data1$row_id %in% out$row_id),] 
     }
     rm(hold)
 
@@ -96,6 +97,7 @@ hormBaseline <- function(data, by_var, conc_var, time_var, criteria=2, event_var
   hold$x <- 0
   total <- 99
   loop <- 0
+  cat('\n')
   print('*---  Iteration History   ----*')
   while(total>0){
     hold <- subset( hold, exclude==0, -x ) 
