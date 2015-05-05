@@ -60,6 +60,7 @@ hormArea <- function(x, lower_bound = 'origin', method='trapezoid', date_format=
   conc_var <- x$conc_var
   data <- x$data
   data <- data[!is.na(data[,conc_var]),]
+  data <- data[!is.na(data[,'conc_type']),]
   data <-ridFactor(data)
   data$plot_title <- getPlotTitle(data,by_var=by_var_v)
   if( lower_bound =='origin'){
