@@ -18,7 +18,6 @@
 
 hormBaseline <- function(data, by_var, conc_var, time_var, criteria=2, event_var=NULL, save_data=T ) {
 #--- initial checks of arguments ---#
-  checkCapitalization(data, var_list = c(by_var,conc_var,time_var,event_var) )
 
   if(missing(data)){
       stop('data must be specified')
@@ -27,6 +26,9 @@ hormBaseline <- function(data, by_var, conc_var, time_var, criteria=2, event_var
       stop('data must be a data.frame object')
     }
   data <- ridFactor(data) # get rid of all factors
+  
+  checkCapitalization(data, var_list = c(by_var,conc_var,time_var,event_var) )
+
   
   if(missing(by_var)){
     message('Warning: No by_var included ... baseline value is for whole dataset')
