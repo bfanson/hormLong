@@ -104,7 +104,7 @@ hormPlotOverlap <- function(x, hormone_var, colors='red, blue', date_format='%d-
   for( i in unique(data$plot_title) ){
     ds_sub <- data[data$plot_title==i, ]
 
-    events <- getEventInfo(ds_events[ds_events$plot_title==i, ], x$event_var, time_var)
+    events <- getEventInfo(ds_sub , x$event_var, time_var)
     
     ds_sub <- ds_sub[!is.na(ds_sub[,conc_var]),]
 
